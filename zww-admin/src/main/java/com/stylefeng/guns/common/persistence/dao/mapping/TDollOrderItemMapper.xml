@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.TDollOrderItemMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.TDollOrderItem">
+		<id column="id" property="id" />
+		<result column="order_id" property="orderId" />
+		<result column="doll_id" property="dollId" />
+		<result column="quantity" property="quantity" />
+		<result column="created_date" property="createdDate" />
+		<result column="modified_date" property="modifiedDate" />
+		<result column="doll_code" property="dollCode" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_id AS orderId, doll_id AS dollId, quantity, created_date AS createdDate, modified_date AS modifiedDate, doll_code AS dollCode
+    </sql>
+
+	<select id="selectLists" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select a.id id, a.doll_code dollCode, a.order_id orderId, a.quantity quantity,
+		b.dollName dollName,b.img_url dollImg
+		from t_doll_order_item a LEFT JOIN doll_info b on a.doll_code=b.dollCode
+		where 1=1
+		<if test="#{orderId != null and orderId != ''}">
+			and a.order_id=#{orderId,jdbcType=INTEGER}
+		</if>
+		ORDER by id
+	</select>
+
+</mapper>

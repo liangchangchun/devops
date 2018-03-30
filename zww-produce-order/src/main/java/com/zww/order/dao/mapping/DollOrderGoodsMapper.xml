@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zww.order.dao.DollOrderGoodsDao">
+    <resultMap id="BaseResultMap" type="com.zww.api.model.DollOrderGoods">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="order_number" jdbcType="VARCHAR" property="orderNumber"/>
+        <result column="order_date" jdbcType="TIMESTAMP" property="orderDate"/>
+        <result column="member_id" jdbcType="INTEGER" property="memberId"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="stock_valid_date" jdbcType="TIMESTAMP" property="stockValidDate"/>
+        <result column="deliver_date" jdbcType="TIMESTAMP" property="deliverDate"/>
+        <result column="deliver_method" jdbcType="VARCHAR" property="deliverMethod"/>
+        <result column="deliver_number" jdbcType="VARCHAR" property="deliverNumber"/>
+        <result column="deliver_amount" jdbcType="DECIMAL" property="deliverAmount"/>
+        <result column="deliver_coins" jdbcType="INTEGER" property="deliverCoins"/>
+        <result column="dollitemids" jdbcType="VARCHAR" property="dollitemids"/>
+        <result column="dolls_info" jdbcType="VARCHAR" property="dollsInfo"/>
+        <result column="receiver_name" jdbcType="VARCHAR" property="receiverName"/>
+        <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="county" jdbcType="VARCHAR" property="county"/>
+        <result column="street" jdbcType="VARCHAR" property="street"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		 `id`,`order_number`,`order_date`,`member_id`,`status`,`stock_valid_date` ,`deliver_date` , 
+		 `deliver_method` ,`deliver_number` ,`deliver_amount`,`deliver_coins`,`dollitemids`,`dolls_info`,`receiver_name` ,
+		 `receiver_phone` ,`province` ,`city`,`county` , `street`,`comment` ,`created_date` ,`modified_date` ,
+		 `modified_by`
+	</sql>
+
+    <!-- 按条件查询的订单 -->
+    <select id="getOrdersByStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doll_order_goods
+        where 1=1
+        <if test="status!=null">
+            and status = #{status}
+        </if>
+        <if test="phone!=null">
+            and receiver_phone like concat
+            ('%',#{phone},'%')
+        </if>
+        order by deliver_date asc
+        limit #{begin},#{pageSize}
+    </select>
+
+    <select id="totalCount" resultType="java.lang.Integer">
+        select
+        count(1)
+        from doll_order_goods
+        where 1=1
+        <if test="status!=null">
+            and status = #{status}
+        </if>
+        <if test="phone!=null">
+            and receiver_phone like concat
+            ('%',#{phone},'%')
+        </if>
+    </select>
+
+    <!-- 查询申请发货的订单 -->
+    <select id="getAllOrdersByStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doll_order_goods
+        where 1=1 and status = '申请发货'
+        <if test="phone!=null">
+            and receiver_phone like concat
+            ('%',#{phone},'%')
+        </if>
+        order by deliver_date asc
+        limit #{begin},#{pageSize}
+    </select>
+
+    <select id="totalCountAll" resultType="java.lang.Integer">
+        select
+        count(1)
+        from doll_order_goods
+        where 1=1 and status = '申请发货'
+        <if test="phone!=null">
+            and receiver_phone like concat
+            ('%',#{phone},'%')
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doll_order_goods
+        where a.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByOrderNum" parameterType="com.zww.api.model.DollOrderGoods"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from doll_order_goods
+        WHERE order_number = #{orderNumber}
+    </select>
+    <select id="selectOrderGoodsIdByDollitemids" resultType="java.lang.Integer">
+	    SELECT
+			id
+		FROM
+			doll_order_goods
+		WHERE
+			dollitemids = #{dollitemids};
+	</select>
+
+    <insert id="insertOrder" parameterType="com.zww.api.model.DollOrderGoods">
+		insert into doll_order_goods( `order_number`,`order_date`,`member_id`,`status`,`stock_valid_date` ,
+		`deliver_date` ,  `deliver_method` ,`deliver_number` ,`deliver_amount`,`deliver_coins`,`dollitemids`,
+		`dolls_info`,`receiver_name` ,`receiver_phone` ,`province` ,`city`,`county` , `street`,`comment` ,
+		`created_date` ,`modified_date` ,`modified_by`)
+		values (#{orderNumber,jdbcType=VARCHAR},#{orderDate,jdbcType=TIMESTAMP},#{memberId,jdbcType=INTEGER}, 
+		#{status,jdbcType=VARCHAR}, #{stockValidDate,jdbcType=TIMESTAMP},#{deliverDate,jdbcType=TIMESTAMP}, 
+		#{deliverMethod,jdbcType=VARCHAR},#{deliverNumber,jdbcType=VARCHAR},
+		#{deliverAmount,jdbcType=DECIMAL}, #{deliverCoins,jdbcType=INTEGER},
+		#{dollids,jdbcType=VARCHAR},#{dollsInfo.id,jdbcType=VARCHAR},
+		#{receiverName,jdbcType=VARCHAR}, #{receiverPhone,jdbcType=VARCHAR}
+		, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}
+		, #{county,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}
+		, #{createdDate,jdbcType=TIMESTAMP}, #{modifiedDate,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR})
+	</insert>
+    <insert id="insertSelective" parameterType="com.zww.api.model.DollOrderGoods"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into doll_order_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderNumber != null">
+                order_number,
+            </if>
+            <if test="orderDate != null">
+                order_date,
+            </if>
+            <if test="memberId != null">
+                member_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="stockValidDate != null">
+                stock_valid_date,
+            </if>
+            <if test="deliverDate != null">
+                deliver_date,
+            </if>
+            <if test="deliverMethod != null">
+                deliver_method,
+            </if>
+            <if test="deliverNumber != null">
+                deliver_number,
+            </if>
+            <if test="deliverAmount != null">
+                deliver_amount,
+            </if>
+            <if test="deliverCoins != null">
+                deliver_coins,
+            </if>
+            <if test="dollitemids != null">
+                dollitemids,
+            </if>
+            <if test="dollsInfo != null">
+                dolls_info,
+            </if>
+            <if test="receiverName != null">
+                receiver_name,
+            </if>
+            <if test="receiverPhone != null">
+                receiver_phone,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="county != null">
+                county,
+            </if>
+            <if test="street != null">
+                street,
+            </if>
+            <if test="comment != null">
+                comment,
+            </if>
+            <if test="createdDate != null">
+                created_date,
+            </if>
+            <if test="modifiedDate != null">
+                modified_date,
+            </if>
+            <if test="modifiedBy != null">
+                modified_by,
+            </if>
+            <if test="note != null">
+                note,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderNumber != null">
+                #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDate != null">
+                #{orderDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="memberId != null">
+                #{memberId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="stockValidDate != null">
+                #{stockValidDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverDate != null">
+                #{deliverDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverMethod != null">
+                #{deliverMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverNumber != null">
+                #{deliverNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverAmount != null">
+                #{deliverAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="deliverCoins != null">
+                #{deliverCoins,jdbcType=INTEGER},
+            </if>
+            <if test="dollitemids != null">
+                #{dollitemids,jdbcType=VARCHAR},
+            </if>
+            <if test="dollsInfo != null">
+                #{dollsInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverName != null">
+                #{receiverName,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverPhone != null">
+                #{receiverPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="county != null">
+                #{county,jdbcType=VARCHAR},
+            </if>
+            <if test="street != null">
+                #{street,jdbcType=VARCHAR},
+            </if>
+            <if test="comment != null">
+                #{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedDate != null">
+                #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="note != null">
+                #{note},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zww.api.model.DollOrderGoods">
+        update doll_order_goods
+        <set>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="stockValidDate != null">
+                stock_valid_date = #{stockValidDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverDate != null">
+                deliver_date = #{deliverDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverMethod != null">
+                deliver_method = #{deliverMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverNumber != null">
+                deliver_number = #{deliverNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverAmount != null">
+                deliver_amount = #{deliverAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="deliverCoins != null">
+                deliver_coins = #{deliverCoins,jdbcType=INTEGER},
+            </if>
+
+            <if test="dollitemids != null">
+                dollitemids = #{dollitemids,jdbcType=VARCHAR},
+            </if>
+            <if test="dollsInfo != null">
+                dollsInfo = #{dollsInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverName != null">
+                receiverName = #{receiverName,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverPhone != null">
+                receiverPhone = #{receiverPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="county != null">
+                county = #{county,jdbcType=VARCHAR},
+            </if>
+            <if test="street != null">
+                street = #{street,jdbcType=VARCHAR},
+            </if>
+            <if test="comment != null">
+                `comment` = #{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedDate != null">
+                modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateOrderGoodsStatus" parameterType="com.zww.api.model.DollOrderGoods">
+		update doll_order_goods
+		status = #{status,jdbcType=VARCHAR},
+		modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+		modified_by = #{modifiedBy,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

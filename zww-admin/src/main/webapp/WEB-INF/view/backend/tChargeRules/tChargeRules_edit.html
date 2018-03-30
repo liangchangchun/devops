@@ -1,0 +1,64 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="operation" value="update">
+            <input type="hidden" id="chargeTypeValue" value="${item.chargeType}">
+            <input type="hidden" id="rulesStatusValue" value="${item.rulesStatus}">
+
+            <div class="row">
+                <span style="margin: 10px">注：选择时长包，周卡，月卡时，娃娃币 填每日返的币数，期限 为返币的天数</span>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <!--<#input id="id" name="充值规则设置唯一标识" value="${item.id}" underline="true"/>-->
+                            <!--<#input id="chargeType" name="充值类型" value="${item.chargeType}" underline="true"/>-->
+                            <#select id="chargeType" name="充值类型" underline="false">
+                                <option value="0">普通包</option>
+                                <option value="1">时长包</option>
+                                <option value="2">周卡</option>
+                                <option value="3">月卡</option>
+                                <option value="4">首充</option>
+                            </#select>
+                            <#input id="chargeName" name="规则名称" value="${item.chargeName}" underline="false"/>
+                            <#input id="coinsCharge" name="娃娃币" value="${item.coinsCharge}" underline="false"/>
+                            <#input id="coinsOffer" name="赠送娃娃币" value="${item.coinsOffer}" underline="false"/>
+                            <#input id="description" name="说明文字" value="${item.description}" underline="false"/>
+                            <#input id="orderby" name="排序序号" value="${item.orderby}" underline="false"/>
+                            <#input id="chargeTimesLimit" name="限购次数,-1为无限次" value="${item.chargeTimesLimit}" underline="false"/>
+                            <!--<#input id="createdDate" name="创建日期" value="${item.createdDate}" underline="true"/>-->
+                            <!--<#input id="createdBy" name="创建人id" value="${item.createdBy}" underline="true"/>-->
+                            <!--<#input id="modifiedDate" name="修改日期" value="${item.modifiedDate}" underline="true"/>-->
+                            <!--<#input id="modifiedBy" name="修改人id" value="${item.modifiedBy}" />-->
+                </div>
+
+                <div class="col-sm-6">
+                            <#select id="rulesStatus" name="规则状态" underline="false">
+                                <option value="1">上架</option>
+                                <option value="0">下架</option>
+                            </#select>
+                            <#input id="chargePrice" name="价格" value="${item.chargePrice}" underline="false"/>
+                            <#input id="superTicketCharge" name="钻石" value="${item.superTicketCharge}" underline="false"/>
+                            <#input id="discount" name="折扣" value="${item.discount}" underline="false"/>
+                            <#input id="cionsFirst" name="首次娃娃币" value="${item.cionsFirst}" underline="false"/>
+                            <#input id="chargeDateLimit" name="期限" value="${item.chargeDateLimit}" underline="false"/>
+                            <!--<#input id="rulesStatus" name="规则状态（1上架 0下架）" value="${item.rulesStatus}" underline="true"/>-->
+                            <!--<#input id="superTicketOffer" name="赠送钻石" value="${item.superTicketOffer}" />-->
+
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TChargeRulesInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TChargeRulesInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tChargeRules/tChargeRules_info.js"></script>
+@}

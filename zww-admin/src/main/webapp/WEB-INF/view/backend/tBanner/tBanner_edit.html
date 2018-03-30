@@ -1,0 +1,65 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="tBannerInfoForm">
+
+            <input type="hidden" id="id" value="${item.id}"/>
+            <input type="hidden" id="operation" value="update">
+            <input type="hidden" id="typeValue" value="${item.type}"/>
+			<input type="hidden" id="linkTypeValue" value="${item.linkType}"/>
+			<input type="hidden" id="activeFlgValue" value="${item.activeFlg}"/>
+			<input type="hidden" id="payIndexValue" value="${item.payIndex}"/>
+			<input type="hidden" id="validStartDateValue" value="${item.validStartDate}"/>
+			<input type="hidden" id="validEndDateValue" value="${item.validEndDate}" />
+			<input type="hidden" id="packageNameValue" value="${item.packageName}" />
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                             <#input id="description" name="描述" value="${item.description}" />
+                            <#input id="hyperlink" name="跳转链接" value="${item.hyperlink}" />
+                    <#select id="type" name="banner类型"  >
+								<option value="0" >banner</option>
+								<option value="1" >悬浮窗</option>
+                                <option value="2" >启动页</option>
+                                <option value="3" >广告弹窗</option>
+					</#select>
+                   	<#select id="linkType" name="超链接类型"  >
+                   		<option value="0" >跳转链接</option>
+						<option value="1" >跳转支付页</option>
+						<option value="2" >跳转分享</option>
+						<option value="3" >跳转支付套餐</option>
+						<option value="4" >身份验证</option>
+                        <option value="5" >QQ群</option>
+					</#select>         
+                    <#select id="activeFlg" name="是否生效" >
+								<option value="0" >无效</option>
+								<option value="1" >有效</option>
+					</#select>
+                    <#select id="packageName" name="包名" >
+                        <option value="1" >365</option>
+                        <option value="2" >小妖精</option>
+                    </#select>
+                </div>
+
+                <div class="col-sm-6">
+                      <#Combobox id="payIndex" name="充值规则"  dataOptions="valueField:'id',textField:'chargeName',url:'${ctxPath}/common/getChargeRules'" >
+                       </#Combobox>
+                       <#TimeCon id="validStartDate" name="过期开始时间"  isTime="false" pattern="YYYY-MM-DD hh:MM:ss"/>
+                        <#TimeCon id="validEndDate" name="过期结束时间"  isTime="false" pattern="YYYY-MM-DD hh:MM:ss"/>
+                   <#input id="sorts" name="排序" value="${item.sorts}" />
+                   <#input id="qqGroupNum" name="qq群号" value="${item.qqGroupNum}" />
+                   <#input id="qqGroupKey" name="qq群key" value="${item.qqGroupKey}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TBannerInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TBannerInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tBanner/tBanner_info.js"></script>
+@}

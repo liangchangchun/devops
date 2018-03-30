@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.MemberWhiteListMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.MemberWhiteList">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="member_id" property="memberId" />
+		<result column="user_name" property="userName" />
+		<result column="user_IP" property="userIP" />
+		<result column="states" property="states" />
+		<result column="created_date" property="createdDate" />
+		<result column="modified_date" property="modifiedDate" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id AS userId, member_id AS memberId, user_name AS userName, user_IP AS userIP, states, created_date AS createdDate, modified_date AS modifiedDate
+    </sql>
+
+	<select id="selectIdByMemberId" resultType="MemberWhiteList">
+		select
+		<include refid="Base_Column_List" />
+		from member_white_list
+		where 1=1
+		<if test="memberId != null and memberId !='' ">
+			and member_id = #{memberId}
+		</if>
+
+	</select>
+
+
+	<select id="selectLists" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		<include refid="Base_Column_List" />
+		from member_white_list
+		where 1=1
+		<if test="memberId!=null and memberId != ''">
+			and member_id = #{memberId}
+		</if>
+		<if test="userName!=null and userName != ''">
+			and user_name like CONCAT('%',#{userName},'%')
+		</if>
+		order by modified_date desc
+	</select>
+
+</mapper>

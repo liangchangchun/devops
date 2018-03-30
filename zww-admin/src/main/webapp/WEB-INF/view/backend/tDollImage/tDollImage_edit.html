@@ -1,0 +1,36 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" value="${item.id}" underline="true"/>
+                            <#input id="dollId" name="" value="${item.dollId}" underline="true"/>
+                            <#input id="imgContextPath" name="" value="${item.imgContextPath}" underline="true"/>
+                            <#input id="imgFileName" name="" value="${item.imgFileName}" underline="true"/>
+                            <#input id="imgRealPath" name="" value="${item.imgRealPath}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="createdDate" name="" value="${item.createdDate}" underline="true"/>
+                            <#input id="createdBy" name="" value="${item.createdBy}" underline="true"/>
+                            <#input id="modifiedDate" name="" value="${item.modifiedDate}" underline="true"/>
+                            <#input id="modifiedBy" name="" value="${item.modifiedBy}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TDollImageInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TDollImageInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tDollImage/tDollImage_info.js"></script>
+@}

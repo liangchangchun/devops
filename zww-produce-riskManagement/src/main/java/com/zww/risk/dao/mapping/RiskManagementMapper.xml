@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zww.risk.dao.RiskManagementDao">
+    <resultMap id="BaseResultMap" type="com.zww.api.model.RiskManagement">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="IMEI1" property="IMEI1"/>
+        <result column="IMEI2" property="IMEI2"/>
+        <result column="IMEI3" property="IMEI3"/>
+        <result column="IP1" property="IP1"/>
+        <result column="IP2" property="IP2"/>
+        <result column="IP3" property="IP3"/>
+    </resultMap>
+
+    <sql id="base_select">
+        id,
+        user_id,
+        IMEI1,
+        IMEI2,
+        IMEI3,
+        IP1,
+        IP2,
+        IP3
+    </sql>
+
+    <insert id="init">
+        INSERT INTO risk_management (user_id)
+        VALUES
+            (#{memberId});
+    </insert>
+
+    <update id="updateById">
+        UPDATE risk_management
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="IMEI1 != null and IMEI1 != ''">
+                IMEI1 = #{IMEI1},
+            </if>
+            <if test="IMEI2 != null and IMEI2 != ''">
+                IMEI2 = #{IMEI2},
+            </if>
+            <if test="IMEI3 != null and IMEI3 != ''">
+                IMEI3 = #{IMEI3},
+            </if>
+            <if test="IP1 != null and IP1 != ''">
+                IP1 = #{IP1},
+            </if>
+            <if test="IP2 != null and IP2 != ''">
+                IP2 = #{IP2},
+            </if>
+            <if test="IP3 != null and IP3 != ''">
+                IP3 = #{IP3},
+            </if>
+        </set>
+        WHERE
+        id = #{id};
+    </update>
+
+    <select id="selectByMemberId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="base_select"/>
+        FROM
+        risk_management
+        WHERE
+        user_id = #{memberId};
+    </select>
+    <select id="selectIMEICount" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            risk_management
+        WHERE
+            IMEI1 = #{imei}
+        OR IMEI2 = #{imei}
+        OR IMEI3 = #{imei};
+    </select>
+
+</mapper>
+
+

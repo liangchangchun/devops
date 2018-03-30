@@ -1,0 +1,38 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="operation" value="update">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <!--<#input id="id" name="id" value="${item.id}" underline="true"/>-->
+                            <!--<#input id="alertImgUrl" name="弹窗图片URL" value="${item.alertImgUrl}" underline="true"/>-->
+                            <#input id="description" name="描述" value="${item.description}"/>
+                            <#input id="hyperlink" name="超链接" value="${item.hyperlink}"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="linkType" name="链接类型" value="${item.linkType}" />
+                            <#input id="sorts" name="排序" value="${item.sorts}"/>
+                            <!--<#input id="createdDate" name="创建时间" value="${item.createdDate}" underline="true"/>-->
+                            <!--<#input id="createdBy" name="创建人" value="${item.createdBy}" underline="true"/>-->
+                            <!--<#input id="modifiedDate" name="修改时间" value="${item.modifiedDate}" underline="true"/>-->
+                            <!--<#input id="modifiedBy" name="修改人" value="${item.modifiedBy}" />-->
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="AlertInfoInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="AlertInfoInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/alertInfo/alertInfo_info.js"></script>
+@}

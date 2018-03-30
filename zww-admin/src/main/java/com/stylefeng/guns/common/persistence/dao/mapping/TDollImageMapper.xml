@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.TDollImageMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.TDollImage">
+		<id column="id" property="id" />
+		<result column="doll_id" property="dollId" />
+		<result column="img_context_path" property="imgContextPath" />
+		<result column="img_file_name" property="imgFileName" />
+		<result column="img_real_path" property="imgRealPath" />
+		<result column="created_date" property="createdDate" />
+		<result column="created_by" property="createdBy" />
+		<result column="modified_date" property="modifiedDate" />
+		<result column="modified_by" property="modifiedBy" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, doll_id AS dollId, img_context_path AS imgContextPath, img_file_name AS imgFileName, img_real_path AS imgRealPath, created_date AS createdDate, created_by AS createdBy, modified_date AS modifiedDate, modified_by AS modifiedBy
+    </sql>
+    
+    <select id="getImageList" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page" >
+  		select a.id AS id, a.doll_id AS dollId, img_context_path AS imgContextPath, img_file_name AS imgFileName, img_real_path AS imgRealPath, a.created_date AS createdDate, a.created_by AS createdBy, a.modified_date AS modifiedDate, a.modified_by AS modifiedBy,
+  		b.name
+  		from t_doll_image a left join t_doll b
+  		on a.doll_id=b.id where 1=1
+		<if test="name!=null and name!=''">
+		and b.name like concat  
+    	('%',#{name},'%')
+		</if>
+		order by id desc
+  	</select>
+
+	<!--批量删除-->
+	<delete id="deleteAllById" parameterType="List">
+		delete from t_doll_image
+		where id IN
+		<foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,17 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                    <label class="col-xs-4 col-sm-3" style="font-size: 15px;"><strong >视频播放:</strong></label>
+                </div>
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                    <embed style="background-color: #999999; width: 300px; height: 450px" src="${videoUrl }">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tDoll/tDoll_upload.js"></script>
+@}

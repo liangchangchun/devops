@@ -1,0 +1,32 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="operation" value="update">
+
+            <div class="row">
+                <div class="col-sm-12 ">
+                            <#NameCon id="code" name="code" value="${item.code}" readonly="readonly"></#NameCon>
+                            <#input id="name" name="名称" value="${item.name}" underline="false"/>
+                            <#input id="value" name="参数值" value="${item.value}" />
+                </div>
+
+                <!--<div class="col-sm-6">-->
+                            <!--<#input id="modifiedDate" name="" value="${item.modifiedDate}" underline="true"/>-->
+                            <!--<#input id="modifiedBy" name="" value="${item.modifiedBy}" />-->
+                <!--</div>-->
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TSystemPrefInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TSystemPrefInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tSystemPref/tSystemPref_info.js"></script>
+@}

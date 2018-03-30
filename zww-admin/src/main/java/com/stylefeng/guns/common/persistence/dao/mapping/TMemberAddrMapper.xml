@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.TMemberAddrMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.TMemberAddr">
+		<id column="id" property="id" />
+		<result column="member_id" property="memberId" />
+		<result column="receiver_name" property="receiverName" />
+		<result column="receiver_phone" property="receiverPhone" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="county" property="county" />
+		<result column="street" property="street" />
+		<result column="created_date" property="createdDate" />
+		<result column="modified_date" property="modifiedDate" />
+		<result column="default_flg" property="defaultFlg" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, member_id AS memberId, receiver_name AS receiverName, receiver_phone AS receiverPhone, province, city, county, street, created_date AS createdDate, modified_date AS modifiedDate, default_flg AS defaultFlg
+    </sql>
+
+	<select id="selectDefaultAddr" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List"/>
+		from t_member_addr
+		where member_id = #{memberId,jdbcType=INTEGER} and default_flg=1
+	</select>
+
+</mapper>

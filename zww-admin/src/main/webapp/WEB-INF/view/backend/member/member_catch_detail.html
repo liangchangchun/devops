@@ -1,0 +1,57 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>用户抓取记录</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                    <input type="hidden" id="userId" value="${item.id}">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <#NameCon id="memberId" name="用户编号" readonly="readonly" value="${item.memberID}" />
+                            </div>
+                            <div class="col-sm-4">
+                                <#NameCon id="userName" name="用户名称" readonly="readonly" value="${item.name}" />
+                            </div>
+                            <div class="col-sm-4">
+                                <#TimeCon id="lastLoginDate" name="最近登陆" readonly="readonly" isTime="false" pattern="YYYY-MM-DD hh:MM:ss" value="${lastLoginDate}"/>
+                            </div>
+                            </div>
+                          <div class="row">   
+                             <div class="col-sm-4">
+                                <#TimeCon id="beginDate" name="开始时间" isTime="false" pattern="YYYY-MM-DD hh:MM:ss"/>
+                            </div>
+                            <div class="col-sm-4">
+                                <#TimeCon id="endtime" name="截止时间" isTime="false" pattern="YYYY-MM-DD hh:MM:ss"/>
+                            </div>
+                              <div class="col-sm-4">
+                                  <#SelectCon id="catchStatus" name="抓取状态">
+                                      <option value="">全部状态</option>
+                                      <option value="抓取成功">抓取成功</option>
+                                      <option value="抓取失败">抓取失败</option>
+                                  </#SelectCon>
+                              </div>
+                            <div class="col-sm-4">
+                                <#button name="搜索" icon="fa-search" clickFun="MemberCatchDetail.search()"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="catchNum" name="抓取次数" readonly="readonly" value=""/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="catchSuccessNum" name="抓中次数" readonly="readonly" value=""/>
+                            </div>
+                        </div>
+                        <#table id="catchDetailTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/member/member_catch_detail.js"></script>
+@}

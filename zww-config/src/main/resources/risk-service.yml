@@ -1,0 +1,57 @@
+from: git-default
+##########################################################
+###################  开发环境的profile  ###################
+##########################################################
+spring: 
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://192.168.2.166:3306/zww?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: admins
+    db-name: zww
+    filters: log4j,wall,mergeStat
+    connectionInitSqls: "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+#flowable数据源和多数据源配置
+guns:
+  flowable:
+    datasource:
+      url: jdbc:mysql://192.168.2.166:3306/guns_flowable?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+      username: root
+      password: admins
+  zww:
+    datasource:
+      url: jdbc:mysql://192.168.2.166:3306/zww_bak?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+      username: root
+      password: admins
+  muti-datasource:
+    default-dataSource-name: dataSourceGuns #默认的数据源名称
+    url: jdbc:mysql://192.168.2.166:3306/guns_flowable?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: admins
+
+logging:
+  level.root: info
+  level.com.stylefeng: debug
+  path: logs/
+  file: risk-service.log
+
+###################  aliyun配置  ###################
+aliyun:
+  accessKey: LTAIR9bpEjEQwnHO
+  accessSecret: hAPaZlI9NXlH5ErNoFnVbkyuRQz0gy
+  mnsAccountEndPoint: http://1792180091275324.mns.cn-shanghai.aliyuncs.com/
+  ossBucketName: zww-image-dev
+  sts: http://47.100.113.59:7080/app/oss/gettoken
+  smsModelCode: 
+   reg: SMS_121910820
+   find: SMS_121910820
+   bind: SMS_121910820
+
+################### dev prop配置 ########################
+
+redisHost: 192.168.2.148
+redisPort: 6379
+redisPassword: Zww123456
+devtoolsEnabled: true
+  

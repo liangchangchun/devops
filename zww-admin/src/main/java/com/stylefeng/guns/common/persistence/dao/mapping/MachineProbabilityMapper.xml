@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.MachineProbabilityMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.MachineProbability">
+		<id column="id" property="id" />
+		<result column="probability_rules_id" property="probabilityRulesId" />
+		<result column="doll_id" property="dollId" />
+		<result column="probability_1" property="probability1" />
+		<result column="probability_2" property="probability2" />
+		<result column="probability_3" property="probability3" />
+		<result column="created_date" property="createdDate" />
+		<result column="modified_date" property="modifiedDate" />
+		<result column="created_by" property="createdBy" />
+		<result column="modified_by" property="modifiedBy" />
+		<result column="base_num" property="baseNum" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, probability_rules_id AS probabilityRulesId, doll_id AS dollId, probability_1 AS probability1,
+        probability_2 AS probability2, probability_3 AS probability3, created_date AS createdDate, modified_date AS modifiedDate,
+         created_by AS createdBy, modified_by AS modifiedBy,base_num AS baseNum
+    </sql>
+
+	<select id="selectMachineProbability" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		a.id id, a.probability_rules_id probabilityRulesId, a.doll_id dollId,
+		a.probability_1 probability1, a.probability_2 AS probability2, a.probability_3 AS probability3, a.created_date AS createdDate, a.modified_date AS modifiedDate,
+		a.created_by AS createdBy, a.modified_by AS modifiedBy ,base_num AS baseNum,
+		b.name dollName, b.machine_code machainCode
+		from machine_probability a LEFT JOIN t_doll b on a.doll_id = b.id
+		WHERE 1=1
+		<if test="name != null and name != ''">
+			AND b.name like concat('%',#{name},'%')
+		</if>
+		<if test="machainCode != null and machainCode != ''">
+			AND b.machine_code = #{machainCode}
+		</if>
+		<if test="dollId != null and dollId != ''">
+			AND a.doll_id = #{dollId}
+		</if>
+		ORDER by id DESC
+	</select>
+
+	<select id="selectByDollId" resultType="MachineProbability" >
+		select
+		*
+		from machine_probability
+		where doll_id = #{dollId}
+	</select>
+</mapper>

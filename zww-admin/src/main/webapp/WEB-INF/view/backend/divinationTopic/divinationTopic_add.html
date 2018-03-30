@@ -1,0 +1,48 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+            <input type="hidden" id="operation" value="add">
+
+            <div class="row">
+                <div class="col-sm-6 ">
+                            <!--<#input id="id" name="id" underline="true"/>-->
+                            <#input id="divinationName" name="预测名称" underline="false"/>
+                            <!--<#input id="dollId" name="机器id" underline="false"/>-->
+                            <!--<#Combobox id="dollId" name="娃娃机名称"  dataOptions="showAll:'no',valueField:'id',textField:'name',url:'${ctxPath}/common/getDollList'" >-->
+                            <!--</#Combobox>-->
+                            <!--<#TimeCon id="wxpireTime" name="过期时间" isTime="false" pattern="YYYY-MM-DD hh:mm:ss"/>-->
+                            <#input id="wxpireTime" name="过期时间(s)" />
+                            <!--<#select id="resultStatus" name="预测结果" underline="false">-->
+                                <!--<option value="0" >每次不同</option>-->
+                                <!--<option value="1" >每日一变</option>-->
+                                <!--<option value="2" >不变</option>-->
+                            <!--</#select>-->
+
+                            <!--<#input id="dollName" name="机器名称" underline="false"/>-->
+                            <!--<#input id="dollNum" name="机器编号"/>-->
+                </div>
+
+                <div class="col-sm-6">
+                            <!--<#input id="dollImg" name="机器图片" underline="false"/>-->
+                            <!--<#input id="createdDate" name="创建时间" underline="true"/>-->
+                            <!--<#input id="createdBy" name="创建人" underline="true"/>-->
+                            <!--<#input id="modifiedDate" name="修改时间" underline="true"/>-->
+                            <!--<#input id="modifiedBy" name="修改人" underline="true"/>-->
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="DivinationTopicInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="DivinationTopicInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/divinationTopic/divinationTopic_info.js"></script>
+@}

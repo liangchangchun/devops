@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zww.base.dao.BaseDao">
+
+ 	<resultMap id="memberAddrMap" type="com.zww.api.model.MemberAddr">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="member_id" property="memberId" jdbcType="INTEGER"/>
+        <result column="recivername" property="recivername" jdbcType="VARCHAR"/>
+        <result column="reciverphone" property="reciverphone" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="county" property="county" jdbcType="VARCHAR"/>
+        <result column="street" property="street" jdbcType="VARCHAR"/>
+        <result column="created_date" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP"/>
+        <result column="default_flg" property="defaultFlg" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="memberAddr_Column_List">
+	    id, member_id, receiver_name, receiver_phone, province, city, county, street, created_date, 
+	    modified_date, default_flg
+  	</sql>
+  	
+  	<resultMap id="MemberResultMap" type="com.zww.api.model.Member">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="memberID" jdbcType="VARCHAR" property="memberID"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="weixin_id" jdbcType="VARCHAR" property="weixinId"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="union_id" jdbcType="VARCHAR" property="unionId"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="catch_number" jdbcType="VARCHAR" property="catchNumber"/>
+        <result column="register_date" jdbcType="TIMESTAMP" property="registerDate"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="modified_by" jdbcType="INTEGER" property="modifiedBy"/>
+        <result column="last_login_date" jdbcType="TIMESTAMP" property="lastLoginDate"/>
+        <result column="last_logoff_date" jdbcType="TIMESTAMP"
+                property="lastLogoffDate"/>
+        <result column="online_flg" jdbcType="INTEGER" property="onlineFlg"/>
+        <result column="icon_context_path" jdbcType="VARCHAR" property="iconContextPath"/>
+        <result column="icon_file_name" jdbcType="VARCHAR" property="iconFileName"/>
+        <result column="icon_real_path" jdbcType="VARCHAR" property="iconRealPath"/>
+        <result column="easemob_uuid" jdbcType="VARCHAR" property="easemobUuid"/>
+        <result column="active_flg" jdbcType="VARCHAR" property="activeFlg"/>
+        <result column="invite_flg" jdbcType="VARCHAR" property="inviteFlg"/>
+        <result column="invite_flg_web" jdbcType="VARCHAR" property="inviteFlgWeb"/>
+        <result column="register_from" jdbcType="VARCHAR" property="registerFrom"/>
+        <result column="last_login_from" jdbcType="VARCHAR" property="lastLoginFrom"/>
+        <result column="first_login" jdbcType="INTEGER" property="firstLogin"/>
+        <result column="first_charge" jdbcType="INTEGER" property="firstCharge"/>
+        <result column="register_channel" jdbcType="VARCHAR" property="registerChannel"/>
+        <result column="login_channel" jdbcType="VARCHAR" property="loginChannel"/>
+        <result column="phone_model" jdbcType="VARCHAR" property="phoneModel"/>
+        <association property="prefset" javaType="PrefSet">
+            <id property="memberId" column="member_id"/>
+            <result property="musicFlg" column="music_flg"/>
+            <result property="soundFlg" column="sound_flg"/>
+            <result property="shockFlg" column="shock_flg"/>
+        </association>
+        <association property="account" javaType="com.zww.api.model.Account"
+                     select="selectAccountById" column="id">
+        </association>
+    </resultMap>
+    
+      <resultMap id="accountResultMap" type="com.zww.api.model.Account">
+        <id column="id" property="id"/>
+        <result column="coins" property="coins"/>
+        <result column="superTicket" property="superTicket"/>
+        <result column="bitState" property="bitState"/>
+        <result column="weeksCardState" property="weeksCardState"/>
+        <result column="monthCardState" property="monthCardState"/>
+    </resultMap>
+   
+    <select id="isWorker" resultType="java.lang.Boolean">
+        SELECT
+            *
+        FROM
+            member_white_list
+        WHERE
+            user_id = #{memberId};
+    </select>
+    
+     <select id="selectAccountById" resultMap="accountResultMap">
+        SELECT
+            *
+        FROM
+            account
+        WHERE
+            id = #{id} limit 1
+    </select>
+    
+      <select id="selectMemberById" resultMap="MemberResultMap">
+        <!-- 具体的sql -->
+        SELECT
+        *
+        FROM
+        t_member
+        WHERE
+        id = #{id} limit 1
+    </select>
+    <select id="selectMemberByMemberId" resultMap="MemberResultMap">
+        <!-- 具体的sql -->
+        SELECT
+        *
+        FROM
+        t_member
+        WHERE
+        memberId = #{memberId} limit 1
+    </select>
+    
+  	<select id="selectMemberAddrByPrimaryKey" resultMap="memberAddrMap" parameterType="java.lang.Integer">
+        select
+        <include refid="memberAddr_Column_List"/>
+        from t_member_addr
+        where id = #{id,jdbcType=INTEGER} limit 1
+    </select>
+    
+ 	<select id="selectDefaultAddr" resultMap="memberAddrMap" parameterType="java.lang.Integer">
+        select
+        <include refid="memberAddr_Column_List"/>
+        from t_member_addr
+        where member_id = #{memberId,jdbcType=INTEGER} and default_flg=1 limit 1
+    </select>
+    
+     <select id="selectPayNumberByMemberId" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            charge_order
+        WHERE
+            member_id = #{memberId}
+        AND charge_state = 1;
+    </select>
+    
+    <resultMap id="DollResultMap" type="com.zww.api.model.Doll">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="machine_type" jdbcType="INTEGER" property="machineType"/>
+        <result column="quantity" jdbcType="INTEGER" property="quantity"/>
+        <result column="price" jdbcType="INTEGER" property="price"/>
+        <result column="machine_status" jdbcType="VARCHAR" property="machineStatus"/>
+        <result column="machine_serial_num" jdbcType="VARCHAR" property="machineSerialNum"/>
+        <result column="machine_ip" jdbcType="VARCHAR" property="machineIp"/>
+        <result column="machine_url" jdbcType="VARCHAR" property="machineUrl"/>
+        <result column="tbimg_context_path" jdbcType="VARCHAR" property="tbimgContextPath"/>
+        <result column="tbimg_file_name" jdbcType="VARCHAR" property="tbimgFileName"/>
+        <result column="tbimg_real_path" jdbcType="VARCHAR" property="tbimgRealPath"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="created_by" jdbcType="INTEGER" property="createdBy"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="modified_by" jdbcType="INTEGER" property="modifiedBy"/>
+        <result column="rtmp_url_1" jdbcType="VARCHAR" property="rtmpUrl1"/>
+        <result column="rtmp_url_2" jdbcType="VARCHAR" property="rtmpUrl2"/>
+        <result column="rtmp_url_3" jdbcType="VARCHAR" property="rtmpUrl3"/>
+        <result column="rtmp_push_url" jdbcType="VARCHAR" property="rtmpPushUrl"/>
+        <result column="watching_number" jdbcType="INTEGER" property="watchingNumber"/>
+        <result column="mns_topic_name" jdbcType="VARCHAR" property="mnsTopicName"/>
+        <result column="timeout" jdbcType="INTEGER" property="timeout"/>
+        <result column="redeem_coins" jdbcType="INTEGER" property="redeemCoins"/>
+        <result column="machine_code" jdbcType="VARCHAR" property="machineCode"/>
+        <result column="doll_ID" jdbcType="VARCHAR" property="dollID"/>
+        <result column="history_id" jdbcType="INTEGER" property="historyId"/>
+        <result column="doll_address_id" jdbcType="INTEGER" property="dollAddressId"/>
+        <result column="delete_status" jdbcType="INTEGER" property="deleteStatus"/>
+        <result column="rtmpUrlH5" property="rtmpUrlH5"/>
+        <result column="check_state" property="checkState"/>
+    </resultMap>
+    <select id="selectDollById" parameterType="java.lang.Integer" resultMap="DollResultMap">
+        SELECT t_doll.*,doll_h5.rtmpUrlH5 rtmpUrlH5
+        FROM t_doll LEFT JOIN doll_h5 ON t_doll.id = doll_h5.id
+        WHERE t_doll.id = #{id,jdbcType=INTEGER}
+    </select>
+    
+     <resultMap id="RiskManagementResultMap" type="com.zww.api.model.RiskManagement">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="IMEI1" property="IMEI1"/>
+        <result column="IMEI2" property="IMEI2"/>
+        <result column="IMEI3" property="IMEI3"/>
+        <result column="IP1" property="IP1"/>
+        <result column="IP2" property="IP2"/>
+        <result column="IP3" property="IP3"/>
+    </resultMap>
+    
+     <select id="selectRiskManagementById" resultMap="RiskManagementResultMap">
+        SELECT
+        id, user_id, IMEI1, IMEI2, IMEI3, IP1, IP2, IP3
+        FROM
+        risk_management
+        WHERE
+        user_id = #{memberId};
+    </select>
+    
+      <select id="selectRank" resultType="java.lang.Integer">
+        SELECT
+            rank
+        FROM
+            member_registe_channel
+        WHERE
+            member_id = #{id};
+    </select>
+     <resultMap id="DollOrderResultMap" type="com.zww.api.model.DollOrder">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="order_number" jdbcType="VARCHAR" property="orderNumber"/>
+        <result column="order_date" jdbcType="TIMESTAMP" property="orderDate"/>
+        <result column="order_by" jdbcType="INTEGER" property="orderBy"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="stock_valid_date" jdbcType="TIMESTAMP" property="stockValidDate"/>
+        <result column="deliver_date" jdbcType="TIMESTAMP" property="deliverDate"/>
+        <result column="deliver_method" jdbcType="VARCHAR" property="deliverMethod"/>
+        <result column="deliver_number" jdbcType="VARCHAR" property="deliverNumber"/>
+        <result column="deliver_amount" jdbcType="DECIMAL" property="deliverAmount"/>
+        <result column="deliver_coins" jdbcType="INTEGER" property="deliverCoins"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="modified_by" jdbcType="INTEGER" property="modifiedBy"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="doll_redeem_coins" jdbcType="VARCHAR" property="dollRedeemCoins"/>
+        <association property="memberAddress" javaType="MemberAddr">
+            <id property="id" column="address_id"/>
+            <result property="receiverPhone" column="receiver_phone"/>
+            <result property="receiverName" column="receiver_name"/>
+            <result property="province" column="province"/>
+            <result property="city" column="city"/>
+            <result property="county" column="county"/>
+            <result property="street" column="street"/>
+        </association>
+        <collection property="orderItems" ofType="DollOrderItem"
+                    column="order_id">
+            <id property="id" column="item_id" javaType="int" jdbcType="INTEGER"/>
+            <result column="item_created_date" jdbcType="TIMESTAMP"
+                    property="createdDate"/>
+            <result column="item_modified_date" jdbcType="TIMESTAMP"
+                    property="modifiedDate"/>
+            <result column="quantity" jdbcType="INTEGER" property="quantity"/>
+            <association property="doll" javaType="Doll">
+                <id property="id" column="doll_id"/>
+                <result property="name" column="name"/>
+            </association>
+        </collection>
+    </resultMap>
+        <select id="selectDollOrderListByIds" resultMap="DollOrderResultMap">
+        SELECT
+            a.id,
+            a.order_number,
+            a.order_date,
+            a.order_by,
+            a. STATUS,
+            a.stock_valid_date,
+            a.deliver_date,
+            a.deliver_method,
+            a.deliver_number,
+            a.deliver_amount,
+            a.deliver_coins,
+            a.address_id,
+            a.modified_date,
+            a.modified_by,
+            a. COMMENT,
+            IFNULL(
+            a.doll_redeem_coins,
+            c.redeem_coins
+            ) doll_redeem_coins,
+            b.id AS item_id,
+            b.created_date AS item_created_date,
+            b.modified_date AS item_modified_date,
+            b.quantity,
+            c.id AS doll_id,
+            c. NAME
+        FROM
+            t_doll_order a INNER JOIN t_doll_order_item b ON a.id = b.order_id
+        	INNER JOIN t_doll c ON c.id = b.doll_id
+        WHERE
+            a.id <foreach collection="array" item="orderIds" open="in ("
+                          close=")" separator=",">
+        #{orderIds}
+    </foreach>
+        AND a. STATUS = '寄存中';
+    </select>
+    
+     <update id="updateDollOrderByIdSelective" parameterType="com.zww.api.model.DollOrder">
+        update t_doll_order
+        <set>
+            <if test="orderNumber != null">
+                order_number = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDate != null">
+                order_date = #{orderDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderBy != null">
+                order_by = #{orderBy,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="stockValidDate != null">
+                stock_valid_date = #{stockValidDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverDate != null">
+                deliver_date = #{deliverDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverMethod != null">
+                deliver_method = #{deliverMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverNumber != null">
+                deliver_number = #{deliverNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverAmount != null">
+                deliver_amount = #{deliverAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="deliverCoins != null">
+                deliver_coins = #{deliverCoins,jdbcType=INTEGER},
+            </if>
+            <if test="memberAddress != null">
+                address_id = #{memberAddress.id,jdbcType=INTEGER},
+            </if>
+            <if test="modifiedDate != null">
+                modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=INTEGER},
+            </if>
+            <if test="modifiedBy != null">
+                comment = #{comment,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+  
+      <update id="updateInviteStatus">
+		UPDATE t_member
+		SET
+		invite_flg_web = 1
+		WHERE
+		id = #{id}
+	</update>
+	
+	<update id="updateChannel">
+        UPDATE member_registe_channel
+        <set>
+            <if test="channel != null">
+                channel = #{channel},
+            </if>
+            <if test="inviter != null">
+                inviter = #{inviter},
+            </if>
+            <if test="rank != null">
+                rank = #{rank},
+            </if>
+        </set>
+        WHERE member_id = #{memberId}
+    </update>
+    
+  <update id="updateBitStatesById" >
+        UPDATE account SET bitState = #{bitState}
+        WHERE
+        id = #{id};
+    </update>
+    
+    <!-- 更新周卡状态 -->
+    <update id="updateMemberSeeksCardState">
+        UPDATE account
+        <set>
+            <if test="coins != null">
+                coins = coins + #{coins},
+            </if>
+            <if test="bitState != null">
+                bitState = #{bitState},
+            </if>
+            <if test="weeksCardState != null">
+                weeksCardState = #{weeksCardState},
+            </if>
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <!-- 更新月卡状态 -->
+    <update id="updateMemberMonthCardState">
+        UPDATE account
+        <set>
+            <if test="coins != null">
+                coins = coins + #{coins},
+            </if>
+            <if test="bitState != null">
+                bitState = #{bitState},
+            </if>
+            <if test="monthCardState != null">
+                monthCardState = #{monthCardState},
+            </if>
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+    
+</mapper>

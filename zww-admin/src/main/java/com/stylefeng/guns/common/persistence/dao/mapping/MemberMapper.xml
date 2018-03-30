@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.MemberMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.Member">
+		<id column="id" property="id" />
+		<result column="memberID" property="memberID" />
+		<result column="name" property="name" />
+		<result column="mobile" property="mobile" />
+		<result column="password" property="password" />
+		<result column="weixin_id" property="weixinId" />
+		<result column="gender" property="gender" />
+		<result column="birthday" property="birthday" />
+		<result column="coins" property="coins" />
+		<result column="points" property="points" />
+		<result column="catch_number" property="catchNumber" />
+		<result column="register_date" property="registerDate" />
+		<result column="modified_date" property="modifiedDate" />
+		<result column="modified_by" property="modifiedBy" />
+		<result column="last_login_date" property="lastLoginDate" />
+		<result column="last_logoff_date" property="lastLogoffDate" />
+		<result column="online_flg" property="onlineFlg" />
+		<result column="icon_context_path" property="iconContextPath" />
+		<result column="icon_file_name" property="iconFileName" />
+		<result column="icon_real_path" property="iconRealPath" />
+		<result column="easemob_uuid" property="easemobUuid" />
+		<result column="active_flg" property="activeFlg" />
+		<result column="invite_flg" property="inviteFlg" />
+		<result column="invite_flg_web" property="inviteFlgWeb" />
+		<result column="register_from" property="registerFrom" />
+		<result column="last_login_from" property="lastLoginFrom" />
+		<result column="first_login" property="firstLogin" />
+		<result column="first_charge" property="firstCharge" />
+		<result column="register_channel" property="registerChannel" />
+		<result column="login_channel" property="loginChannel" />
+		<result column="phone_model" property="phoneModel" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, memberID, name, mobile, password, weixin_id AS weixinId, gender, birthday, coins, points, catch_number AS catchNumber, register_date AS registerDate, modified_date AS modifiedDate, modified_by AS modifiedBy, last_login_date AS lastLoginDate, last_logoff_date AS lastLogoffDate, online_flg AS onlineFlg, icon_context_path AS iconContextPath, icon_file_name AS iconFileName, icon_real_path AS iconRealPath, easemob_uuid AS easemobUuid, active_flg AS activeFlg, invite_flg AS inviteFlg, invite_flg_web AS inviteFlgWeb, register_from AS registerFrom, last_login_from AS lastLoginFrom, first_login AS firstLogin, first_charge AS firstCharge, register_channel AS registerChannel, login_channel AS loginChannel, phone_model AS phoneModel
+    </sql>
+
+	<sql id="Base_Column_Lists">
+		a.id, a.memberID, a.name, a.mobile, a.password, a.weixin_id AS weixinId, a.gender, a.birthday, a.coins,
+		a.points, a.catch_number AS catchNumber, a.register_date AS registerDate, a.modified_date AS modifiedDate, a.modified_by AS modifiedBy, a.last_login_date AS lastLoginDate, a.last_logoff_date AS lastLogoffDate,
+		a.online_flg AS onlineFlg, a.icon_context_path AS iconContextPath, a.icon_file_name AS iconFileName, a.icon_real_path AS iconRealPath, a.easemob_uuid AS easemobUuid,
+		a.active_flg AS activeFlg, a.invite_flg AS inviteFlg, a.invite_flg_web AS inviteFlgWeb, a.register_from AS registerFrom, a.last_login_from AS lastLoginFrom, a.first_login AS firstLogin,
+		a.first_charge AS firstCharge, a.register_channel AS registerChannel, a.login_channel AS loginChannel, a.phone_model AS phoneModel,
+		b.jicun AS checkIn
+	</sql>
+
+	<select id="selectMember" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		<include refid="Base_Column_Lists" />
+		from t_member
+		a LEFT JOIN (SELECT  NULLIF(COUNT(id),0) jicun,order_by FROM t_doll_order WHERE STATUS = '寄存中' GROUP BY order_by) b ON a.id = b.order_by
+		where 1=1
+		<if test="id != null and id != ''">
+			and a.id = #{id}
+		</if>
+		<if test="userId != null and userId != ''">
+			and memberID = #{userId}
+		</if>
+		<if test="userName != null and userName != ''">
+			and name like CONCAT('%',#{userName},'%')
+		</if>
+		<if test="beginTime != null and beginTime != ''">
+			and DATEDIFF(register_date,#{beginTime}) &gt;= 0
+		</if>
+		<if test="lastLoginFrom != null and lastLoginFrom != '' ">
+			<if test="lastLoginFrom == 'android'">
+				AND last_login_from = #{lastLoginFrom}
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (last_login_from is NULL
+				or last_login_from = 'iOS')
+			</if>
+		</if>
+		order by register_date DESC
+	</select>
+
+	<!--渠道-->
+	<select id="selectChannel" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		<include refid="Base_Column_List" />
+		from t_member
+		where 1=1
+		<if test="channelNum != null and channelNum != ''">
+			and register_channel = #{channelNum}
+		</if>
+		<if test="userId != null and userId != ''">
+			and memberID = #{userId}
+		</if>
+		<if test="userName != null and userName != ''">
+			and name like CONCAT('%',#{userName},'%')
+		</if>
+		<if test="beginTime != null and beginTime != ''">
+			AND  DATEDIFF(register_date,#{beginTime}) &gt;= 0
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND  DATEDIFF(register_date,#{endTime})&lt;0
+		</if>
+		<if test="lastLoginFrom != null and lastLoginFrom != '' ">
+			<if test="lastLoginFrom == 'android'">
+				AND last_login_from = #{lastLoginFrom}
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (last_login_from is NULL
+				or last_login_from = 'iOS')
+			</if>
+		</if>
+		order by register_date desc
+	</select>
+
+
+	<!--小妖精渠道-->
+	<select id="xiaoyaojingSelectChannel" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		<include refid="Base_Column_List" />
+		from t_member
+		where 1=1 and register_channel in ('an1','an2','an3','an4','an5','an6','an7')
+		and id not in (SELECT user_id from member_channel_deduct)
+		<if test="channelNum != null and channelNum != ''">
+			and register_channel = #{channelNum}
+		</if>
+		<if test="userId != null and userId != ''">
+			and memberID = #{userId}
+		</if>
+		<if test="userName != null and userName != ''">
+			and name like CONCAT('%',#{userName},'%')
+		</if>
+		<if test="beginTime != null and beginTime != ''">
+			AND  DATEDIFF(register_date,#{beginTime}) &gt;= 0
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND  DATEDIFF(register_date,#{endTime})&lt;0
+		</if>
+		<if test="lastLoginFrom != null and lastLoginFrom != '' ">
+			<if test="lastLoginFrom == 'android'">
+				AND last_login_from = #{lastLoginFrom}
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (last_login_from is NULL
+				or last_login_from = 'iOS')
+			</if>
+		</if>
+		order by register_date desc
+	</select>
+
+	<select id="selectIdByMemberId" resultType="Member">
+		select
+		<include refid="Base_Column_List" />
+		from t_member
+		where 1=1
+		<if test="memberId != null and memberId !='' ">
+		   and memberID = #{memberId}
+		</if>
+
+	</select>
+
+
+	<select id="getCoinsById" resultType="java.lang.Integer">
+		SELECT coins
+		FROM account
+		WHERE id = #{id}
+	</select>
+
+	<select id="getRegisterChannel" resultMap="BaseResultMap">
+		SELECT register_channel
+		FROM t_member
+		GROUP by register_channel
+	</select>
+
+</mapper>

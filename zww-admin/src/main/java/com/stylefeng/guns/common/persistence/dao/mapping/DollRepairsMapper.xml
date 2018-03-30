@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.DollRepairsMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.DollRepairs">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="doll_id" property="dollId" />
+		<result column="repairs_reason" property="repairsReason" />
+		<result column="create_date" property="createDate" />
+		<result column="modified_date" property="modifiedDate" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id AS userId, doll_id AS dollId, repairs_reason AS repairsReason, create_date AS createDate, modified_date AS modifiedDate
+    </sql>
+
+	<select id="selectDollRepairs" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select a.id id, a.user_id userId, a.doll_id dollId, a.repairs_reason repairsReason,
+		a.create_date createDate, a.modified_date modifyDate,
+		b.memberID memberID, b.name name,
+		c.name dollName, c.tbimg_real_path tbimgRealPath, c.machine_code machineCode,
+		c.machine_status machineStatus,
+		d.province province,d.city city,d.county county,d.street street
+		from doll_repairs a LEFT JOIN t_member b on a.user_id=b.id
+		LEFT JOIN t_doll c on a.doll_id=c.id LEFT JOIN doll_address d on c.doll_address_id=d.id
+		<!--where 1=1-->
+		<!--<if test="userId != null and userId != ''">-->
+			<!--and memberID = #{userId}-->
+		<!--</if>-->
+		ORDER by id DESC
+	</select>
+
+</mapper>

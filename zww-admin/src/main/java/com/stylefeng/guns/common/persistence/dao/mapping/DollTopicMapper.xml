@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.DollTopicMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.DollTopic">
+		<id column="id" property="id" />
+		<result column="doll_id" property="dollId" />
+		<result column="doll_name" property="dollName" />
+		<result column="room_type" property="roomType" />
+		<result column="topic_type" property="topicType" />
+		<result column="topic_name" property="topicName" />
+		<result column="groupid" property="groupid" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, doll_id AS dollId, doll_name AS dollName, room_type AS roomType, topic_type AS topicType, topic_name AS topicName, groupid
+    </sql>
+
+		<!-- 分页查询用户列表 -->
+	<select id="getDollTopicList" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		a.id, a.doll_id AS dollId, a.doll_name AS dollName, a.room_type AS roomType, a.topic_type AS topicType, a.topic_name AS topicName, groupid,
+		 b.machine_code as machineCode
+		from doll_topic a LEFT JOIN t_doll b on a.doll_id = b.id
+		where 1=1
+		<if test="machineCode != null and machineCode != '' ">
+			and b.machine_code = #{machineCode}
+		</if>
+		<if test="topicName!=null and topicName != ''">
+			and a.topic_name like concat('%',#{topicName},'%')
+		</if>
+		order by id desc
+	</select>
+
+	<select id="selectLists" resultType="DollTopic" parameterType="DollTopic">
+		select * from doll_topic
+		where
+		topic_name = #{topicName} and doll_id = #{dollId}
+	</select>
+
+	<select id="selectByTopicName" resultType="java.lang.Integer">
+		select DISTINCT topic_type from doll_topic where topic_name = #{topicName}
+	</select>
+
+	<select id="getMaxTopicType" resultType="java.lang.Integer">
+		select MAX(topic_type) max from doll_topic
+	</select>
+
+	<select id="getTopicList" resultMap="BaseResultMap">
+		select DISTINCT topic_type, topic_name from doll_topic
+	</select>
+
+	<select id="selectByTopicType" resultType="java.lang.String">
+		select DISTINCT topic_name from doll_topic where topic_Type = #{topicType}
+	</select>
+
+	<!--修改主题时候修改房间名-->
+	<update id="updateByDollId" parameterType="DollTopic">
+		update doll_topic
+		<set>
+			<if test="dollName != null">
+				doll_name = #{dollName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where doll_id = #{dollId,jdbcType=INTEGER}
+	</update>
+
+</mapper>

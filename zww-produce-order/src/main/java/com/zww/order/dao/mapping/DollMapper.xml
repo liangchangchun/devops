@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bfei.icrane.core.dao.DollDao">
+    <resultMap id="BaseResultMap" type="com.zww.api.model.Doll">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="machine_type" jdbcType="INTEGER" property="machineType"/>
+        <result column="quantity" jdbcType="INTEGER" property="quantity"/>
+        <result column="price" jdbcType="INTEGER" property="price"/>
+        <result column="machine_status" jdbcType="VARCHAR" property="machineStatus"/>
+        <result column="machine_serial_num" jdbcType="VARCHAR" property="machineSerialNum"/>
+        <result column="machine_ip" jdbcType="VARCHAR" property="machineIp"/>
+        <result column="machine_url" jdbcType="VARCHAR" property="machineUrl"/>
+        <result column="tbimg_context_path" jdbcType="VARCHAR" property="tbimgContextPath"/>
+        <result column="tbimg_file_name" jdbcType="VARCHAR" property="tbimgFileName"/>
+        <result column="tbimg_real_path" jdbcType="VARCHAR" property="tbimgRealPath"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="created_by" jdbcType="INTEGER" property="createdBy"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="modified_by" jdbcType="INTEGER" property="modifiedBy"/>
+        <result column="rtmp_url_1" jdbcType="VARCHAR" property="rtmpUrl1"/>
+        <result column="rtmp_url_2" jdbcType="VARCHAR" property="rtmpUrl2"/>
+        <result column="rtmp_url_3" jdbcType="VARCHAR" property="rtmpUrl3"/>
+        <result column="rtmp_push_url" jdbcType="VARCHAR" property="rtmpPushUrl"/>
+        <result column="watching_number" jdbcType="INTEGER" property="watchingNumber"/>
+        <result column="mns_topic_name" jdbcType="VARCHAR" property="mnsTopicName"/>
+        <result column="timeout" jdbcType="INTEGER" property="timeout"/>
+        <result column="redeem_coins" jdbcType="INTEGER" property="redeemCoins"/>
+        <result column="machine_code" jdbcType="VARCHAR" property="machineCode"/>
+        <result column="doll_ID" jdbcType="VARCHAR" property="dollID"/>
+        <result column="history_id" jdbcType="INTEGER" property="historyId"/>
+        <result column="doll_address_id" jdbcType="INTEGER" property="dollAddressId"/>
+        <result column="delete_status" jdbcType="INTEGER" property="deleteStatus"/>
+        <result column="rtmpUrlH5" property="rtmpUrlH5"/>
+        <result column="check_state" property="checkState"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		id, name, description, machine_type, quantity, price, machine_status,
+		machine_serial_num, machine_ip,
+		machine_url, tbimg_context_path, tbimg_file_name, tbimg_real_path, created_date,
+		created_by, modified_date,
+		modified_by,rtmp_url_1,rtmp_url_2,rtmp_url_3,rtmp_push_url,watching_number,mns_topic_name,redeem_coins,timeout,machine_code,
+		doll_ID,doll_address_id,delete_status
+	</sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+            resultMap="BaseResultMap">
+        SELECT
+            t_doll.*,
+            doll_h5.rtmpUrlH5 rtmpUrlH5
+        FROM
+            t_doll
+        LEFT JOIN doll_h5 ON t_doll.id = doll_h5.id
+        WHERE
+            t_doll.id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="getTotalCount" resultType="java.lang.Integer">
+		select
+		count(1)
+		from t_doll
+	</select>
+    <!-- 抓取记录 -->
+    <select id="selectDollHistory" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+            dhistory.id history_id,
+            dhistory.video_url videoUrl,
+            doll.tbimg_real_path,
+            IFNULL(info.dollName, doll. NAME) NAME,
+            doll.tbimg_context_path,
+            doll.tbimg_file_name,
+            dhistory.catch_date,
+            IFNULL(mc.check_state ,3) check_state,
+            dhistory.catch_status,
+            dhistory.game_num gameNum
+        FROM
+            t_doll_catch_history dhistory
+        LEFT JOIN t_doll doll ON doll.id = dhistory.doll_id
+        LEFT JOIN member_complaint mc ON mc.member_catch_id = dhistory.id
+        LEFT JOIN doll_info info ON info.dollCode = dhistory.doll_code
+        WHERE
+            dhistory.member_id = #{memberId}
+        ORDER BY
+            dhistory.catch_date DESC
+        LIMIT 100;
+	</select>
+    <select id="getDollList" resultType="Doll">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        t_doll WHERE machine_status!='未上线' AND machine_status!='' AND machine_status!='已下架' AND td.machine_status !=
+        '维修中' AND machine_url in (SELECT machine_name from machine_status where machine_state='ONLINE' AND
+        rtmp_state='开启')
+        ORDER BY watching_number LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getH5DollList" resultType="Doll">
+        SELECT
+            td.id,
+            td. NAME,
+            td.description,
+            td.machine_type,
+            td.quantity,
+            td.price,
+            td.machine_status,
+            td.machine_serial_num,
+            td.machine_ip,
+            td.machine_url,
+            td.tbimg_context_path,
+            td.tbimg_file_name,
+            td.tbimg_real_path,
+            td.created_date,
+            td.created_by,
+            td.modified_date,
+            td.modified_by,
+            td.rtmp_push_url,
+            td.watching_number,
+            td.mns_topic_name,
+            td.redeem_coins,
+            td.timeout,
+            td.machine_code,
+            td.doll_ID,
+            td.doll_address_id,
+            td.delete_status,
+            dh.rtmp_url_h5
+        FROM
+            doll_h5 dh
+        LEFT JOIN t_doll td ON dh.id = td.id
+        WHERE
+            td.machine_status != '未上线'
+        AND td.machine_status != ''
+        AND td.machine_status != '已下架'
+        AND td.machine_status != '维修中'
+        AND td.machine_url in (SELECT machine_name from machine_status where machine_state='ONLINE' AND rtmp_state='开启')
+        ORDER BY
+	        td.watching_number
+	    LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getDollTopics" resultType="DollTopic">
+	  select DISTINCT '' as id,'' as dollId,'' as doll_name,room_type as roomType,topic_type as topicType,
+	  topic_name as topicName,0 groupid from doll_topic order by topic_type
+	</select>
+    <!-- 查询主题列表对应房间 -->
+    <select id="getDollTopicList" resultType="com.zww.api.model.Doll">
+        select r.* from (
+        select a.id,IFNULL(a.NAME, b.doll_name) `name`, a.description, a.machine_type, a.quantity, a.price,
+        a.machine_status,
+        a.machine_serial_num, a.machine_ip,
+        a.machine_url, a.tbimg_context_path, a.tbimg_file_name, a.tbimg_real_path, a.created_date,
+        a.created_by, a.modified_date,
+        a.modified_by,a.rtmp_url_1,a.rtmp_url_2,a.rtmp_url_3,a.rtmp_push_url,a.watching_number,a.mns_topic_name,a.redeem_coins,a.timeout,a.machine_code,
+        a.doll_ID
+        FROM
+        t_doll a LEFT JOIN (select * from doll_topic x where 1=1
+        <if test="dollTopic == 0">
+            AND x.groupid = 0
+        </if>
+        ) b on a.id = b.doll_id
+        LEFT JOIN doll_h5 dh ON a.id = dh.id
+        WHERE dh.id IS NULL
+        AND
+        machine_status!='未上线' AND machine_status!='' AND machine_status!='已下架' AND
+        machine_status != '维修中' AND a.machine_url in (SELECT machine_name from machine_status where
+        machine_state='ONLINE' AND rtmp_state='开启')
+        <if test="dollTopic > 0">
+            AND b.topic_type = #{dollTopic}
+        </if>
+        AND a.delete_status = 1
+        ) r ORDER BY r.watching_number LIMIT #{offset}, #{limit}
+    </select>
+
+
+    <select id="getH5DollTopicList" resultMap="BaseResultMap">
+        SELECT
+            a.id,
+            a. NAME,
+            a.description,
+            a.machine_type,
+            a.quantity,
+            a.price,
+            a.machine_status,
+            a.machine_serial_num,
+            a.machine_ip,
+            a.machine_url,
+            a.tbimg_context_path,
+            a.tbimg_file_name,
+            a.tbimg_real_path,
+            a.created_date,
+            a.created_by,
+            a.modified_date,
+            a.modified_by,
+            dh.rtmpUrlH5,
+            a.rtmp_push_url,
+            a.watching_number,
+            a.mns_topic_name,
+            a.redeem_coins,
+            a.timeout,
+            a.machine_code,
+            a.doll_ID
+        FROM
+            t_doll a
+        INNER JOIN doll_h5 dh ON a.id = dh.id
+        WHERE
+            (
+                machine_status = '空闲中'
+                OR machine_status = '游戏中'
+            )
+        AND a.machine_url in (SELECT machine_name from machine_status where machine_state='ONLINE' AND rtmp_state='开启')
+        AND delete_status = 1
+        ORDER BY
+            watching_number;
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_doll
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+    <insert id="insert" parameterType="Doll">
+		insert into t_doll (id, name, description, machine_type,
+		quantity, price, machine_status,doll_address_id,
+		machine_serial_num, machine_ip, machine_url,
+		tbimg_context_path, tbimg_file_name, tbimg_real_path,
+		created_date, created_by, modified_date, rtmp_url_1,rtmp_url_2
+		modified_by)
+		values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},#{machineType,jdbcType=INTEGER},
+		#{quantity,jdbcType=INTEGER}, #{price,jdbcType=INTEGER}, #{machineStatus,jdbcType=VARCHAR},#{dollAddressId,jdbcType=INTEGER},
+		#{machineSerialNum,jdbcType=VARCHAR}, #{machineIp,jdbcType=VARCHAR},
+		#{machineUrl,jdbcType=VARCHAR},
+		#{tbimgContextPath,jdbcType=VARCHAR}, #{tbimgFileName,jdbcType=VARCHAR}, #{tbimgRealPath,jdbcType=VARCHAR},
+		#{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=INTEGER},
+		#{modifiedDate,jdbcType=TIMESTAMP},
+		#{modifiedBy,jdbcType=INTEGER}),#{rtmpUrl1,jdbcType=VARCHAR},#{rtmpUrl2,jdbcType=VARCHAR}
+	</insert>
+    <insert id="insertSelective" parameterType="Doll">
+        insert into t_doll
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="machineType != null">
+                machine_type,
+            </if>
+            <if test="quantity != null">
+                quantity,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="redeemCoins != null">
+                redeem_coins,
+            </if>
+            <if test="machineStatus != null">
+                machine_status,
+            </if>
+            <if test="machineSerialNum != null">
+                machine_serial_num,
+            </if>
+            <if test="machineIp != null">
+                machine_ip,
+            </if>
+            <if test="machineUrl != null">
+                machine_url,
+            </if>
+            <if test="mnsTopicName != null">
+                mns_topic_name,
+            </if>
+            <if test="tbimgContextPath != null">
+                tbimg_context_path,
+            </if>
+            <if test="tbimgFileName != null">
+                tbimg_file_name,
+            </if>
+            <if test="tbimgRealPath != null">
+                tbimg_real_path,
+            </if>
+            <if test="createdDate != null">
+                created_date,
+            </if>
+            <if test="createdBy != null">
+                created_by,
+            </if>
+            <if test="modifiedDate != null">
+                modified_date,
+            </if>
+            <if test="modifiedBy != null">
+                modified_by,
+            </if>
+            <if test="rtmpPushUrl != null">
+                rtmp_push_url,
+            </if>
+            <if test="rtmpUrl1 != null">
+                rtmp_url_1,
+            </if>
+            <if test="rtmpUrl2 != null">
+                rtmp_url_2,
+            </if>
+            <if test="rtmpUrl3 != null">
+                rtmp_url_3,
+            </if>
+            <if test="timeout != null">
+                timeout,
+            </if>
+            <if test="machineCode != null">
+                machine_code,
+            </if>
+            <if test="dollID != null">
+                doll_ID,
+            </if>
+            <if test="dollAddressId != null">
+                doll_address_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="machineType != null">
+                #{machineType,jdbcType=INTEGER},
+            </if>
+            <if test="quantity != null">
+                #{quantity,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=INTEGER},
+            </if>
+            <if test="redeemCoins != null">
+                #{redeemCoins,jdbcType=INTEGER},
+            </if>
+            <if test="machineStatus != null">
+                #{machineStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="machineSerialNum != null">
+                #{machineSerialNum,jdbcType=VARCHAR},
+            </if>
+            <if test="machineIp != null">
+                #{machineIp,jdbcType=VARCHAR},
+            </if>
+            <if test="machineUrl != null">
+                #{machineUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="mnsTopicName != null">
+                #{mnsTopicName,jdbcType=VARCHAR},
+            </if>
+            <if test="tbimgContextPath != null">
+                #{tbimgContextPath,jdbcType=VARCHAR},
+            </if>
+            <if test="tbimgFileName != null">
+                #{tbimgFileName,jdbcType=VARCHAR},
+            </if>
+            <if test="tbimgRealPath != null">
+                #{tbimgRealPath,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=INTEGER},
+            </if>
+            <if test="modifiedDate != null">
+                #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                #{modifiedBy,jdbcType=INTEGER},
+            </if>
+            <if test="rtmpPushUrl != null">
+                #{rtmpPushUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="rtmpUrl1 != null">
+                #{rtmpUrl1,jdbcType=VARCHAR},
+            </if>
+            <if test="rtmpUrl2 != null">
+                #{rtmpUrl2,jdbcType=VARCHAR},
+            </if>
+            <if test="rtmpUrl3 != null">
+                #{rtmpUrl3,jdbcType=VARCHAR},
+            </if>
+            <if test="timeout != null">
+                #{timeout,jdbcType=INTEGER},
+            </if>
+            <if test="machineCode != null">
+                #{machineCode,jdbcType=VARCHAR},
+            </if>
+            <if test="dollID != null">
+                #{dollID,jdbcType=VARCHAR},
+            </if>
+            <if test="dollAddressId != null">
+                #{dollAddressId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateClean" parameterType="Doll">
+        update t_doll
+        <set>
+            <if test="machineStatus != null">
+                machine_status = #{machineStatus,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER} and machine_status!='未上线' AND machine_status!='维修中' AND machine_status!="已下架"
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="Doll">
+        update t_doll
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="quantity != null">
+                quantity = #{quantity,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=INTEGER},
+            </if>
+            <if test="mnsTopicName != null">
+                mns_topic_name=#{mnsTopicName,jdbcType=VARCHAR},
+            </if>
+            <if test="machineStatus != null">
+                machine_status = #{machineStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="machineSerialNum != null">
+                machine_serial_num = #{machineSerialNum,jdbcType=VARCHAR},
+            </if>
+            <if test="machineIp != null">
+                machine_ip = #{machineIp,jdbcType=VARCHAR},
+            </if>
+            <if test="machineUrl != null">
+                machine_url = #{machineUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="tbimgContextPath != null">
+                tbimg_context_path = #{tbimgContextPath,jdbcType=VARCHAR},
+            </if>
+            <if test="tbimgFileName != null">
+                tbimg_file_name = #{tbimgFileName,jdbcType=VARCHAR},
+            </if>
+            <if test="tbimgRealPath != null">
+                tbimg_real_path = #{tbimgRealPath,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                created_date = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy,jdbcType=INTEGER},
+            </if>
+            <if test="modifiedDate != null">
+                modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=INTEGER},
+            </if>
+            <if test="rtmpUrl1 != null">
+                rtmp_url_1 = #{rtmpUrl1,jdbcType=VARCHAR},
+            </if>
+            <if test="rtmpUrl2 != null">
+                rtmp_url_2 = #{rtmpUrl2,jdbcType=VARCHAR},
+            </if>
+            <if test="rtmpUrl3 != null">
+                rtmp_url_3 = #{rtmpUrl3,jdbcType=VARCHAR},
+            </if>
+            <if test="rtmpPushUrl != null">
+                rtmp_push_url = #{rtmpPushUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="watchingNumber != 0 and watchingNumber != null">
+                watching_number = #{watchingNumber,jdbcType=INTEGER},
+            </if>
+            <if test="redeemCoins != null">
+                redeem_coins = #{redeemCoins,jdbcType=INTEGER},
+            </if>
+            <if test="timeout != null">
+                timeout = #{timeout,jdbcType=INTEGER},
+            </if>
+            <if test="machineCode != null">
+                machine_code = #{machineCode,jdbcType=VARCHAR},
+            </if>
+            <if test="dollID != null">
+                doll_ID = #{dollID,jdbcType=VARCHAR},
+            </if>
+            <if test="machineType != null">
+                machine_type = #{machineType,jdbcType=INTEGER},
+            </if>
+            <if test="dollAddressId != null">
+                doll_address_id = #{dollAddressId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="Doll">
+		update t_doll
+		set name = #{name,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		quantity = #{quantity,jdbcType=INTEGER},
+		price = #{price,jdbcType=INTEGER},
+		machine_status = #{machineStatus,jdbcType=VARCHAR},
+		machine_serial_num = #{machineSerialNum,jdbcType=VARCHAR},
+		machine_ip = #{machineIp,jdbcType=VARCHAR},
+		machine_url = #{machineUrl,jdbcType=VARCHAR},
+		tbimg_context_path = #{tbimgContextPath,jdbcType=VARCHAR},
+		tbimg_file_name = #{tbimgFileName,jdbcType=VARCHAR},
+		tbimg_real_path = #{tbimgRealPath,jdbcType=VARCHAR},
+		created_date = #{createdDate,jdbcType=TIMESTAMP},
+		created_by = #{createdBy,jdbcType=INTEGER},
+		modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+		modified_by = #{modifiedBy,jdbcType=INTEGER},
+		rtmp_url_1 = #{rtmpUrl1,jdbcType=VARCHAR},
+		rtmp_url_2 = #{rtmpUrl2,jdbcType=VARCHAR},
+		watching_number = #{watchingNumber,jdbcType=INTEGER},
+		mns_topic_name = #{mnsTopicName,jdbcType=VARCHAR},
+		machine_type = #{machineType,jdbcType=INTEGER},
+		doll_address_id = #{dollAddressId,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+    
+    <!-- 删除娃娃机根据id -->
+    <delete id="dollDel" parameterType="Doll">
+		delete from t_doll
+		where id=#{id,jdbcType=INTEGER}
+	</delete>
+    <!-- 根据id查询娃娃机 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultType="Doll">
+		select
+		id, name, description, quantity, price, machine_status,machine_type,doll_ID,
+		machine_serial_num, machine_ip,
+		machine_url, tbimg_real_path,
+		rtmp_url_1,rtmp_url_2,rtmp_url_3,rtmp_push_url,mns_topic_name,redeem_coins,timeout,watching_number,machine_code,doll_address_id
+		from t_doll
+		where id=#{id,jdbcType=INTEGER}
+	</select>
+    <select id="totalCount" resultType="java.lang.Integer">
+        select
+        count(1)
+        from t_doll
+        where machine_status!="" AND machine_status!="已下架" and delete_status = 1
+        <if test="name!=null">
+            and name like concat
+            ('%',#{name},'%')
+        </if>
+        <if test="machineCode!=null">
+            and machine_code = #{machineCode}
+        </if>
+        <if test="machineStatus!=null">
+            and machine_status = #{machineStatus}
+        </if>
+    </select>
+    <select id="allDollList" resultType="Doll">
+		select id,name,machine_code
+		from t_doll where delete_status = 1
+	</select>
+    <select id="getDollByName" resultType="Doll">
+		select id,name
+		from t_doll
+		where name = #{name}
+	</select>
+    <select id="getTopicInfo" resultType="com.zww.api.model.TopicInfo">
+        SELECT
+            *
+        FROM
+            topic_info
+        ORDER BY
+            orderBy;
+    </select>
+    <select id="selectTypeById" resultType="java.lang.Integer">
+        SELECT
+            machine_type
+        FROM
+            t_doll
+        WHERE
+            id = #{dollId};
+    </select>
+    <select id="selectDollId" resultType="java.lang.Integer">
+        SELECT
+            id
+        FROM
+            t_doll;
+    </select>
+
+    <select id="getDollByDollCode" resultType="com.zww.api.model.Doll">
+        SELECT
+            a.id,
+            a. NAME,
+            a.description,
+            a.machine_type,
+            a.quantity,
+            a.price,
+            a.machine_status,
+            a.machine_serial_num,
+            a.machine_ip,
+            a.machine_url,
+            a.tbimg_context_path,
+            a.tbimg_file_name,
+            a.tbimg_real_path,
+            a.created_date,
+            a.created_by,
+            a.modified_date,
+            a.modified_by,
+            dh.rtmpUrlH5,
+            a.rtmp_push_url,
+            a.watching_number,
+            a.mns_topic_name,
+            a.redeem_coins,
+            a.timeout,
+            a.machine_code,
+            a.doll_ID
+        FROM
+            t_doll a
+        LEFT JOIN doll_h5 dh ON a.id = dh.id
+        WHERE
+            (
+                machine_status = '空闲中'
+                OR machine_status = '游戏中'
+            )
+        AND a.machine_url IN (
+            SELECT
+                machine_name
+            FROM
+                machine_status
+            WHERE
+                machine_state = 'ONLINE'
+            AND rtmp_state = '开启'
+        )
+        AND delete_status = 1
+        AND a.doll_ID = #{dollCode}
+        LIMIT 1;
+    </select>
+    <select id="selectSpareRoom" resultType="com.zww.api.model.Doll">
+        SELECT
+            a.id,
+            a. NAME,
+            a.description,
+            a.machine_type,
+            a.quantity,
+            a.price,
+            a.machine_status,
+            a.machine_serial_num,
+            a.machine_ip,
+            a.machine_url,
+            a.tbimg_context_path,
+            a.tbimg_file_name,
+            a.tbimg_real_path,
+            a.created_date,
+            a.created_by,
+            a.modified_date,
+            a.modified_by,
+            a.rtmp_push_url,
+            a.watching_number,
+            a.mns_topic_name,
+            a.redeem_coins,
+            a.timeout,
+            a.machine_code,
+            a.doll_ID
+        FROM
+            t_doll a
+        WHERE
+            (
+                machine_status = '空闲中'
+                OR machine_status = '游戏中'
+            )
+        AND a.machine_url IN (
+            SELECT
+                machine_name
+            FROM
+                machine_status
+            WHERE
+                machine_state = 'ONLINE'
+            AND rtmp_state = '开启'
+        )
+        AND delete_status = 1
+        AND machine_type = 1;
+    </select>
+
+    <!--删除状态-->
+    <update id="updateDeleteStatus" parameterType="java.lang.Integer">
+		update t_doll
+		set
+		delete_status = 0
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

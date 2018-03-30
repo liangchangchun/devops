@@ -1,0 +1,42 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+            <input type="hidden" id="operation" value="add">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <!--<#input id="id" name="id" underline="true"/>-->
+                            <!--<#input id="dollId" name="机器id" underline="false"/>-->
+                            <#Combobox id="dollId" name="机器名称"  dataOptions="showAll:'no',valueField:'id',textField:'name',url:'${ctxPath}/common/getDollListProbability'" >
+                                    </#Combobox>
+                            <#input id="probabilityRulesId" name="充值金额阈值" underline="false"/>
+                            <#input id="probability1" name="未充值概率" underline="false"/>
+
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="probability2" name="充值小于阈值概率"/>
+                            <#input id="probability3" name="充值大于阈值概率" underline="false"/>
+                            <#input id="baseNum" name="概率基数" underline="false"/>
+                            <!--<#input id="createdDate" name="创建时间" underline="true"/>-->
+                            <!--<#input id="modifiedDate" name="修改时间" underline="true"/>-->
+                            <!--<#input id="createdBy" name="创建人" underline="true"/>-->
+                            <!--<#input id="modifiedBy" name="修改人" underline="true"/>-->
+                </div>
+            </div>
+            <span>注：概率基数，抓中娃娃的最小间隔次数</span>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MachineProbabilityInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MachineProbabilityInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/machineProbability/machineProbability_info.js"></script>
+@}

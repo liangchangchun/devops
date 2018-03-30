@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.MemberComplaintMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.MemberComplaint">
+		<id column="id" property="id" />
+		<result column="game_num" property="gameNum" />
+		<result column="member_id" property="memberId" />
+		<result column="member_num" property="memberNum" />
+		<result column="doll_id" property="dollId" />
+		<result column="member_catch_id" property="memberCatchId" />
+		<result column="complaint_reason" property="complaintReason" />
+		<result column="check_state" property="checkState" />
+		<result column="check_reason" property="checkReason" />
+		<result column="creat_date" property="creatDate" />
+		<result column="creat_by" property="creatBy" />
+		<result column="modify_date" property="modifyDate" />
+		<result column="modify_by" property="modifyBy" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, game_num AS gameNum, member_id AS memberId, member_num AS memberNum, doll_id AS dollId, member_catch_id AS memberCatchId, complaint_reason AS complaintReason, check_state AS checkState, check_reason AS checkReason, creat_date AS creatDate, creat_by AS creatBy, modify_date AS modifyDate, modify_by AS modifyBy
+    </sql>
+
+	<!-- 待处理 -->
+	<select id="selectMemberComplain" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select a.id id, a.game_num gameNum,a.member_id memberId, a.member_num memberNum,a.doll_id dollId,
+		a.member_catch_id memberCatchId, a.complaint_reason complaintReason,a.check_state checkState,a.check_reason
+		checkReason,
+		a.creat_date creatDate,a.modify_date modifyDate,
+		b.name memberName, b.mobile memberPhone,b.register_channel complaintChannel,
+		c.tbimg_real_path dollImg, c.name dollName,c.price dollCions,
+		d.catch_date memberCatchDate, d.catch_status memberCatchResult,d.video_url videoURL
+		from member_complaint a LEFT JOIN t_member b on a.member_id=b.id
+		LEFT JOIN t_doll c on a.doll_id=c.id LEFT JOIN t_doll_catch_history d on a.member_catch_id=d.id
+		where 1=1 AND a.check_state = 0
+		<if test="memberNum!=null and memberNum!='' ">
+			and a.member_num = #{memberNum,jdbcType=VARCHAR}
+		</if>
+		<if test="complaintChannel!=null and complaintChannel!='' ">
+			and b.register_channel = #{complaintChannel,jdbcType=VARCHAR}
+		</if>
+		order by a.id desc
+	</select>
+
+	<!--已处理-->
+	<select id="selectMemberComplainDone" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select a.id id, a.game_num gameNum,a.member_id memberId, a.member_num memberNum,a.doll_id dollId,
+		a.member_catch_id memberCatchId, a.complaint_reason complaintReason,a.check_state checkState,a.check_reason
+		checkReason,
+		a.creat_date creatDate,a.modify_date modifyDate,
+		b.name memberName, b.mobile memberPhone,b.register_channel complaintChannel,
+		c.tbimg_real_path dollImg, c.name dollName,c.price dollCions,
+		d.catch_date memberCatchDate, d.catch_status memberCatchResult,d.video_url videoURL
+		from member_complaint a LEFT JOIN t_member b on a.member_id=b.id
+		LEFT JOIN t_doll c on a.doll_id=c.id LEFT JOIN t_doll_catch_history d on a.member_catch_id=d.id
+		where 1=1 AND a.check_state != 0
+		<if test="memberNum!=null and memberNum!=''">
+			and a.member_num = #{memberNum,jdbcType=VARCHAR}
+		</if>
+		<if test="complaintChannel!=null and complaintChannel != '' ">
+			and b.register_channel = #{complaintChannel,jdbcType=VARCHAR}
+		</if>
+		order by a.id desc
+	</select>
+
+</mapper>

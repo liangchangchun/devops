@@ -1,0 +1,41 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>待发货列表管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="phone" name="手机" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="memberId" name="用户id" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="TDollOrder.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="TDollOrderTableToolbar" role="group">
+                            @if(shiro.hasPermission("/tDollOrder/update")){
+                                 <#button name="发货" icon="fa-plus" clickFun="TDollOrder.openTDollOrderDetail()"/>
+                            @}
+                            @if(shiro.hasPermission("/tDollOrder/add")){
+                                <!--<#button name="添加" icon="fa-plus" clickFun="TDollOrder.openAddTDollOrder()"/>-->
+                            @}
+                            @if(shiro.hasPermission("/tDollOrder/delete")){
+                                <!--<#button name="删除" icon="fa-plus" clickFun="TDollOrder.delete()" space="true"/>-->
+                            @}
+                        </div>
+                        <#table id="TDollOrderTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tDollOrder/tDollOrder.js"></script>
+@}

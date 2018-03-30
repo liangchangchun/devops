@@ -1,0 +1,23 @@
+server:
+  port: ${PORT:8501}
+
+spring:
+  application:
+    name: eureka
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl: 
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    enableSelfPreservation: false
+
+
+# 自定义属性
+h2:
+  web:
+    enabled: true

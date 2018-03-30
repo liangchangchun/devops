@@ -1,0 +1,35 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="dollTopicInfoForm">
+
+            <input type="hidden" id="id" value="">
+            <input type="hidden" id="operation" value="add">
+            <input type="hidden" id="dollIdValue" value="${item.id}"/>
+
+            <div class="row">
+                <div class="col-sm-12">   
+                    <#Combobox id="topicName" name="主题名称"  dataOptions="valueField:'topicName',textField:'topicName',url:'${ctxPath}/common/getTopicList'" >
+                    </#Combobox>
+                    <!--<#input id="roomType" name="主题排序"/>-->
+                    <#Combobox id="dollId" name="机器名称"  dataOptions="showAll:'no',valueField:'id',textField:'name',url:'${ctxPath}/common/getDollListOrderByMachineCode'" >
+                    </#Combobox>
+                    <#SelectCon id="groupid" name="房间分组" >
+								<option value="0" >首页显示</option>
+								<option value="1" selected>首页不显示</option>
+					</#SelectCon>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="DollTopicInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="DollTopicInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/dollTopic/dollTopic_info_doll.js"></script>
+@}

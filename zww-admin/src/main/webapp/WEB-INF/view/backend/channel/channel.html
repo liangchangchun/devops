@@ -1,0 +1,62 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>渠道管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#Combobox id="channelNum" name="渠道号" dataOptions="valueField:'registerChannel',textField:'registerChannel',url:'${ctxPath}/common/getRegisterChannel'" >
+                                </#Combobox>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="userId" name="用户id" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="userName" name="用户名" />
+                            </div>
+                            <div class="col-sm-2">
+                                <#SelectCon id="lastLoginFrom" name="设备">
+                                    <option value="">全部</option>
+                                    <option value="android">android</option>
+                                    <option value="ios">ios</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="registerDate" name="开始时间" isTime="false" pattern="YYYY-MM-DD hh:mm:ss"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="endDate" name="结束时间" isTime="false" pattern="YYYY-MM-DD hh:mm:ss"/>
+                            </div>
+                            <div class="col-sm-2">
+                                <#button name="搜索" icon="fa-search" clickFun="Member.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="ChannelTableToolbar" role="group">
+                            <#button name="查看抓取记录" icon="fa-youtube" clickFun="Member.openMemberCatchDetail()" />
+
+                            <#button name="查看充值记录" icon="fa-xing" clickFun="Member.openMemberChargeDetail()" space="true"/>
+
+                            @if(shiro.hasPermission("/member/channelDeduct")){
+                                <#button name="扣量" icon="fa-xing" clickFun="Member.channelDeduct()" space="true"/>
+                            @}
+
+                        </div>
+                         <!--<div class="row">-->
+                         <!--<div class="col-sm-3">-->
+                        	 <!--<#NameCon id="totalCoins" name="总金额" readonly="readonly" style="width:80px;text-align:right;" />-->
+                         <!--</div>-->
+                         <!--</div>-->
+                        <#table id="ChannelTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/channel/channel.js"></script>
+@}

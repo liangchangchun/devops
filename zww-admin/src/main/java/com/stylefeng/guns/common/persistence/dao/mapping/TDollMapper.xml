@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.TDollMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.TDoll">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+		<result column="quantity" property="quantity" />
+		<result column="price" property="price" />
+		<result column="redeem_coins" property="redeemCoins" />
+		<result column="machine_status" property="machineStatus" />
+		<result column="machine_serial_num" property="machineSerialNum" />
+		<result column="machine_ip" property="machineIp" />
+		<result column="machine_url" property="machineUrl" />
+		<result column="tbimg_context_path" property="tbimgContextPath" />
+		<result column="tbimg_file_name" property="tbimgFileName" />
+		<result column="tbimg_real_path" property="tbimgRealPath" />
+		<result column="created_date" property="createdDate" />
+		<result column="created_by" property="createdBy" />
+		<result column="modified_date" property="modifiedDate" />
+		<result column="modified_by" property="modifiedBy" />
+		<result column="rtmp_url_1" property="rtmpUrl1" />
+		<result column="rtmp_url_2" property="rtmpUrl2" />
+		<result column="rtmp_url_3" property="rtmpUrl3" />
+		<result column="rtmp_push_url" property="rtmpPushUrl" />
+		<result column="mns_topic_name" property="mnsTopicName" />
+		<result column="watching_number" property="watchingNumber" />
+		<result column="timeout" property="timeout" />
+		<result column="pili_room_name" property="piliRoomName" />
+		<result column="machine_code" property="machineCode" />
+		<result column="doll_ID" property="dollID" />
+		<result column="machine_type" property="machineType" />
+		<result column="doll_address_id" property="dollAddressId" />
+		<result column="delete_status" property="deleteStatus" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, description, quantity, price, redeem_coins AS redeemCoins, machine_status AS machineStatus,
+         machine_serial_num AS machineSerialNum, machine_ip AS machineIp, machine_url AS machineUrl,
+          tbimg_context_path AS tbimgContextPath, tbimg_file_name AS tbimgFileName, tbimg_real_path AS tbimgRealPath,
+           created_date AS createdDate, created_by AS createdBy, modified_date AS modifiedDate, modified_by AS modifiedBy,
+            rtmp_url_1 AS rtmpUrl1, rtmp_url_2 AS rtmpUrl2, rtmp_url_3 AS rtmpUrl3, rtmp_push_url AS rtmpPushUrl,
+             mns_topic_name AS mnsTopicName, watching_number AS watchingNumber, timeout, pili_room_name AS piliRoomName,
+              machine_code AS machineCode, doll_ID AS dollID, machine_type AS machineType,
+               doll_address_id AS dollAddressId, delete_status AS deleteStatus
+    </sql>
+    
+    <select id="selectDolls" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+        a.id id, a.name name, a.description description, a.machine_type machineType, quantity, price, a.machine_status
+        machineStatus,
+        a.machine_serial_num machineSerialNum, a.machine_ip machineIp,
+        a.machine_url machineUrl, a.tbimg_context_path tbimgContextPath, a.tbimg_file_name tbimgFileName,
+        a.tbimg_real_path tbimgRealPath, a.created_date createdDate,
+        a.created_by createdBy, a.modified_date modifiedDate,
+        a.modified_by modifiedBy, a.rtmp_url_1 rtmpUrl1, a.rtmp_url_2 rtmpUrl2, a.rtmp_url_3 rtmpUrl3,
+        a.rtmp_push_url rtmpPushUrl, a.watching_number watchingNumber, a.mns_topic_name mnsTopicName, a.redeem_coins
+        redeemCoins, timeout, a.machine_code machineCode,
+        a.doll_ID dollID, a.doll_address_id dollAddressId,
+        b.province, b.city, b.county, b.street
+        from t_doll a LEFT JOIN doll_address b on a.doll_address_id = b.id
+        where machine_status!="" AND machine_status!="已下架" and delete_status = 1
+        <if test="dollId!=null and dollId != ''">
+            and a.id = #{dollId}
+        </if>
+		<if test="name!=null and name != ''">
+			and name like CONCAT('%',#{name},'%')
+		</if>
+        <if test="machineCode!=null and machineCode !=''">
+            and machine_code = #{machineCode}
+        </if>
+        <if test="machineStatus!=null and machineStatus !=''">
+			<if test="machineStatus == '在线中'">
+				AND (machine_status = '空闲中' or machine_status = '游戏中')
+			</if>
+			<if test="machineStatus != '在线中'">
+				and machine_status = #{machineStatus}
+			</if>
+        </if>
+		<if test="machineType!=null and machineType !=''">
+			and machine_type = #{machineType}
+		</if>
+		<if test="modifiedBy!=null and modifiedBy !=''">
+			<if test="modifiedBy == -1 ">
+				and a.modified_by IS NULL
+			</if>
+		</if>
+        order by a.modified_date desc
+	</select>
+
+	<!--机器列表排序-->
+	<select id="getDollListOrderByMachineCode" resultType="TDoll" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		id, name, machine_code AS machineCode
+		from t_doll
+		WHERE delete_status = 1
+		ORDER BY machine_code
+	</select>
+
+	<!--小机器列表-->
+	<select id="getDollListProbability" resultType="TDoll" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		id, name, machine_code AS machineCode
+		from t_doll
+		where machine_url like CONCAT('devicea%') and delete_status = 1
+	</select>
+
+	<!--占卜机器列表-->
+	<select id="getDollListDivination" resultType="TDoll" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		id, name, machine_code AS machineCode
+		from t_doll
+		where machine_type = 3 and delete_status = 1
+	</select>
+</mapper>

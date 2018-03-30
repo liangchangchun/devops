@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zww.account.dao.AccountDao">
+    <resultMap id="BaseResultMap" type="com.zww.api.model.Account">
+        <id column="id" property="id"/>
+        <result column="coins" property="coins"/>
+        <result column="superTicket" property="superTicket"/>
+        <result column="bitState" property="bitState"/>
+        <result column="weeksCardState" property="weeksCardState"/>
+        <result column="monthCardState" property="monthCardState"/>
+    </resultMap>
+    <insert id="insert">
+        INSERT INTO account (id, coins, superTicket)
+        VALUES
+            (#{id}, #{coins}, 0);
+    </insert>
+
+    <!-- 更新总币数 -->
+    <update id="updateMemberCoin">
+        UPDATE account
+        SET
+        coins = coins + #{coins}
+        WHERE
+        id = #{id}
+    </update>
+
+    <!-- 更新钻石 -->
+    <update id="updateMemberSuperTicket">
+        UPDATE account
+        SET
+        superTicket = superTicket + #{superTicket}
+        WHERE
+        id = #{id}
+    </update>
+
+    <!-- 更新周卡状态 -->
+    <update id="updateMemberSeeksCardState">
+        UPDATE account
+        <set>
+            <if test="coins != null">
+                coins = coins + #{coins},
+            </if>
+            <if test="bitState != null">
+                bitState = #{bitState},
+            </if>
+            <if test="weeksCardState != null">
+                weeksCardState = #{weeksCardState},
+            </if>
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <!-- 更新月卡状态 -->
+    <update id="updateMemberMonthCardState">
+        UPDATE account
+        <set>
+            <if test="coins != null">
+                coins = coins + #{coins},
+            </if>
+            <if test="bitState != null">
+                bitState = #{bitState},
+            </if>
+            <if test="monthCardState != null">
+                monthCardState = #{monthCardState},
+            </if>
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateBitStatesById">
+        UPDATE account SET bitState = #{bitState}
+        WHERE
+        id = #{id};
+    </update>
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            account
+        WHERE
+            id = #{id}
+    </select>
+    <select id="selectId" resultType="java.lang.Integer">
+        SELECT
+            id
+        FROM
+            account
+        WHERE
+            id = #{id}
+    </select>
+</mapper>
+
+

@@ -1,0 +1,66 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>订单管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="memberName" name="用户名" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="memberId" name="用户id" />
+                            </div>
+                            <div class="col-sm-3">
+                              <#Combobox id="comboNames" name="充值规则" dataOptions="valueField:'id',textField:'chargeName',url:'${ctxPath}/common/getChargeRules'" >
+                              </#Combobox>  
+                            </div>
+                            <div class="col-sm-3">
+                                <#SelectCon id="chargeState" name="订单状态">
+                                    <option value="1">已完成</option>
+                                    <option value="">全部状态</option>
+                                    <option value="0">未完成</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="registeDate" name="开始时间" isTime="false" pattern="YYYY-MM-DD hh:MM:ss"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="endtime" name="截止时间" isTime="false" pattern="YYYY-MM-DD hh:MM:ss"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="ChargeOrder.search()"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="allMoney" name="总金额" readonly="readonly" value=""/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="allPerson" name="充值人数" readonly="readonly" value=""/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="ChargeOrderTableToolbar" role="group">
+                            @if(shiro.hasPermission("/chargeOrder/add")){
+                                <!--<#button name="添加" icon="fa-plus" clickFun="ChargeOrder.openAddChargeOrder()"/>-->
+                            @}
+                            @if(shiro.hasPermission("/chargeOrder/update")){
+                                <!--<#button name="修改" icon="fa-plus" clickFun="ChargeOrder.openChargeOrderDetail()" space="true"/>-->
+                            @}
+                            @if(shiro.hasPermission("/chargeOrder/delete")){
+                                <!--<#button name="删除" icon="fa-plus" clickFun="ChargeOrder.delete()" space="true"/>-->
+                            @}
+                        </div>
+                        <#table id="ChargeOrderTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/chargeOrder/chargeOrder.js"></script>
+@}

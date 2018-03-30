@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.TDollOrderMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.TDollOrder">
+		<id column="id" property="id" />
+		<result column="order_number" property="orderNumber" />
+		<result column="order_date" property="orderDate" />
+		<result column="order_by" property="orderBy" />
+		<result column="status" property="status" />
+		<result column="stock_valid_date" property="stockValidDate" />
+		<result column="deliver_date" property="deliverDate" />
+		<result column="deliver_method" property="deliverMethod" />
+		<result column="deliver_number" property="deliverNumber" />
+		<result column="deliver_amount" property="deliverAmount" />
+		<result column="deliver_coins" property="deliverCoins" />
+		<result column="address_id" property="addressId" />
+		<result column="modified_date" property="modifiedDate" />
+		<result column="modified_by" property="modifiedBy" />
+		<result column="comment" property="comment" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_number AS orderNumber, order_date AS orderDate, order_by AS orderBy, status, stock_valid_date AS stockValidDate, deliver_date AS deliverDate, deliver_method AS deliverMethod, deliver_number AS deliverNumber, deliver_amount AS deliverAmount, deliver_coins AS deliverCoins, address_id AS addressId, modified_date AS modifiedDate, modified_by AS modifiedBy, comment
+    </sql>
+
+	<select id="selectByOrderNum" parameterType="TDollOrder"
+			resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from t_doll_order
+		WHERE order_number = #{orderNumber}
+	</select>
+
+	<!-- 查询申请发货的订单 -->
+	<select id="selectTDollOrder" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select a.id id, a.order_number orderNumber, a.order_date orderDate,
+		a.order_by orderBy,a.status status,a.deliver_date deliverDate,
+		a.deliver_method deliverMethod, a.deliver_number deliverNumber,
+		a.modified_date modifiedDate,
+		b.receiver_phone addrPhone,b.receiver_name addrName, b.province province, b.city city,
+		b.county county, b.street street,
+		c.memberID memberIDs
+		from t_doll_order a LEFT JOIN t_member_addr b ON  a.address_id=b.id
+		LEFT JOIN t_member c on a.order_by = c.id
+		where a.status='申请发货'
+		<if test="phone!=null and phone != '' ">
+			and b.receiver_phone like concat
+			('%',#{phone},'%')
+		</if>
+		<if test="memberId!=null and memberId != '' ">
+			and c.memberID = #{memberId}
+		</if>
+		order by a.modified_date DESC
+	</select>
+
+	<!-- 查询已发货发货的订单 -->
+	<select id="selectTDollOrderOut" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select a.id id, a.order_number orderNumber, a.order_date orderDate,
+		a.order_by orderBy,a.status status,a.deliver_date deliverDate,
+		a.deliver_method deliverMethod, a.deliver_number deliverNumber,
+		a.modified_date modifiedDate,
+		b.receiver_phone addrPhone,b.receiver_name addrName, b.province province, b.city city,
+		b.county county, b.street street,
+		c.memberID memberIDs
+		from t_doll_order a LEFT JOIN t_member_addr b ON  a.address_id=b.id
+		LEFT JOIN t_member c on a.order_by = c.id
+		where a.status='已发货'
+		<if test="phone!=null and phone != '' ">
+			and b.receiver_phone like concat
+			('%',#{phone},'%')
+		</if>
+		<if test="memberId!=null and memberId != '' ">
+			and c.memberID = #{memberId}
+		</if>
+		order by a.modified_date DESC
+	</select>
+</mapper>

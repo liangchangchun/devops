@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.MemberChannelDeductMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.MemberChannelDeduct">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="memberID" property="memberID" />
+		<result column="name" property="name" />
+		<result column="mobile" property="mobile" />
+		<result column="weixin_id" property="weixinId" />
+		<result column="gender" property="gender" />
+		<result column="phone_model" property="phoneModel" />
+		<result column="register_date" property="registerDate" />
+		<result column="last_login_date" property="lastLoginDate" />
+		<result column="register_channel" property="registerChannel" />
+		<result column="login_channel" property="loginChannel" />
+		<result column="register_from" property="registerFrom" />
+		<result column="last_login_from" property="lastLoginFrom" />
+		<result column="online_flg" property="onlineFlg" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id AS userId, memberID, name, mobile, weixin_id AS weixinId, gender, phone_model AS phoneModel, register_date AS registerDate, last_login_date AS lastLoginDate, register_channel AS registerChannel, login_channel AS loginChannel, register_from AS registerFrom, last_login_from AS lastLoginFrom, online_flg AS onlineFlg
+    </sql>
+
+	<!--去重-->
+	<select id="selectByUserid" resultType="java.lang.Integer" >
+		<!-- 具体的sql -->
+		SELECT
+		count(*)
+		FROM
+		member_channel_deduct
+		WHERE
+		user_id = #{userId}
+	</select>
+
+	<!--批量删除-->
+	<delete id="deleteAllById" parameterType="java.util.Arrays">
+		delete from member_channel_deduct
+		where id IN
+		<foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="selectLists" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		<include refid="Base_Column_List" />
+		from member_channel_deduct
+		where 1=1
+		<if test="channelNum != null and channelNum != ''">
+			and register_channel = #{channelNum}
+		</if>
+		<if test="name!=null and name != ''">
+			and name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="userId != null and userId != ''">
+			and memberID = #{userId}
+		</if>
+		<if test="registeDate!=null and registeDate != ''">
+			AND  DATEDIFF(register_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endTime!=null and endTime != ''">
+			AND  DATEDIFF(register_date,#{endTime})&lt;0
+		</if>
+		<if test="lastLoginFrom!=null and lastLoginFrom != ''">
+			<if test="lastLoginFrom == 'android'">
+				AND last_login_from = #{lastLoginFrom}
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (last_login_from is NULL
+				or last_login_from = 'iOS')
+			</if>
+		</if>
+		order by id desc
+	</select>
+
+</mapper>

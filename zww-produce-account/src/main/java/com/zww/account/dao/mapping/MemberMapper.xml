@@ -1,0 +1,936 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zww.account.dao.MemberDao">
+    <resultMap id="BaseResultMap" type="com.zww.api.model.Member">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="memberID" jdbcType="VARCHAR" property="memberID"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="weixin_id" jdbcType="VARCHAR" property="weixinId"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="union_id" jdbcType="VARCHAR" property="unionId"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="catch_number" jdbcType="VARCHAR" property="catchNumber"/>
+        <result column="register_date" jdbcType="TIMESTAMP" property="registerDate"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="modified_by" jdbcType="INTEGER" property="modifiedBy"/>
+        <result column="last_login_date" jdbcType="TIMESTAMP" property="lastLoginDate"/>
+        <result column="last_logoff_date" jdbcType="TIMESTAMP"
+                property="lastLogoffDate"/>
+        <result column="online_flg" jdbcType="INTEGER" property="onlineFlg"/>
+        <result column="icon_context_path" jdbcType="VARCHAR" property="iconContextPath"/>
+        <result column="icon_file_name" jdbcType="VARCHAR" property="iconFileName"/>
+        <result column="icon_real_path" jdbcType="VARCHAR" property="iconRealPath"/>
+        <result column="easemob_uuid" jdbcType="VARCHAR" property="easemobUuid"/>
+        <result column="active_flg" jdbcType="VARCHAR" property="activeFlg"/>
+        <result column="invite_flg" jdbcType="VARCHAR" property="inviteFlg"/>
+        <result column="invite_flg_web" jdbcType="VARCHAR" property="inviteFlgWeb"/>
+        <result column="register_from" jdbcType="VARCHAR" property="registerFrom"/>
+        <result column="last_login_from" jdbcType="VARCHAR" property="lastLoginFrom"/>
+        <result column="first_login" jdbcType="INTEGER" property="firstLogin"/>
+        <result column="first_charge" jdbcType="INTEGER" property="firstCharge"/>
+        <result column="register_channel" jdbcType="VARCHAR" property="registerChannel"/>
+        <result column="login_channel" jdbcType="VARCHAR" property="loginChannel"/>
+        <result column="phone_model" jdbcType="VARCHAR" property="phoneModel"/>
+        <association property="prefset" javaType="PrefSet">
+            <id property="memberId" column="member_id"/>
+            <result property="musicFlg" column="music_flg"/>
+            <result property="soundFlg" column="sound_flg"/>
+            <result property="shockFlg" column="shock_flg"/>
+        </association>
+        <association property="account" javaType="com.zww.api.model.Account"
+                     select="com.zww.account.dao.AccountDao.selectById" column="id">
+        </association>
+    </resultMap>
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+    <update id="updateByPrimaryKeySelective" parameterType="Member">
+        update t_member
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=DATE},
+            </if>
+            <if test="catchNumber != null">
+                catch_number = #{catchNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="registerDate != null">
+                register_date = #{registerDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedDate != null">
+                modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=INTEGER},
+            </if>
+            <if test="lastLoginDate != null">
+                last_login_date = #{lastLoginDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLogoffDate != null">
+                last_logoff_date = #{lastLogoffDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="onlineFlg != null">
+                online_flg = #{onlineFlg,jdbcType=INTEGER},
+            </if>
+            <if test="iconContextPath != null">
+                icon_context_path = #{iconContextPath,jdbcType=VARCHAR},
+            </if>
+            <if test="iconFileName != null">
+                icon_file_name = #{iconFileName,jdbcType=VARCHAR},
+            </if>
+            <if test="iconRealPath != null">
+                icon_real_path = #{iconRealPath,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="login" resultMap="BaseResultMap" parameterType="Member">
+        <!-- 具体的sql -->
+        SELECT
+        m.*,
+        p.*
+        FROM
+        t_member m LEFT JOIN t_member_pref p ON
+        (m.`id`=p.`member_id`)
+        WHERE
+        mobile = #{arg0} and password = #{arg1}
+    </select>
+
+    <select id="selectByMobile" resultMap="BaseResultMap" parameterType="Member">
+        SELECT
+			*
+		FROM
+			t_member
+		WHERE
+			mobile = #{mobile}
+		LIMIT 0,
+		1
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        <!-- 具体的sql -->
+        SELECT
+        *
+        FROM
+        t_member
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="selectByMemberID" resultType="Member" parameterType="Member">
+        <!-- 具体的sql -->
+        SELECT
+        *
+        FROM
+        t_member
+        WHERE
+        memberID = #{memberID}
+    </select>
+
+    <select id="validateSmsCode" resultType="MemberSmscode"
+            parameterType="MemberSmscode">
+        <!-- 具体的sql -->
+        SELECT
+        mobile,smscode,
+        valid_start_time AS validStartTime,
+        valid_end_time AS validEndTime
+        FROM
+        t_member_smscode
+        WHERE
+        mobile =
+        #{arg0} and smscode = #{arg1}
+    </select>
+    <!-- 验证是否重复 -->
+    <select id="validateSmsCodeByCode" resultType="MemberSmscode"
+            parameterType="MemberSmscode">
+        <!-- 具体的sql -->
+        SELECT
+        mobile,smscode,valid_start_time as validStartTime,valid_end_time
+        as validEndTime
+        FROM
+        t_member_smscode
+        WHERE
+        smscode = #{smscode}
+    </select>
+    <select id="validateSmsCodeByMobile" resultType="MemberSmscode"
+            parameterType="MemberSmscode">
+        <!-- 具体的sql -->
+        SELECT
+        mobile,smscode,
+        valid_start_time AS validStartTime,
+        valid_end_time AS validEndTime
+        FROM
+        t_member_smscode
+        WHERE
+        mobile =
+        #{mobile}
+    </select>
+
+    <!-- 更新登录时间 -->
+    <update id="updateLogin" parameterType="Member">
+        UPDATE t_member
+        <set>
+            <if test="lastLoginFrom != null">
+                last_login_from = #{lastLoginFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginDate != null">
+                last_login_date = #{lastLoginDate},
+            </if>
+            <if test="onlineFlg != null">
+                online_flg = #{onlineFlg},
+            </if>
+            <if test="loginChannel != null">
+                login_channel = #{loginChannel,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneModel != null">
+                phone_model = #{phoneModel,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <!-- 更新登出时间 -->
+    <update id="updateLogoff" parameterType="Member">
+		UPDATE t_member
+		SET
+		last_logoff_date = #{lastLogoffDate},
+		online_flg = #{onlineFlg}
+		WHERE
+		id
+		= #{id}
+	</update>
+    <!-- 修改密码 -->
+    <update id="updatePwd" parameterType="Member">
+		update t_member
+		set
+		password=#{password},
+		modified_date=#{modifiedDate},
+		modified_by=#{modifiedBy}
+		where
+		mobile=#{mobile}
+	</update>
+    <update id="updateFirstCharge" parameterType="Member">
+		update t_member
+		set
+		first_charge=#{firstCharge}
+		where
+		id=#{id}
+	</update>
+    <select id="getCodeByMobile" parameterType="String" resultType="Member">
+		select memberID
+		from t_member
+		where mobile=#{mobile}
+	</select>
+    <!-- 根据openId查询用户是否存在 -->
+    <select id="selectByOpenId" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+            a.*, b.*, w.*
+        FROM
+            t_member a
+        LEFT JOIN t_member_pref b ON a.id = b.member_id
+        LEFT JOIN member_wx w ON a.id = w.user_id
+		where
+		a.weixin_id=#{weixinId}
+	</select>
+    <insert id="insertToken" parameterType="MemberToken">
+		INSERT INTO
+		t_member_token(token,member_id,valid_start_date)
+		VALUES(#{token}, #{memberId},now())
+	</insert>
+    <!-- 新增token -->
+    <!-- 更新token -->
+    <update id="updateToken" parameterType="MemberToken">
+		update
+		    t_member_token
+		set
+		    token=#{token},
+            valid_start_date=now()
+		where
+	    	member_id=#{memberId}
+	</update>
+    <!-- 微信更新登录时间 -->
+    <update id="updateMember" parameterType="Member">
+        UPDATE t_member
+        <set>
+            <if test="lastLoginFrom != null">
+                last_login_from = #{lastLoginFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginDate != null">
+                last_login_date = #{lastLoginDate},
+            </if>
+            <if test="onlineFlg != null">
+                online_flg = #{onlineFlg},
+            </if>
+            <if test="loginChannel != null">
+                login_channel = #{loginChannel,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneModel != null">
+                phone_model = #{phoneModel,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <!-- 已输入邀请码 -->
+    <!-- <update id="updateInviteStatus" parameterType="Member"> UPDATE t_member
+        SET invite_flg = 1 WHERE id = #{id} </update> -->
+
+    <update id="updateInviteStatus" parameterType="Member">
+		UPDATE t_member
+		SET
+		invite_flg_web = 1
+		WHERE
+		id = #{id}
+	</update>
+    <update id="updateUnionId">
+		UPDATE
+        t_member
+        SET
+        last_login_date = #{lastLoginDate},
+        online_flg = #{onlineFlg}
+        WHERE
+        id = #{id}
+	</update>
+    <update id="updateLogoffBymemberId">
+        UPDATE t_member
+        SET last_logoff_date = now(),
+         online_flg = FALSE
+        WHERE
+            id = #{memberId}
+    </update>
+    <update id="updateChannel">
+        UPDATE member_registe_channel
+        <set>
+            <if test="channel != null">
+                channel = #{channel},
+            </if>
+            <if test="inviter != null">
+                inviter = #{inviter},
+            </if>
+            <if test="rank != null">
+                rank = #{rank},
+            </if>
+        </set>
+        WHERE member_id = #{memberId}
+    </update>
+    <insert id="insertSmsCode" parameterType="MemberSmscode">
+		INSERT INTO
+		t_member_smscode(mobile,smscode,valid_start_time,valid_end_time)
+		VALUES(#{mobile}, #{smscode},#{validStartTime}, #{validEndTime})
+	</insert>
+    <!-- 注册 -->
+    <insert id="insertRegister" parameterType="Member" useGeneratedKeys="true" keyProperty="id">
+        insert into t_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="iconRealPath != null">
+                icon_real_path,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="memberID != null">
+                memberID,
+            </if>
+            <if test="easemobUuid != null">
+                easemob_uuid,
+            </if>
+            <if test="registerDate != null">
+                register_date,
+            </if>
+            <if test="registerFrom != null">
+                register_from,
+            </if>
+            <if test="lastLoginFrom != null">
+                last_login_from,
+            </if>
+            <if test="firstLogin != null">
+                first_login,
+            </if>
+            <if test="firstCharge != null">
+                first_charge,
+            </if>
+            <if test="registerChannel != null">
+                register_channel,
+            </if>
+            <if test="phoneModel != null">
+                phone_model,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="iconRealPath != null">
+                #{iconRealPath,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="memberID != null">
+                #{memberID,jdbcType=VARCHAR},
+            </if>
+            <if test="easemobUuid != null">
+                #{easemobUuid,jdbcType=VARCHAR},
+            </if>
+            <if test="registerDate != null">
+                #{registerDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="registerFrom != null">
+                #{registerFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginFrom != null">
+                #{lastLoginFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLogin != null">
+                #{firstLogin,jdbcType=INTEGER},
+            </if>
+            <if test="firstCharge != null">
+                #{firstCharge,jdbcType=INTEGER},
+            </if>
+            <if test="registerChannel != null">
+                #{registerChannel,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneModel != null">
+                #{phoneModel,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!-- 微信第一次登录 -->
+    <insert id="insertMemberBywx" useGeneratedKeys="true"
+            keyProperty="id" parameterType="Member">
+        insert into t_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="weixinId != null">
+                weixin_id,
+            </if>
+            <if test="openId != null">
+                open_id,
+            </if>
+            <if test="unionId != null">
+                union_id,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="memberID != null">
+                memberID,
+            </if>
+            <if test="registerDate != null">
+                register_date,
+            </if>
+            <if test="lastLoginDate != null">
+                last_login_date,
+            </if>
+            <if test="onlineFlg != null">
+                online_flg,
+            </if>
+            <if test="iconRealPath != null">
+                icon_real_path,
+            </if>
+            <if test="easemobUuid != null">
+                easemob_uuid,
+            </if>
+            <if test="catchNumber != null">
+                catch_number,
+            </if>
+            <if test="activeFlg != null">
+                active_flg,
+            </if>
+            <if test="inviteFlg != null">
+                invite_flg,
+            </if>
+            <if test="registerFrom != null">
+                register_from,
+            </if>
+            <if test="lastLoginFrom != null">
+                last_login_from,
+            </if>
+            <if test="registerChannel != null">
+                register_channel,
+            </if>
+            <if test="phoneModel != null">
+                phone_model,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="weixinId != null">
+                #{weixinId,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="unionId != null">
+                #{unionId,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="memberID != null">
+                #{memberID,jdbcType=VARCHAR},
+            </if>
+            <if test="registerDate != null">
+                #{registerDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginDate != null">
+                #{lastLoginDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="onlineFlg != null">
+                #{onlineFlg,jdbcType=BIT},
+            </if>
+            <if test="iconRealPath != null">
+                #{iconRealPath,jdbcType=VARCHAR},
+            </if>
+            <if test="easemobUuid != null">
+                #{easemobUuid,jdbcType=VARCHAR},
+            </if>
+            <if test="catchNumber != null">
+                #{catchNumber,jdbcType=INTEGER},
+            </if>
+            <if test="activeFlg != null">
+                #{activeFlg,jdbcType=BIT},
+            </if>
+            <if test="inviteFlg != null">
+                #{inviteFlg,jdbcType=BIT},
+            </if>
+            <if test="registerFrom != null">
+                #{registerFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginFrom != null">
+                #{lastLoginFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="registerChannel != null">
+                #{registerChannel,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneModel != null">
+                #{phoneModel,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!-- 插入音乐 -->
+    <insert id="insertPref" parameterType="PrefSet">
+        insert into t_member_pref
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">
+                member_id,
+            </if>
+            <if test="musicFlg != null">
+                music_flg,
+            </if>
+            <if test="soundFlg != null">
+                sound_flg,
+            </if>
+            <if test="shockFlg != null">
+                shock_flg,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">
+                #{memberId,jdbcType=INTEGER},
+            </if>
+            <if test="musicFlg != null">
+                #{musicFlg,jdbcType=VARCHAR},
+            </if>
+            <if test="soundFlg != null">
+                #{soundFlg,jdbcType=VARCHAR},
+            </if>
+            <if test="shockFlg != null">
+                #{shockFlg,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertUnionId">
+		INSERT INTO member_wx (user_id, open_id, union_id)
+		VALUE
+			(#{userId}, #{openId}, #{unionId});
+	</insert>
+    <insert id="insertChannel">
+        INSERT INTO member_registe_channel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">
+                member_id,
+            </if>
+            <if test="channel != null">
+                channel,
+            </if>
+            <if test="inviter != null">
+                inviter,
+            </if>
+            <if test="rank != null">
+                rank,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">
+                #{memberId},
+            </if>
+            <if test="channel != null">
+                #{channel},
+            </if>
+            <if test="inviter != null">
+                #{inviter},
+            </if>
+            <if test="rank != null">
+                #{rank},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertmember_add">
+        INSERT INTO member_add (openid, unionid, add_flg)
+        VALUES
+            (#{openid}, #{unionId}, 0);
+    </insert>
+
+    <delete id="deleteToken" parameterType="MemberToken">
+		DELETE FROM
+		t_member_token WHERE token = #{token}
+	</delete>
+
+    <delete id="deleteSmscode" parameterType="MemberSmscode">
+		DELETE FROM
+		t_member_smscode WHERE mobile = #{mobile,jdbcType=VARCHAR}
+	</delete>
+    <!-- 根据 memberId查询用户金币数 -->
+    <select id="getUserInfoById" resultMap="BaseResultMap"
+            parameterType="int">
+		select
+		a.*,b.member_id ,music_flg,sound_flg,shock_flg
+		from t_member a,t_member_pref b
+		where
+		a.id=#{memberId} and a.id=b.member_id
+	</select>
+    <!-- <select id="getUserAll" resultType="User"> SELECT id,name,password
+        FROM t_user ORDER BY name LIMIT #{offset}, #{limit} </select> <insert id="insertUser"
+        parameterType="User"> INSERT INTO t_user(name,password, mobile, created_date,created_by,modified_date,modified_by)
+        VALUES(#{name}, #{password}, #{mobile}, #{created_date}, #{created_by}, #{modified_date},
+        #{modified_by}) </insert> <delete id="deleteUser" parameterType="int"> DELETE
+        FROM t_user WHERE id = #{id} </delete> -->
+    <!-- 分页查询用户列表 -->
+    <select id="getUserList" resultMap="BaseResultMap">
+        select
+        *
+        from t_member
+        where 1=1
+        <if test="registerChannel != null">
+            and register_channel = #{registerChannel}
+        </if>
+        <if test="name != null">
+            and name like concat
+            ('%',#{name},'%')
+        </if>
+        <if test="memberID != null">
+            AND memberID like concat
+            ('%',#{memberID},'%')
+        </if>
+        <if test="lastLoginFrom != null">
+            <if test="lastLoginFrom == 'android'">
+                AND last_login_from = #{lastLoginFrom}
+            </if>
+            <if test="lastLoginFrom == 'ios'">
+                AND (last_login_from is NULL
+                or last_login_from = 'iOS')
+            </if>
+        </if>
+        <if test="registerDate != null">
+            AND register_date &gt; #{registerDate}
+        </if>
+        <if test="endDate != null">
+            AND register_date &lt; #{endDate}
+        </if>
+        order by id desc
+        limit #{begin},#{pageSize}
+    </select>
+    <select id="totalCount" resultType="java.lang.Integer">
+        select
+        count(1)
+        from t_member
+        where 1=1
+        <if test="registerChannel != null">
+            and register_channel = #{registerChannel}
+        </if>
+        <if test="name != null">
+            AND name like concat
+            ('%',#{name},'%')
+        </if>
+        <if test="memberid != null">
+            AND memberId like concat
+            ('%',#{memberid},'%')
+        </if>
+        <if test="lastLoginFrom != null">
+            <if test="lastLoginFrom == 'android'">
+                AND last_login_from = #{lastLoginFrom}
+            </if>
+            <if test="lastLoginFrom == 'ios'">
+                AND (last_login_from is NULL
+                or last_login_from = 'iOS')
+            </if>
+        </if>
+        <if test="registerDate != null">
+            AND register_date &gt; #{registerDate}
+        </if>
+        <if test="endDate != null">
+            AND register_date &lt; #{endDate}
+        </if>
+    </select>
+    <select id="totalCount1" resultType="java.lang.Integer">
+        select
+        count(1)
+        from t_member
+        where 1=1
+        <if test="name != null">
+            AND name like concat
+            ('%',#{name},'%')
+        </if>
+        <if test="memberid != null">
+            AND memberId like concat
+            ('%',#{memberid},'%')
+        </if>
+        <if test="lastLoginFrom != null">
+            <if test="lastLoginFrom == 'android'">
+                AND last_login_from = #{lastLoginFrom}
+            </if>
+            <if test="lastLoginFrom == 'ios'">
+                AND (last_login_from is NULL
+                or last_login_from = 'iOS')
+            </if>
+        </if>
+        <if test="registerDate != null">
+            AND register_date like concat
+            ('%',#{registerDate},'%')
+        </if>
+    </select>
+
+    <select id="getUserList1" resultMap="BaseResultMap">
+        select
+        *
+        from t_member
+        where 1=1
+        <if test="name != null">
+            and name like concat
+            ('%',#{name},'%')
+        </if>
+        <if test="memberID != null">
+            AND memberID like concat
+            ('%',#{memberID},'%')
+        </if>
+        <if test="lastLoginFrom != null">
+            <if test="lastLoginFrom == 'android'">
+                AND last_login_from = #{lastLoginFrom}
+            </if>
+            <if test="lastLoginFrom == 'ios'">
+                AND (last_login_from is NULL
+                or last_login_from = 'iOS')
+            </if>
+        </if>
+        <if test="registerDate != null">
+            AND register_date like concat
+            ('%',#{registerDate},'%')
+        </if>
+        order by id desc
+        limit #{begin},#{pageSize}
+    </select>
+
+    <select id="getMemberById" resultType="Member" parameterType="java.lang.Integer">
+        <!-- 具体的sql -->
+        SELECT
+        id,name,mobile,gender
+        FROM
+        t_member
+        WHERE
+        id = #{id}
+    </select>
+    <select id="getFirstById" resultMap="BaseResultMap" parameterType="Member">
+        <!-- 具体的sql -->
+        SELECT
+        id,name,mobile,gender,first_login,first_charge
+        FROM
+        t_member
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="getAllInfoById" resultType="Member" parameterType="java.lang.Integer">
+		select
+		id,memberID,name,mobile,gender,first_login,first_charge
+		from t_member
+		where
+		id = #{id}
+	</select>
+
+    <select id="getAllById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		*
+		from t_member
+		where
+		id = #{id}
+	</select>
+
+    <select id="getMemberAllGroupBy" resultMap="BaseResultMap">
+		select
+		register_channel
+		from t_member
+		GROUP by register_channel
+	</select>
+    <select id="selectToken" resultType="com.bfei.icrane.core.models.MemberToken">
+        SELECT * FROM
+		t_member_token WHERE member_id = #{memberId} AND token = #{token}
+    </select>
+    <select id="deleteTokenByIdToken">
+        DELETE
+        FROM
+            t_member_token
+        WHERE
+            member_id = #{memberId}
+    </select>
+    <select id="selectInitializeHeads" resultType="com.zww.api.model.InitializeHeads">
+        SELECT
+            nikeName,headimgurl
+        FROM
+            initializeheads
+    </select>
+    <select id="getCoinsById" resultType="java.lang.Integer">
+        SELECT coins
+        FROM account
+        WHERE id = #{id}
+    </select>
+    <select id="selectOpenIdByUnionId" resultType="java.lang.String">
+        SELECT
+            open_id
+        FROM
+            member_wx
+        WHERE
+            union_id = #{unionId}
+        Limit 1;
+    </select>
+    <select id="selectTokenById" resultType="java.lang.String">
+        SELECT
+           token
+        FROM
+           t_member_token
+        WHERE
+           member_id=#{memberId}
+    </select>
+    <select id="check" resultType="java.lang.Boolean">
+
+    </select>
+    <select id="selectGzhopenId" resultType="java.lang.String">
+        SELECT
+        ma.openid
+        FROM
+        member_wx mw
+        LEFT JOIN member_add ma ON mw.union_id = ma.unionid
+        WHERE
+        mw.user_id = #{memberId}
+        LIMIT 0,
+        1;
+    </select>
+    <select id="isWorker" resultType="java.lang.Boolean">
+        SELECT
+            *
+        FROM
+            member_white_list
+        WHERE
+            user_id = #{memberId};
+    </select>
+    <select id="getSuperUsers" resultType="java.lang.String">
+        SELECT
+            super_phone_number
+        FROM
+            superuser;
+    </select>
+    <select id="selectOutTokenUserId" resultType="java.lang.Integer">
+        <![CDATA[
+        SELECT
+            member_id
+        FROM
+            t_member_token
+        WHERE
+            valid_start_date < NOW() - INTERVAL 24 HOUR;
+        ]]>
+    </select>
+
+    <select id="selectPayNumberByMemberId" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            charge_order
+        WHERE
+            member_id = #{memberId}
+        AND charge_state = 1;
+    </select>
+    <select id="selectRank" resultType="java.lang.Integer">
+        SELECT
+            rank
+        FROM
+            member_registe_channel
+        WHERE
+            member_id = #{id};
+    </select>
+    <select id="selectGzhopenIdByUnionId" resultType="java.lang.String">
+        SELECT
+            openid
+        FROM
+            member_add
+        WHERE
+            unionid = #{unionId};
+    </select>
+    <select id="selectChannels" resultType="java.lang.String">
+        SELECT
+            NAME
+        FROM
+            t_system_pref
+        WHERE
+            `code` LIKE 'CHANNEL%';
+    </select>
+</mapper>

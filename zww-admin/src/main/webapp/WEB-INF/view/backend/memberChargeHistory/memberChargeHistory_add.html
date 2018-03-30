@@ -1,0 +1,37 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="玩家充值记录" underline="true"/>
+                            <#input id="memberId" name="" underline="true"/>
+                            <#input id="prepaidAmt" name="" underline="true"/>
+                            <#input id="coins" name="" underline="true"/>
+                            <#input id="chargeDate" name=""/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="type" name="" underline="true"/>
+                            <#input id="chargeMethod" name="" underline="true"/>
+                            <#input id="dollId" name="" underline="true"/>
+                            <#input id="coinsBefore" name="" underline="true"/>
+                            <#input id="coinsAfter" name="" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MemberChargeHistoryInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MemberChargeHistoryInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/memberChargeHistory/memberChargeHistory_info.js"></script>
+@}

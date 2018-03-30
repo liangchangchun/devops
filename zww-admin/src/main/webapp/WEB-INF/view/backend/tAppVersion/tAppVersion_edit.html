@@ -1,0 +1,43 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="openUpdateValue" value="${item.openUpdate}" />
+            <input type="hidden" id="forceUpdateValue" value="${item.forceUpdate}" />
+
+            <div class="row">
+                <div class="col-sm-6 ">
+                            <#NameCon id="appKey" name="系统" value="${item.appKey}" readonly="readonly"></#NameCon>
+                            <#input id="version" name="版本号" value="${item.version}" />
+                            <#SelectCon id="openUpdate" name="是否开启更新" >
+                                <option value="1" >开启</option>
+                                <option value="2" >关闭</option>
+                            </#SelectCon>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="content" name="更新备注" value="${item.content}" />
+                            <#SelectCon id="forceUpdate" name="是否强制更新" >
+                                <option value="0" >建议更新</option>
+                                <option value="1" >强制更新</option>
+                            </#SelectCon>
+                </div>
+                <div class="col-sm-12">
+                    <#NameCon id="upgradeUrl" name="链接" value="${item.upgradeUrl}" readonly="readonly"></#NameCon>
+                </div>
+
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TAppVersionInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TAppVersionInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tAppVersion/tAppVersion_info.js"></script>
+@}

@@ -1,0 +1,57 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="tDollInfoForm">
+            <input type="hidden" id="id" value="">
+            <input type="hidden" id="operation" value="add">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                	<#input id="machineCode" name="娃娃机编号" />
+                    <#input id="name" name="娃娃机名称" placeholder="必填" />
+                 
+					<#input id="dollID" name="娃娃编号"  placeholder="必填" />
+                    <#input id="price" name="价格" placeholder="必填" />
+                    <#input id="redeemCoins" name="兑换币数" placeholder="必填" />
+                    <#input id="timeout" name="游戏时间" value="30" placeholder="必填"/>
+                    <#input id="watchingNumber" name="排序" />
+                </div>
+
+                <div class="col-sm-6">
+                  	
+					<#input id="machineSerialNum" name="设备码" placeholder="必填" />
+					<#input id="machineUrl" name="设备名称" placeholder="必填" />
+					<#input id="machineIp" name="队列名称" placeholder="必填" />
+					<#input id="mnsTopicName" name="Topic名称" placeholder="必填"/>
+                    <#input id="description" name="备注" />
+                    <#SelectCon id="machineType" name="机器类型" >
+								<option value="0" >普通房</option>
+								<option value="1" >练习房</option>
+								<option value="2" >强抓房</option>
+								<option value="3" >占卜房</option>
+					</#SelectCon>
+					<#Combobox id="dollAddressId" name="机器地址"  dataOptions="showAll:'no',valueField:'id',textField:'address',url:'${ctxPath}/common/getDollAddress'" >
+                    </#Combobox>
+                </div>
+            </div>
+            <div class="row">
+            <div class="col-sm-12">
+            		<#input id="rtmpPushUrl" name="推牛地址" placeholder="必填" />
+					<#input id="rtmpUrl1" name="拉牛地址1" placeholder="必填"/>
+                    <#input id="rtmpUrl2" name="拉牛地址2" placeholder=""/>
+                    <#input id="rtmpUrl3" name="拉牛地址3" />
+                    </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TDollInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TDollInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tDoll/tDoll_info.js"></script>
+@}

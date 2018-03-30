@@ -1,0 +1,55 @@
+
+##########################################################
+###################  正式环境的majia  ###################
+##########################################################
+ spring:
+  profiles: majia
+  datasource:
+      url: jdbc:mysql://rm-uf6528juob1nalin3.mysql.rds.aliyuncs.com:3306/zww_mj1?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+      username: zww_app_user
+      password: nxCpVYcnqkrsA6dbqtZV8NUIr3gvtVEk
+      db-name: zww
+      filters: log4j,wall,mergeStat
+      connectionInitSqls: "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+#flowable数据源和多数据源配置
+ guns:
+  flowable:
+    datasource:
+      url: jdbc:mysql://rm-uf6528juob1nalin3.mysql.rds.aliyuncs.com:3306/zww_flowable?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+      username: zww_app_user
+      password: nxCpVYcnqkrsA6dbqtZV8NUIr3gvtVEk
+  zww:
+    datasource:
+      url: jdbc:mysql://rm-uf6528juob1nalin3.mysql.rds.aliyuncs.com:3306/zww_mj1?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+      username: zww_app_user
+      password: nxCpVYcnqkrsA6dbqtZV8NUIr3gvtVEk
+  muti-datasource:
+    default-dataSource-name: dataSourceGuns #默认的数据源名称
+    url: jdbc:mysql://rm-uf6528juob1nalin3.mysql.rds.aliyuncs.com:3306/zww_flowable?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+    username: zww_app_user
+    password: nxCpVYcnqkrsA6dbqtZV8NUIr3gvtVEk
+
+ logging:
+  level.root: warn
+  path: logs/
+  file: base-service.log
+
+###################  aliyun配置  ###################
+ aliyun:
+  accessKey: LTAIR9bpEjEQwnHO
+  accessSecret: hAPaZlI9NXlH5ErNoFnVbkyuRQz0gy
+  mnsAccountEndPoint: http://1792180091275324.mns.cn-shanghai.aliyuncs.com/
+  ossBucketName: zww-image-prod
+  sts: http://47.100.113.59:7080/app/oss/gettoken
+  smsModelCode: 
+   reg: SMS_121910820
+   find: SMS_121910820
+   bind: SMS_121910820
+
+################### majia prop配置 ########################
+
+ redisHost: 172.19.201.136
+ redisPort: 6379
+ redisPassword: Zww123456
+ devtoolsEnabled: false

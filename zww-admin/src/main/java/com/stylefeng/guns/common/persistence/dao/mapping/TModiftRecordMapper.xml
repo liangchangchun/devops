@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TModifyRecordMapper" >
+	<resultMap id="BaseResultMap" type="TModifyRecord" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="member_id" property="memberId" jdbcType="INTEGER" />
+		<result column="coins" property="coins" jdbcType="INTEGER" />
+		<result column="super_ticket" property="superTicket" jdbcType="INTEGER" />
+		<result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="modified_by" property="modifiedBy" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List" >
+		id, member_id, coins,super_ticket, modified_date, modified_by
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+		select
+		<include refid="Base_Column_List" />
+		from t_modify_record
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+		delete from t_modify_record
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="TModifyRecord" >
+		insert into t_modify_record (id, member_id, coins,
+		modified_date, modified_by)
+		values (#{id,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{coins,jdbcType=INTEGER},
+		#{modifiedDate,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="TModifyRecord" >
+		insert into t_modify_record
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				id,
+			</if>
+			<if test="memberId != null" >
+				member_id,
+			</if>
+			<if test="coins != null" >
+				coins,
+			</if>
+			<if test="superTicket != null" >
+				super_ticket,
+			</if>
+			<if test="modifiedDate != null" >
+				modified_date,
+			</if>
+			<if test="modifiedBy != null" >
+				modified_by,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="memberId != null" >
+				#{memberId,jdbcType=INTEGER},
+			</if>
+			<if test="coins != null" >
+				#{coins,jdbcType=INTEGER},
+			</if>
+			<if test="superTicket != null" >
+				#{superTicket,jdbcType=INTEGER},
+			</if>
+			<if test="modifiedDate != null" >
+				#{modifiedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifiedBy != null" >
+				#{modifiedBy,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKey" parameterType="TModifyRecord" >
+		update t_modify_record
+		set member_id = #{memberId,jdbcType=INTEGER},
+		coins = #{coins,jdbcType=INTEGER},
+		super_ticket = #{superTicket,jdbcType=INTEGER},
+		modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+		modified_by = #{modifiedBy,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

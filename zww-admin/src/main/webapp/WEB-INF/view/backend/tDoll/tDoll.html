@@ -1,0 +1,71 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>娃娃机列表管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <#NameCon id="dollId" name="机器id" placeholder="输入机器id" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="name" name="名称" placeholder="输入娃娃名称" />
+                            </div>
+                            <div class="col-sm-2">
+                                <#NameCon id="machineCode" name="机器号" placeholder="输入机器号" />
+                            </div>
+                            <div class="col-sm-2">
+                                <#SelectCon id="machineStates" name="状态" >
+								<option value="" >全部</option>
+								<option value="在线中" >在线中</option>
+                                <option value="空闲中" >空闲中</option>
+								<option value="维修中" >维修中</option>
+								<option value="未上线" >未上线</option>
+								</#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#SelectCon id="machineType" name="机器类型" >
+                                    <option value="" >全部</option>
+                                    <option value="0" >普通房</option>
+                                    <option value="1" >练习房</option>
+                                    <option value="2" >钻石房</option>
+                                    <option value="3" >占卜房</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#SelectCon id="modifiedBy" name="修改人" >
+                                    <option value="" >全部</option>
+                                    <option value="-1" >空</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="TDoll.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="TDollTableToolbar" role="group">
+                            @if(shiro.hasPermission("/tDoll/add")){
+                                <#button name="添加" icon="fa-plus" clickFun="TDoll.openAddTDoll()"/>
+                            @}
+                            @if(shiro.hasPermission("/tDoll/update")){
+                                <#button name="修改" icon="fa-plus" clickFun="TDoll.openTDollDetail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/tDoll/delete")){
+                                <#button name="删除" icon="fa-plus" clickFun="TDoll.delete()" space="true"/>
+                            @}
+                            <#button name="添加背景图" icon="fa-plus" clickFun="TDoll.addBackground()" space="true"/>
+                            <#button name="添加主题" icon="fa-plus" clickFun="TDoll.addDollTopic()" space="true"/>
+                            <!--<#avatar id="avatar" name="上传apk" underline="true"/>-->
+                        </div>
+                        <#table id="TDollTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tDoll/tDoll.js"></script>
+@}

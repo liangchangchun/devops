@@ -1,0 +1,42 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="id" underline="true"/>
+                            <#input id="userId" name="用户id" underline="true"/>
+                            <#input id="memberID" name="用户编号" underline="true"/>
+                            <#input id="name" name="用户名" underline="true"/>
+                            <#input id="mobile" name="手机号" underline="true"/>
+                            <#input id="weixinId" name="微信id" underline="true"/>
+                            <#input id="gender" name="性别" underline="true"/>
+                            <#input id="phoneModel" name="手机机型"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="registerDate" name="注册时间" underline="true"/>
+                            <#input id="lastLoginDate" name="最近登录时间" underline="true"/>
+                            <#input id="registerChannel" name="注册渠道号" underline="true"/>
+                            <#input id="loginChannel" name="登陆渠道号" underline="true"/>
+                            <#input id="registerFrom" name="注册设备" underline="true"/>
+                            <#input id="lastLoginFrom" name="登录设备" underline="true"/>
+                            <#input id="onlineFlg" name="0：登录成功 1：登录失败" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MemberChannelDeductInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MemberChannelDeductInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/memberChannelDeduct/memberChannelDeduct_info.js"></script>
+@}

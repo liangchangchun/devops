@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.TAppVersionMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.TAppVersion">
+		<id column="app_key" property="appKey" />
+		<result column="version" property="version" />
+		<result column="upgrade_url" property="upgradeUrl" />
+		<result column="content" property="content" />
+		<result column="hide_flg" property="hideFlg" />
+		<result column="force_update" property="forceUpdate" />
+		<result column="open_update" property="openUpdate" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        app_key AS appKey, version, upgrade_url AS upgradeUrl, content, hide_flg AS hideFlg,
+        force_update AS forceUpdate, open_update AS openUpdate
+    </sql>
+
+	<!--查询版本信息-->
+	<select id="selectByAppKey" resultType="TAppVersion" >
+		select
+		<include refid="Base_Column_List" />
+		from t_app_version
+		WHERE 1=1
+		<if test="sys!=null and sys !=''">
+			and app_key = #{sys}
+		</if>
+	</select>
+
+	<update id="updates" parameterType="TAppVersion">
+		UPDATE t_app_version
+		SET upgrade_url = #{upgradeUrl}
+		WHERE
+		app_key = #{appKey}
+	</update>
+
+	<update id="updateByAppKey" parameterType="TAppVersion">
+		UPDATE t_app_version
+		<set>
+			<if test="version!=null and version !=''">
+				 version = #{version},
+			</if>
+			<if test="content!=null and content !=''">
+				 content = #{content},
+			</if>
+			<if test="hideFlg!=null and hideFlg !=''">
+				 hide_flg = #{hideFlg},
+			</if>
+			<if test="forceUpdate!=null and forceUpdate !=''">
+				force_update = #{forceUpdate},
+			</if>
+			<if test="openUpdate!=null and openUpdate !=''">
+				open_update = #{openUpdate},
+			</if>
+		</set>
+		WHERE
+		app_key = #{appKey}
+	</update>
+</mapper>

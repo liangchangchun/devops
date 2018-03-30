@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.ShareInviteMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.ShareInvite">
+		<id column="id" property="id" />
+		<result column="invite_code" property="inviteCode" />
+		<result column="invite_member_id" property="inviteMemberId" />
+		<result column="invited_id" property="invitedId" />
+		<result column="create_date" property="createDate" />
+		<result column="state" property="state" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, invite_code AS inviteCode, invite_member_id AS inviteMemberId, invited_id AS invitedId, create_date AS createDate, state
+    </sql>
+    
+        <select id="selectMember" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+        SELECT
+        b.id id, b.name name, b.gender gender,b.`mobile` mobile,b.memberID inviteCode,
+        b.`register_date` registerDate,b.`last_login_date` lastLoginDate,b.`online_flg` onlineFlg
+        FROM t_member b
+        WHERE  b.id IN (SELECT DISTINCT a.invite_member_id FROM share_invite a  where 1=1
+        <if test="createDate != null and  createDate != ''">
+            AND  DATEDIFF(a.create_date,#{createDate}) &gt;= 0
+        </if>
+        <if test="endDate != null and  endDate != ''">
+            AND  DATEDIFF(a.create_date,#{endDate}) &lt;0
+        </if>
+        <if test="memberid != null and memberid != ''">
+            and  a.invite_code = #{memberid}
+        </if>
+        )
+        <if test="name != null and name != ''">
+            and b.name like CONCAT('%',#{name},'%')
+        </if>
+            order by b.id desc
+    </select>
+    
+    <select id="selectInvitedNum" resultType="Integer">
+    	SELECT count(1) num FROM share_invite where invite_member_id =#{userId};
+    </select>
+    <!-- 获取被邀请时间 -->
+     <select id="selectInvitedTime" resultType="Date">
+    	SELECT create_date FROM share_invite where invited_id =#{userId} limit 0,1;
+    </select>
+    
+     <select id="selectInvitedMember" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+        SELECT
+        b.id id, b.name name, b.gender gender,b.`mobile` mobile,b.memberID inviteCode,
+        b.`register_date` registerDate,b.`last_login_date` lastLoginDate,b.`online_flg` onlineFlg
+        FROM t_member b
+        WHERE  b.id IN (SELECT DISTINCT a.invited_id FROM share_invite a where 1=1
+        <if test="createDate != null and  createDate != ''">
+            AND  DATEDIFF(a.create_date,#{createDate}) &gt;= 0
+        </if>
+         <if test="endDate != null and  endDate != ''">
+             AND  DATEDIFF(a.create_date,#{endDate}) &lt;0
+         </if>
+        <if test="memberid != null and memberid != ''">
+            and  a.invite_code = #{memberid}
+        </if>
+        )
+        <if test="name != null and name != ''">
+            and b.name like CONCAT('%',#{name},'%')
+        </if>
+        order by b.id desc
+    </select>
+    
+
+</mapper>

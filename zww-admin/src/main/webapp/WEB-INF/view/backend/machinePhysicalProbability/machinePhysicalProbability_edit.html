@@ -1,0 +1,44 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="machinePhysicalProbabilityInfoForm">
+
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="dollIdValue" value="${item.dollId}">
+            <input type="hidden" id="operation" value="update">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <!--<#input id="id" name="id" value="${item.id}" underline="true"/>-->
+                            <#Combobox id="dollId" name="机器名称"  dataOptions="showAll:'no',valueField:'id',textField:'name',url:'${ctxPath}/common/getDollListProbability'" >
+                            </#Combobox>
+                            <#input id="strongVoltage" name="强力电压（0-48）" value="${item.strongVoltage}" underline="false"/>
+                            <#input id="weakOneVoltage" name="弱一电压（0-48）" value="${item.weakOneVoltage}" underline="false"/>
+                            <#input id="weakTwoVoltage" name="弱二电压（0-48）" value="${item.weakTwoVoltage}" underline="false"/>
+
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="strongTime" name="强力时间（0-100 0.1s）" value="${item.strongTime}" />
+                            <#input id="weakTime" name="弱一时间（0-100 0.1s）" value="${item.weakTime}" underline="false"/>
+                            <!--<#input id="createdDate" name="创建时间" value="${item.createdDate}" underline="true"/>-->
+                            <!--<#input id="createdBy" name="创建人" value="${item.createdBy}" underline="true"/>-->
+                            <!--<#input id="modifiedDate" name="修改时间" value="${item.modifiedDate}" underline="true"/>-->
+                            <!--<#input id="modifiedBy" name="修改人" value="${item.modifiedBy}" />-->
+                </div>
+            </div>
+            <div class="row">
+                <span style="margin: 10px">注：所有填整数，（）中为范围值，后两个时间，单位：0.1秒</span>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MachinePhysicalProbabilityInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MachinePhysicalProbabilityInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/machinePhysicalProbability/machinePhysicalProbability_info.js"></script>
+@}

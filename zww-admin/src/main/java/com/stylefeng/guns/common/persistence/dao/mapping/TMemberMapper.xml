@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.TMemberMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.TMember">
+		<id column="id" property="id" />
+		<result column="memberID" property="memberID" />
+		<result column="name" property="name" />
+		<result column="mobile" property="mobile" />
+		<result column="password" property="password" />
+		<result column="weixin_id" property="weixinId" />
+		<result column="gender" property="gender" />
+		<result column="birthday" property="birthday" />
+		<result column="coins" property="coins" />
+		<result column="points" property="points" />
+		<result column="catch_number" property="catchNumber" />
+		<result column="register_date" property="registerDate" />
+		<result column="modified_date" property="modifiedDate" />
+		<result column="modified_by" property="modifiedBy" />
+		<result column="last_login_date" property="lastLoginDate" />
+		<result column="last_logoff_date" property="lastLogoffDate" />
+		<result column="online_flg" property="onlineFlg" />
+		<result column="icon_context_path" property="iconContextPath" />
+		<result column="icon_file_name" property="iconFileName" />
+		<result column="icon_real_path" property="iconRealPath" />
+		<result column="easemob_uuid" property="easemobUuid" />
+		<result column="active_flg" property="activeFlg" />
+		<result column="invite_flg" property="inviteFlg" />
+		<result column="invite_flg_web" property="inviteFlgWeb" />
+		<result column="register_from" property="registerFrom" />
+		<result column="last_login_from" property="lastLoginFrom" />
+		<result column="first_login" property="firstLogin" />
+		<result column="first_charge" property="firstCharge" />
+		<result column="register_channel" property="registerChannel" />
+		<result column="login_channel" property="loginChannel" />
+		<result column="phone_model" property="phoneModel" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, memberID, name, mobile, password, weixin_id AS weixinId, gender, birthday, coins, points, catch_number AS catchNumber, register_date AS registerDate, modified_date AS modifiedDate, modified_by AS modifiedBy, last_login_date AS lastLoginDate, last_logoff_date AS lastLogoffDate, online_flg AS onlineFlg, icon_context_path AS iconContextPath, icon_file_name AS iconFileName, icon_real_path AS iconRealPath, easemob_uuid AS easemobUuid, active_flg AS activeFlg, invite_flg AS inviteFlg, invite_flg_web AS inviteFlgWeb, register_from AS registerFrom, last_login_from AS lastLoginFrom, first_login AS firstLogin, first_charge AS firstCharge, register_channel AS registerChannel, login_channel AS loginChannel, phone_model AS phoneModel
+    </sql>
+
+</mapper>

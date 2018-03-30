@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.MemberChargeHistoryMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.MemberChargeHistory">
+		<id column="id" property="id" />
+		<result column="member_id" property="memberId" />
+		<result column="prepaid_amt" property="prepaidAmt" />
+		<result column="coins" property="coins" />
+		<result column="charge_date" property="chargeDate" />
+		<result column="type" property="type" />
+		<result column="charge_method" property="chargeMethod" />
+		<result column="doll_id" property="dollId" />
+		<result column="coins_before" property="coinsBefore" />
+		<result column="coins_after" property="coinsAfter" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, member_id AS memberId, prepaid_amt AS prepaidAmt, coins, charge_date AS chargeDate, type, charge_method AS chargeMethod, doll_id AS dollId, coins_before AS coinsBefore, coins_after AS coinsAfter
+    </sql>
+
+	<select id="selectList" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		a.id, member_id AS memberId, prepaid_amt AS prepaidAmt, a.coins coins, charge_date AS chargeDate, type,
+		charge_method AS chargeMethod, doll_id AS dollId, coins_before AS coinsBefore, coins_after AS coinsAfter 
+		from t_member_charge_history a 
+		where 1=1
+		<if test="condition != null and condition != ''">
+			and a.member_id = #{condition}
+		</if>
+		ORDER by id DESC
+	</select>
+
+	<!-- 更新总币数 -->
+	<update id="updateMemberCount" parameterType="MemberChargeHistory">
+		UPDATE account
+		SET
+		coins = coins + #{coinsSum}
+		<if test="superTicketSum != null">
+			,superTicket = superTicket + #{superTicketSum}
+		</if>
+		WHERE
+		id = #{memberId}
+	</update>
+
+	<!--生成消费记录-->
+	<insert id="insertChargeHistory" parameterType="MemberChargeHistory">
+		insert into t_member_charge_history
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="memberId != null">
+				member_id,
+			</if>
+			<if test="coinsSum != null">
+				coins,
+			</if>
+			<if test="coins != null">
+				coins_before,
+			</if>
+			<if test="coinsSum != null">
+				coins_after,
+			</if>
+			<if test="prepaidAmt != null">
+				prepaid_amt,
+			</if>
+			<if test="chargeDate != null">
+				charge_date,
+			</if>
+			<if test="chargeMethod != null">
+				charge_method,
+			</if>
+			<if test="dollId != null">
+				doll_id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="memberId != null">
+				#{memberId,jdbcType=INTEGER},
+			</if>
+			<if test="coinsSum != null">
+				#{coinsSum,jdbcType=INTEGER},
+			</if>
+			<if test="coins != null">
+				#{coins,jdbcType=INTEGER},
+			</if>
+			<if test="coinsSum != null">
+				#{coins,jdbcType=INTEGER} + #{coinsSum,jdbcType=INTEGER},
+			</if>
+			<if test="prepaidAmt != null">
+				#{prepaidAmt,jdbcType=VARCHAR},
+			</if>
+			<if test="chargeDate != null">
+				#{chargeDate},
+			</if>
+			<if test="chargeMethod != null">
+				#{chargeMethod,jdbcType=VARCHAR},
+			</if>
+			<if test="dollId != null">
+				#{dollId,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+</mapper>

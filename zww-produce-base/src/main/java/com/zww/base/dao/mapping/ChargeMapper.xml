@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zww.base.dao.ChargeDao">
+    <!-- 用户充值记录总数sql -->
+
+    <select id="totalCount" resultType="java.lang.Integer">
+        select count(1) from t_member_charge_history where 1=1
+        and prepaid_amt > 0
+        <if test="memberId!=null">
+            and member_id =#{memberId,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="getChargeByInviteCode" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            share_invite
+        WHERE
+            invite_code = #{inviteCode};
+    </select>
+
+    <select id="getChargeList" resultType="Charge">
+        select
+        *
+        from t_member_charge_history
+        where 1=1
+        <if test="memberId!=null">
+            and member_id =#{memberId,jdbcType=INTEGER}
+        </if>
+        and prepaid_amt > 0
+        order by charge_date desc
+        limit #{begin},#{pageSize}
+    </select>
+
+    <select id="getChargeRules" resultType="Charge" parameterType="Charge">
+        <!-- 具体的sql -->
+        SELECT
+        crules.`coins_charge` as coinsCharge,
+        crules.`coins_offer` as coinsOffer ,
+        crules.`description`,
+        crules.charge_price as chargePrice
+        FROM `t_charge_rules` crules
+        WHERE crules.`charge_price`=#{chargePrice}
+    </select>
+
+    <insert id="insertChargeHistory" parameterType="Charge">
+        insert into t_member_charge_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">
+                member_id,
+            </if>
+            <if test="coinsSum != null">
+                coins,
+            </if>
+            <if test="coins != null">
+                coins_before,
+            </if>
+            <if test="coinsSum != null">
+                coins_after,
+            </if>
+            <if test="prepaidAmt != null">
+                prepaid_amt,
+            </if>
+            <if test="chargeDate != null">
+                charge_date,
+            </if>
+            <if test="chargeMethod != null">
+                charge_method,
+            </if>
+            <if test="dollId != null">
+                doll_id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">
+                #{memberId,jdbcType=INTEGER},
+            </if>
+            <if test="coinsSum != null">
+                #{coinsSum,jdbcType=INTEGER},
+            </if>
+            <if test="coins != null">
+                #{coins,jdbcType=INTEGER},
+            </if>
+            <if test="coinsSum != null">
+                #{coins,jdbcType=INTEGER} + #{coinsSum,jdbcType=INTEGER},
+            </if>
+            <if test="prepaidAmt != null">
+                #{prepaidAmt,jdbcType=VARCHAR},
+            </if>
+            <if test="chargeDate != null">
+                #{chargeDate,jdbcType=DATE},
+            </if>
+            <if test="chargeMethod != null">
+                #{chargeMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="dollId != null">
+                #{dollId,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertInviteChargeHistory" parameterType="Charge">
+        insert into t_member_charge_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inviteMemberId != null">
+                member_id,
+            </if>
+            <if test="inviteCoinsSum != null">
+                coins,
+            </if>
+            <if test="coins != null">
+                coins_before,
+            </if>
+            <if test="inviteCoinsSum != null">
+                coins_after,
+            </if>
+            <if test="prepaidAmt != null">
+                prepaid_amt,
+            </if>
+            <if test="chargeDate != null">
+                charge_date,
+            </if>
+            <if test="chargeMethod != null">
+                charge_method,
+            </if>
+            <if test="dollId != null">
+                doll_id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inviteMemberId != null">
+                #{inviteMemberId,jdbcType=INTEGER},
+            </if>
+            <if test="inviteCoinsSum != null">
+                #{inviteCoinsSum,jdbcType=INTEGER},
+            </if>
+            <if test="coins != null">
+                #{coins,jdbcType=INTEGER},
+            </if>
+            <if test="inviteCoinsSum != null">
+                #{coins,jdbcType=INTEGER} + #{inviteCoinsSum,jdbcType=INTEGER},
+            </if>
+            <if test="prepaidAmt != null">
+                #{prepaidAmt,jdbcType=VARCHAR},
+            </if>
+            <if test="chargeDate != null">
+                #{chargeDate,jdbcType=DATE},
+            </if>
+            <if test="chargeMethod != null">
+                #{chargeMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="dollId != null">
+                #{dollId,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 邀请人信息 -->
+    <insert id="insertInvite" parameterType="ShareInvite">
+        insert into share_invite
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="inviteCode != null">
+                invite_code,
+            </if>
+            <if test="inviteMemberId != null">
+                invite_member_id,
+            </if>
+            <if test="invitedId != null">
+                invited_id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="inviteCode != null">
+                #{inviteCode,jdbcType=VARCHAR},
+            </if>
+            <if test="inviteMemberId != null">
+                #{inviteMemberId,jdbcType=VARCHAR},
+            </if>
+            <if test="invitedId != null">
+                #{invitedId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <parameterMap type="java.util.Map" id="payNotifyMap">
+        <parameter property="memberId" mode="IN" jdbcType="INTEGER"/>
+        <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
+
+    <insert id="payNotify" parameterMap="payNotifyMap" statementType="CALLABLE">
+        <![CDATA[{call SP_Notify(?)}]]>
+    </insert>
+
+    <!-- 充值记录查询 -->
+    <select id="getChargeHistory" resultType="Charge" parameterType="Charge">
+        SELECT
+            history.`member_id` AS memberId,
+            history.`prepaid_amt` AS prepaidAmt,
+            history.`coins` AS coins,
+            history.charge_date AS chargeDate,
+            history.charge_method AS chargeMethod,
+            history.type AS type
+        FROM
+            `t_member_charge_history` history
+        WHERE
+            history.`member_id` = #{memberId}
+        ORDER BY
+            chargeDate DESC
+        LIMIT 0,
+         100;
+    </select>
+    <!-- -->
+    <parameterMap type="java.util.Map" id="getInviteChargeMap">
+        <parameter property="memberId" mode="IN" jdbcType="INTEGER"/>
+        <parameter property="result" mode="OUT" jdbcType="INTEGER"/>
+    </parameterMap>
+
+    <select id="inviteChargeFirst" parameterMap="getInviteChargeMap" statementType="CALLABLE">
+		<![CDATA[{call SP_Invite_Charge_First(?, ?)}]]>
+	</select>
+    <select id="getChargeByMchOrderNo" resultType="java.lang.Integer">
+		SELECT id FROM t_wxpay_record WHERE mch_order_no = #{mchOrderNo}
+	</select>
+    <!-- 更新总币数 -->
+    <update id="updateMemberCount" parameterType="Charge">
+        UPDATE account
+        SET
+        coins = coins + #{coinsSum}
+        <if test="superTicketSum != null">
+            ,superTicket = superTicket + #{superTicketSum}
+        </if>
+        WHERE
+        id = #{memberId}
+    </update>
+
+    <!-- 更新邀请人总币数 -->
+    <update id="updateInviteMemberCount" parameterType="Charge">
+		UPDATE account
+		SET
+		coins = coins + #{inviteCoinsSum}
+		WHERE
+		id = #{inviteMemberId}
+	</update>
+
+    <!--查询周月卡每日送币数-->
+    <select id="selectCardGiveByType">
+      SELECT
+            coins_charge
+        FROM
+            t_charge_rules
+        WHERE
+            charge_type = 2
+        LIMIT 0,
+         1;
+    </select>
+    <select id="whoInvite" resultType="java.lang.String">
+        SELECT
+            invite_code
+        FROM
+            share_invite
+        WHERE
+            invited_id = #{memberId}
+        ORDER BY
+            create_date DESC
+        LIMIT 0,
+         1;
+    </select>
+    <select id="howInvite" resultType="java.lang.Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            (
+                SELECT DISTINCT
+                    invited_id
+                FROM
+                    share_invite
+                WHERE
+                    invite_member_id = #{memberId}
+            ) a;
+    </select>
+</mapper>
+
+

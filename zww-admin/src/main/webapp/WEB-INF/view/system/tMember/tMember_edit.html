@@ -1,0 +1,58 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="注册用户（玩家）" value="${item.id}" underline="true"/>
+                            <#input id="memberID" name="" value="${item.memberID}" underline="true"/>
+                            <#input id="name" name="" value="${item.name}" underline="true"/>
+                            <#input id="mobile" name="" value="${item.mobile}" underline="true"/>
+                            <#input id="password" name="" value="${item.password}" underline="true"/>
+                            <#input id="weixinId" name="" value="${item.weixinId}" underline="true"/>
+                            <#input id="gender" name="" value="${item.gender}" underline="true"/>
+                            <#input id="birthday" name="" value="${item.birthday}" underline="true"/>
+                            <#input id="coins" name="" value="${item.coins}" underline="true"/>
+                            <#input id="points" name="" value="${item.points}" underline="true"/>
+                            <#input id="catchNumber" name="" value="${item.catchNumber}" underline="true"/>
+                            <#input id="registerDate" name="" value="${item.registerDate}" underline="true"/>
+                            <#input id="modifiedDate" name="" value="${item.modifiedDate}" underline="true"/>
+                            <#input id="modifiedBy" name="" value="${item.modifiedBy}" underline="true"/>
+                            <#input id="lastLoginDate" name="" value="${item.lastLoginDate}" underline="true"/>
+                            <#input id="lastLogoffDate" name="" value="${item.lastLogoffDate}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="onlineFlg" name="0：登录成功 1：登录失败 " value="${item.onlineFlg}" underline="true"/>
+                            <#input id="iconContextPath" name="" value="${item.iconContextPath}" underline="true"/>
+                            <#input id="iconFileName" name="" value="${item.iconFileName}" underline="true"/>
+                            <#input id="iconRealPath" name="" value="${item.iconRealPath}" underline="true"/>
+                            <#input id="easemobUuid" name="环信uuid" value="${item.easemobUuid}" underline="true"/>
+                            <#input id="activeFlg" name="账号是否激活" value="${item.activeFlg}" underline="true"/>
+                            <#input id="inviteFlg" name="是否已输入邀请码" value="${item.inviteFlg}" underline="true"/>
+                            <#input id="inviteFlgWeb" name="" value="${item.inviteFlgWeb}" underline="true"/>
+                            <#input id="registerFrom" name="注册设备" value="${item.registerFrom}" underline="true"/>
+                            <#input id="lastLoginFrom" name="登录设备" value="${item.lastLoginFrom}" underline="true"/>
+                            <#input id="firstLogin" name="0尚未充值，1已充值" value="${item.firstLogin}" underline="true"/>
+                            <#input id="firstCharge" name="0尚未充值过，1已完成过充值" value="${item.firstCharge}" underline="true"/>
+                            <#input id="registerChannel" name="注册渠道号" value="${item.registerChannel}" underline="true"/>
+                            <#input id="loginChannel" name="登陆渠道号" value="${item.loginChannel}" underline="true"/>
+                            <#input id="phoneModel" name="手机机型" value="${item.phoneModel}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TMemberInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TMemberInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/tMember/tMember_info.js"></script>
+@}

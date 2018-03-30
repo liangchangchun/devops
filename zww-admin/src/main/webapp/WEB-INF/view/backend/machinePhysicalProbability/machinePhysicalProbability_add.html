@@ -1,0 +1,42 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="machinePhysicalProbabilityInfoForm">
+
+            <input type="hidden" id="id" value="">
+            <input type="hidden" id="operation" value="add">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <!--<#input id="id" name="id" underline="true"/>-->
+                            <#Combobox id="dollId" name="机器名称"  dataOptions="showAll:'no',valueField:'id',textField:'name',url:'${ctxPath}/common/getDollListProbability'" >
+                            </#Combobox>
+                            <#input id="strongVoltage" name="强力电压（0-48）" underline="false"/>
+                            <#input id="weakOneVoltage" name="弱一电压（0-48）" underline="false"/>
+                            <#input id="weakTwoVoltage" name="弱二电压（0-48）" underline="false"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="strongTime" name="强力时间（0-100 0.1s）"/>
+                            <#input id="weakTime" name="弱一时间（0-100 0.1s）" underline="false"/>
+                            <!--<#input id="createdDate" name="创建时间" underline="true"/>-->
+                            <!--<#input id="createdBy" name="创建人" underline="true"/>-->
+                            <!--<#input id="modifiedDate" name="修改时间" underline="true"/>-->
+                            <!--<#input id="modifiedBy" name="修改人" underline="true"/>-->
+                </div>
+            </div>
+            <div class="row">
+                <span style="margin: 10px">注：所有填整数，（）中为范围值，后两个时间，单位：0.1秒</span>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MachinePhysicalProbabilityInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MachinePhysicalProbabilityInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/machinePhysicalProbability/machinePhysicalProbability_info.js"></script>
+@}

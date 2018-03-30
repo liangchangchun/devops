@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zww.activity.dao.SignedSheetDao">
+
+	<resultMap id="BaseResultMap" type="com.zww.api.model.SignedSheet">
+    	<id column="signed_id" jdbcType="INTEGER" property="signedId" />
+    	<result column="member_id" jdbcType="VARCHAR" property="memberId" />
+    	<result column="member_name" jdbcType="VARCHAR" property="memberName" />
+    	<result column="signed_date" jdbcType="TIMESTAMP" property="signedDate" />
+    	<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    	<result column="signed" jdbcType="INTEGER" property="signed" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    signed_id, member_id, member_name, signed_date, create_time, signed
+  </sql>
+	<update id="updateByMemberId">
+		UPDATE signed_sheet
+		SET signed_date = now(),
+		 signed = signed + 1
+		WHERE
+			member_id = #{memberId}
+	</update>
+	<update id="updateNewDayByMemberId">
+		UPDATE signed_sheet
+		SET signed_date = now(),
+		 signed = 1
+		WHERE
+			member_id = #{memberId}
+	</update>
+	<select id="selectOneByMemberID" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+     from signed_sheet
+    where member_id = #{memberId,jdbcType=INTEGER} order by signed_date desc LIMIT 1
+  </select>
+
+	<insert id="insert" parameterType="com.zww.api.model.SignedSheet">
+		insert into signed_sheet
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="signedId != null">
+				signed_id,
+			</if>
+			<if test="memberId != null">
+				member_id,
+			</if>
+			<if test="memberName != null">
+				member_name,
+			</if>
+			<if test="signedDate != null">
+				signed_date,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="signed != null">
+				signed,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="signedId != null">
+				#{signedId,jdbcType=INTEGER},
+			</if>
+			<if test="memberId != null">
+				#{memberId,jdbcType=VARCHAR},
+			</if>
+			<if test="memberName != null">
+				#{memberName,jdbcType=VARCHAR},
+			</if>
+			<if test="signedDate != null">
+				#{signedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="signed != null">
+				#{signed,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+</mapper>
+
+

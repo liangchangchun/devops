@@ -1,0 +1,42 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${item}">
+
+            <div class="row">
+                <div class="col-sm-6">
+                        <#input id="checkReason" name="审核理由" underline="false"/>
+                            <!--<#input id="id" name="id" underline="true"/>-->
+                            <!--<#input id="gameNum" name="游戏编号" underline="true"/>-->
+                            <!--<#input id="memberId" name="用户id" underline="true"/>-->
+                            <!--<#input id="memberNum" name="用户编号" underline="true"/>-->
+                            <!--<#input id="dollId" name="娃娃机id" underline="true"/>-->
+                            <!--<#input id="memberCatchId" name="抓取记录id" underline="true"/>-->
+                            <!--<#input id="complaintReason" name="申诉原因"/>-->
+                </div>
+
+                <!--<div class="col-sm-6">-->
+                            <!--<#input id="checkState" name="审核状态（待审核0，通过返币1，通过发娃娃2，未通过-1）" underline="true"/>-->
+
+                            <!--<#input id="creatDate" name="创建日期" underline="true"/>-->
+                            <!--<#input id="creatBy" name="创建人" underline="true"/>-->
+                            <!--<#input id="modifyDate" name="修改时间" underline="true"/>-->
+                            <!--<#input id="modifyBy" name="修改人" underline="true"/>-->
+                <!--</div>-->
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="补娃娃" id="ensure" icon="fa-check" clickFun="MemberComplaintInfoDlg.backDollSubmit()"/>
+                    <#button btnCss="info" name="返币，钻" id="ensure" icon="fa-check" clickFun="MemberComplaintInfoDlg.backCoinsSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MemberComplaintInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/memberComplaint/memberComplaint_info.js"></script>
+@}

@@ -1,0 +1,58 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="注册用户（玩家）" underline="true"/>
+                            <#input id="memberID" name="" underline="true"/>
+                            <#input id="name" name="" underline="true"/>
+                            <#input id="mobile" name="" underline="true"/>
+                            <#input id="password" name="" underline="true"/>
+                            <#input id="weixinId" name="" underline="true"/>
+                            <#input id="gender" name="" underline="true"/>
+                            <#input id="birthday" name="" underline="true"/>
+                            <#input id="coins" name="" underline="true"/>
+                            <#input id="points" name="" underline="true"/>
+                            <#input id="catchNumber" name="" underline="true"/>
+                            <#input id="registerDate" name="" underline="true"/>
+                            <#input id="modifiedDate" name="" underline="true"/>
+                            <#input id="modifiedBy" name="" underline="true"/>
+                            <#input id="lastLoginDate" name="" underline="true"/>
+                            <#input id="lastLogoffDate" name=""/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="onlineFlg" name="0：登录成功 1：登录失败 " underline="true"/>
+                            <#input id="iconContextPath" name="" underline="true"/>
+                            <#input id="iconFileName" name="" underline="true"/>
+                            <#input id="iconRealPath" name="" underline="true"/>
+                            <#input id="easemobUuid" name="环信uuid" underline="true"/>
+                            <#input id="activeFlg" name="账号是否激活" underline="true"/>
+                            <#input id="inviteFlg" name="是否已输入邀请码" underline="true"/>
+                            <#input id="inviteFlgWeb" name="" underline="true"/>
+                            <#input id="registerFrom" name="注册设备" underline="true"/>
+                            <#input id="lastLoginFrom" name="登录设备" underline="true"/>
+                            <#input id="firstLogin" name="0尚未充值，1已充值" underline="true"/>
+                            <#input id="firstCharge" name="0尚未充值过，1已完成过充值" underline="true"/>
+                            <#input id="registerChannel" name="注册渠道号" underline="true"/>
+                            <#input id="loginChannel" name="登陆渠道号" underline="true"/>
+                            <#input id="phoneModel" name="手机机型" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TMemberInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TMemberInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/tMember/tMember_info.js"></script>
+@}

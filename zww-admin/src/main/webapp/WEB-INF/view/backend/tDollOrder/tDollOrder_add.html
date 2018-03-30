@@ -1,0 +1,42 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" underline="true"/>
+                            <#input id="orderNumber" name="抓到娃娃后生成的订单编号" underline="true"/>
+                            <#input id="orderDate" name="" underline="true"/>
+                            <#input id="orderBy" name="收货人外键 t_member" underline="true"/>
+                            <#input id="status" name="订单状态" underline="true"/>
+                            <#input id="stockValidDate" name="寄存有效期" underline="true"/>
+                            <#input id="deliverDate" name="发货时间" underline="true"/>
+                            <#input id="deliverMethod" name="发货方式（快递公司名称）"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="deliverNumber" name="快递单号" underline="true"/>
+                            <#input id="deliverAmount" name="邮费金额，暂不用，预留字段" underline="true"/>
+                            <#input id="deliverCoins" name="邮费等值的游戏币" underline="true"/>
+                            <#input id="addressId" name="发货地址外键 t_member_addr" underline="true"/>
+                            <#input id="modifiedDate" name="" underline="true"/>
+                            <#input id="modifiedBy" name="" underline="true"/>
+                            <#input id="comment" name="" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TDollOrderInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TDollOrderInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tDollOrder/tDollOrder_info.js"></script>
+@}

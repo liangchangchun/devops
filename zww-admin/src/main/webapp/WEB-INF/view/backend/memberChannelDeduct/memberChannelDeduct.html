@@ -1,0 +1,53 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>渠道扣量管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="userId" name="用户id" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="name" name="用户名" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="registeDate" name="开始时间" isTime="false" pattern="YYYY-MM-DD hh:MM:ss"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="endTime" name="结束时间" isTime="false" pattern="YYYY-MM-DD hh:MM:ss"/>
+                            </div>
+                            <div class="col-sm-2">
+                                <#SelectCon id="lastLoginFrom" name="设备">
+                                    <option value="">全部</option>
+                                    <option value="android">android</option>
+                                    <option value="ios">ios</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#Combobox id="channelNum" name="渠道号" dataOptions="valueField:'registerChannel',textField:'registerChannel',url:'${ctxPath}/common/getRegisterChannel'" >
+                                </#Combobox>
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="MemberChannelDeduct.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="MemberChannelDeductTableToolbar" role="group">
+
+                            @if(shiro.hasPermission("/memberChannelDeduct/delete")){
+                                <#button name="删除" icon="fa-plus" clickFun="MemberChannelDeduct.delete()" />
+                            @}
+                        </div>
+                        <#table id="MemberChannelDeductTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/memberChannelDeduct/memberChannelDeduct.js"></script>
+@}

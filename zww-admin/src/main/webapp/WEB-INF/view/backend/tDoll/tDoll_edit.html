@@ -1,0 +1,66 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="tDollInfoForm">
+
+            <input type="hidden" id="id" value="${item.id}" />
+            <input type="hidden" id="operation" value="update">
+            <input type="hidden" id="machineTypeValue" value="${item.machineType}" />
+            <input type="hidden" id="dollAddressIdValue" value="${item.dollAddressId}" />
+            <input type="hidden" id="machineStatusValue" value="${item.machineStatus}" />
+
+           <div class="row">
+                <div class="col-sm-6 b-r">
+                	<#input id="machineCode" name="娃娃机编号" value="${item.machineCode}" />
+                    <#input id="name" name="娃娃机名称" value="${item.name}" placeholder="必填" />
+                 
+					<#input id="dollID" name="娃娃编号" value="${item.dollID}"  placeholder="必填" />
+                    <#input id="price" name="价格" value="${item.price}" placeholder="必填" />
+                    <#input id="redeemCoins" name="兑换币数" value="${item.redeemCoins}" placeholder="必填" />
+                    <#input id="timeout" name="游戏时间" value="${item.timeout}" placeholder="必填"/>
+                    <#input id="watchingNumber" name="排序" value="${item.watchingNumber}" />
+                </div>
+
+                <div class="col-sm-6">
+					<#input id="machineSerialNum" name="设备码" value="${item.machineSerialNum}" placeholder="必填" />
+					<#input id="machineUrl" name="设备名称" value="${item.machineUrl}" placeholder="必填" />
+					<#input id="machineIp" name="队列名称" value="${item.machineIp}"  placeholder="必填" />
+					<#input id="mnsTopicName" name="Topic名称" value="${item.mnsTopicName}" placeholder="必填"/>
+					<#input id="description" name="备注" value="${item.description}" />
+					 <#SelectCon id="machineType" name="机器类型" >
+								<option value="0" >普通房</option>
+								<option value="1" >练习房</option>
+								<option value="2" >强抓房</option>
+								<option value="3" >占卜房</option>
+					</#SelectCon>
+					<#Combobox id="dollAddressId" name="机器地址"  dataOptions="showAll:'no',valueField:'id',textField:'address',url:'${ctxPath}/common/getDollAddress'" >
+                    </#Combobox>
+                    <#SelectCon id="machineStatus" name="机器状态" >
+								<option value="空闲中" >空闲中</option>
+								<option value="游戏中" >游戏中</option>
+								<option value="维修中" >维修中</option>
+								<option value="未上线" >未上线</option>
+					</#SelectCon>
+                </div>
+            </div>
+             <div class="row">
+              <div class="col-sm-12">
+             		<#input id="rtmpPushUrl" name="推牛地址" value="${item.rtmpPushUrl}" placeholder="必填" />
+					<#input id="rtmpUrl1" name="拉牛地址1" value="${item.rtmpUrl1}" placeholder="必填"/>
+                    <#input id="rtmpUrl2" name="拉牛地址2" value="${item.rtmpUrl2}" placeholder=""/>
+                    <#input id="rtmpUrl3" name="拉牛地址3" value="${item.rtmpUrl3}" />
+               </div>
+             </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TDollInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TDollInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tDoll/tDoll_info.js"></script>
+@}

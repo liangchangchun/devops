@@ -1,0 +1,43 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${item.id}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <!--<#input id="id" name="" value="${item.id}" underline="true"/>-->
+                            <!--<#input id="orderNumber" name="抓到娃娃后生成的订单编号" value="${item.orderNumber}" underline="true"/>-->
+                            <!--<#input id="orderDate" name="" value="${item.orderDate}" underline="true"/>-->
+                            <!--<#input id="orderBy" name="收货人外键 t_member" value="${item.orderBy}" underline="true"/>-->
+                            <!--<#input id="status" name="订单状态" value="${item.status}" underline="true"/>-->
+                            <!--<#input id="stockValidDate" name="寄存有效期" value="${item.stockValidDate}" underline="true"/>-->
+                            <!--<#input id="deliverDate" name="发货时间" value="${item.deliverDate}" underline="true"/>-->
+                            <#input id="deliverMethod" name="快递公司" value="${item.deliverMethod}" />
+                            <#input id="deliverNumber" name="快递单号" value="${item.deliverNumber}" underline="false"/>
+
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="deliverAmount" name="邮费" value="${item.deliverAmount}" underline="false"/>
+                            <!--<#input id="deliverCoins" name="邮费等值的游戏币" value="${item.deliverCoins}" underline="true"/>-->
+                            <!--<#input id="addressId" name="发货地址外键 t_member_addr" value="${item.addressId}" underline="true"/>-->
+                            <!--<#input id="modifiedDate" name="" value="${item.modifiedDate}" underline="true"/>-->
+                            <!--<#input id="modifiedBy" name="" value="${item.modifiedBy}" underline="true"/>-->
+                            <#input id="comment" name="备注" value="${item.comment}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="TDollOrderInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="TDollOrderInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/tDollOrder/tDollOrder_info.js"></script>
+@}

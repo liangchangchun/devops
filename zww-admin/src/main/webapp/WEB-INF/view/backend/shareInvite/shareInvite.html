@@ -1,0 +1,46 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>邀请列表管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                         <div class="col-sm-3">
+                       			 <#SelectCon id="inviteType" name="查询类型">
+                                    <option value="0" selected>邀请人</option>
+                                    <option value="1">被邀请人</option>
+                                </#SelectCon>
+                          </div>
+
+                            <div class="col-sm-3">
+								<#NameCon id="name" name="用户名" />
+						  </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="startDate" name="开始时间"  isTime="false" pattern="YYYY-MM-DD hh:mm:ss"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="endDate" name="结束时间"  isTime="false" pattern="YYYY-MM-DD hh:mm:ss"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="memberid" name="用户id" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="ShareInvite.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="ShareInviteTableToolbar" role="group">
+                                <#button name="查看充值记录" icon="fa-xing" clickFun="ShareInvite.openMemberChargeDetail()" space="false"/>
+                        </div>
+                        <#table id="ShareInviteTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/shareInvite/shareInvite.js"></script>
+@}

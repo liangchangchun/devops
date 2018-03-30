@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zww.order.dao.DollOrderDao">
+    <resultMap id="BaseResultMap" type="com.zww.api.model.DollOrder">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="order_number" jdbcType="VARCHAR" property="orderNumber"/>
+        <result column="order_date" jdbcType="TIMESTAMP" property="orderDate"/>
+        <result column="order_by" jdbcType="INTEGER" property="orderBy"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="stock_valid_date" jdbcType="TIMESTAMP" property="stockValidDate"/>
+        <result column="deliver_date" jdbcType="TIMESTAMP" property="deliverDate"/>
+        <result column="deliver_method" jdbcType="VARCHAR" property="deliverMethod"/>
+        <result column="deliver_number" jdbcType="VARCHAR" property="deliverNumber"/>
+        <result column="deliver_amount" jdbcType="DECIMAL" property="deliverAmount"/>
+        <result column="deliver_coins" jdbcType="INTEGER" property="deliverCoins"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="modified_by" jdbcType="INTEGER" property="modifiedBy"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="doll_redeem_coins" jdbcType="VARCHAR" property="dollRedeemCoins"/>
+        <association property="memberAddress" javaType="MemberAddr">
+            <id property="id" column="address_id"/>
+            <result property="receiverPhone" column="receiver_phone"/>
+            <result property="receiverName" column="receiver_name"/>
+            <result property="province" column="province"/>
+            <result property="city" column="city"/>
+            <result property="county" column="county"/>
+            <result property="street" column="street"/>
+        </association>
+        <collection property="orderItems" ofType="DollOrderItem"
+                    column="order_id">
+            <id property="id" column="item_id" javaType="int" jdbcType="INTEGER"/>
+            <result column="item_created_date" jdbcType="TIMESTAMP"
+                    property="createdDate"/>
+            <result column="item_modified_date" jdbcType="TIMESTAMP"
+                    property="modifiedDate"/>
+            <result column="quantity" jdbcType="INTEGER" property="quantity"/>
+            <association property="doll" javaType="Doll">
+                <id property="id" column="doll_id"/>
+                <result property="name" column="name"/>
+            </association>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+		id,
+        order_number,
+        order_date,
+        order_by,
+        status,
+        stock_valid_date,
+        deliver_date,
+        deliver_method,
+        deliver_number,
+        deliver_amount,
+        deliver_coins,
+        address_id,
+        modified_date,
+        modified_by,
+        comment,
+        doll_redeem_coins
+	</sql>
+
+    <!-- 查询申请发货的订单 -->
+    <select id="getOrdersByStatus" resultMap="BaseResultMap">
+        select a.*,receiver_phone,receiver_name,province,city,county,street
+        from t_doll_order a,t_member_addr b
+        where a.address_id=b.id and a.status='申请发货'
+        <if test="phone!=null">
+            and b.receiver_phone like concat
+            ('%',#{phone},'%')
+        </if>
+        order by a.deliver_date asc
+        limit #{begin},#{pageSize}
+    </select>
+    <!-- 查询已发货发货的订单 -->
+    <select id="getOutOrdersByStatus" resultMap="BaseResultMap">
+        select a.*,receiver_phone,receiver_name,province,city,county,street
+        from t_doll_order a LEFT JOIN t_member_addr b on a.address_id=b.id
+        where a.status='已发货'
+        <if test="phone!=null">
+            and b.receiver_phone like concat
+            ('%',#{phone},'%')
+        </if>
+        <if test="outGoodsId!=0">
+            and a.id=#{outGoodsId}
+        </if>
+        order by a.modified_date desc
+        limit #{begin},#{pageSize}
+    </select>
+    <select id="totalCount" resultType="java.lang.Integer">
+        select
+        count(1)
+        from t_doll_order a,t_member_addr b
+        where a.address_id=b.id and a.status='申请发货'
+        <if test="phone!=null">
+            and b.receiver_phone like concat
+            ('%',#{phone},'%')
+        </if>
+    </select>
+    <select id="totalCountOutOrders" resultType="java.lang.Integer">
+        select
+        count(1)
+        from t_doll_order a,t_member_addr b
+        where a.address_id=b.id and a.status='已发货'
+        <if test="phone!=null">
+            and b.receiver_phone like concat
+            ('%',#{phone},'%')
+        </if>
+        <if test="outGoodsId!=0">
+            and a.id=#{outGoodsId}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+            resultMap="BaseResultMap">
+		select
+		a.*, addr.*, b.id as item_id, b.created_date as item_created_date,
+		b.modified_date as item_modified_date,
+		b.quantity,
+		c.id as doll_id, c.name
+		from t_doll_order a
+		inner join t_doll_order_item b on a.id=b.order_id
+		inner join t_doll c on
+		c.id=b.doll_id
+		left outer join t_member_addr addr on
+		a.address_id=addr.id
+		where a.id = #{id,jdbcType=INTEGER}
+	</select>
+
+    <select id="selectListByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            a.id,
+            a.order_number,
+            a.order_date,
+            a.order_by,
+            a. STATUS,
+            a.stock_valid_date,
+            a.deliver_date,
+            a.deliver_method,
+            a.deliver_number,
+            a.deliver_amount,
+            a.deliver_coins,
+            a.address_id,
+            a.modified_date,
+            a.modified_by,
+            a. COMMENT,
+            IFNULL(
+            a.doll_redeem_coins,
+            c.redeem_coins
+            ) doll_redeem_coins,
+            b.id AS item_id,
+            b.created_date AS item_created_date,
+            b.modified_date AS item_modified_date,
+            b.quantity,
+            c.id AS doll_id,
+            c. NAME
+        FROM
+            t_doll_order a
+        INNER JOIN t_doll_order_item b ON a.id = b.order_id
+        INNER JOIN t_doll c ON c.id = b.doll_id
+        WHERE
+            a.id <foreach collection="array" item="orderIds" open="in ("
+                          close=")" separator=",">
+        #{orderIds}
+    </foreach>
+        AND a. STATUS = '寄存中';
+    </select>
+
+    <select id="selectByOrderNum" parameterType="com.zww.api.model.DollOrder"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_doll_order
+        WHERE order_number = #{orderNumber}
+    </select>
+
+    <select id="selectExpireOrder" resultMap="BaseResultMap">
+		SELECT 
+		a.*, addr.*, b.id AS item_id, b.created_date AS item_created_date,
+		b.modified_date AS item_modified_date,
+		b.quantity,
+		c.id AS doll_id, c.name
+		FROM t_doll_order a
+		INNER JOIN t_doll_order_item b ON a.id=b.order_id
+		INNER JOIN t_doll c ON
+		c.id=b.doll_id
+		LEFT OUTER JOIN t_member_addr addr ON
+		a.address_id=addr.id
+	    WHERE a.status = '寄存中' AND a.stock_valid_date &lt; NOW()
+
+	</select>
+
+    <select id="selectByOrderIds" parameterType="Integer[]"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_doll_order
+        <where>
+            id
+            <foreach collection="array" item="orderIds" open="in ("
+                     close=")" separator=",">
+                #{orderIds}
+            </foreach>
+            ORDER BY order_date desc LIMIT 1
+        </where>
+    </select>
+
+
+    <select id="selectByOrderNotIn" parameterType="com.zww.api.model.DollOrder"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_doll_order
+        <where>
+            id
+            <foreach collection="orderIds" item="orderId" open="in ("
+                     close=")" separator=",">
+                #{orderId}
+            </foreach>
+            AND id NOT IN (#{id})
+        </where>
+    </select>
+    <select id="selectListByOrderIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        t_doll_order
+        WHERE
+        id
+        <foreach collection="array" item="orderIds" open="in ("
+                 close=")" separator=",">
+            #{orderIds}
+        </foreach>
+        AND STATUS = '寄存中'
+        ORDER BY
+        order_date DESC;
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_doll_order
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+    <insert id="insertOrder" parameterType="com.zww.api.model.DollOrder"
+            useGeneratedKeys="true" keyProperty="id">
+		insert into t_doll_order (id, order_number, order_date,
+		order_by, status, stock_valid_date,
+		deliver_date, deliver_method, deliver_number,
+		deliver_amount, deliver_coins, address_id,
+		modified_date, modified_by ,doll_redeem_coins)
+		values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR},
+		#{orderDate,jdbcType=TIMESTAMP},
+		#{orderBy,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{stockValidDate,jdbcType=TIMESTAMP},
+		#{deliverDate,jdbcType=TIMESTAMP}, #{deliverMethod,jdbcType=VARCHAR},
+		#{deliverNumber,jdbcType=VARCHAR},
+		#{deliverAmount,jdbcType=DECIMAL}, #{deliverCoins,jdbcType=INTEGER},
+		#{memberAddress.id,jdbcType=INTEGER},
+		#{modifiedDate,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=INTEGER},#{dollRedeemCoins})
+	</insert>
+    <insert id="insertSelective" parameterType="com.zww.api.model.DollOrder"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into t_doll_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderNumber != null">
+                order_number,
+            </if>
+            <if test="orderDate != null">
+                order_date,
+            </if>
+            <if test="orderBy != null">
+                order_by,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="stockValidDate != null">
+                stock_valid_date,
+            </if>
+            <if test="deliverDate != null">
+                deliver_date,
+            </if>
+            <if test="deliverMethod != null">
+                deliver_method,
+            </if>
+            <if test="deliverNumber != null">
+                deliver_number,
+            </if>
+            <if test="deliverAmount != null">
+                deliver_amount,
+            </if>
+            <if test="deliverCoins != null">
+                deliver_coins,
+            </if>
+            <if test="memberAddress.id != null">
+                address_id,
+            </if>
+            <if test="modifiedDate != null">
+                modified_date,
+            </if>
+            <if test="modifiedBy != null">
+                modified_by,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderNumber != null">
+                #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDate != null">
+                #{orderDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderBy != null">
+                #{orderBy,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="stockValidDate != null">
+                #{stockValidDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverDate != null">
+                #{deliverDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverMethod != null">
+                #{deliverMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverNumber != null">
+                #{deliverNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverAmount != null">
+                #{deliverAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="deliverCoins != null">
+                #{deliverCoins,jdbcType=INTEGER},
+            </if>
+            <if test="memberAddress.id != null">
+                #{memberAddress.id,jdbcType=INTEGER},
+            </if>
+            <if test="modifiedDate != null">
+                #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                #{modifiedBy,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zww.api.model.DollOrder">
+        update t_doll_order
+        <set>
+            <if test="orderNumber != null">
+                order_number = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDate != null">
+                order_date = #{orderDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderBy != null">
+                order_by = #{orderBy,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="stockValidDate != null">
+                stock_valid_date = #{stockValidDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverDate != null">
+                deliver_date = #{deliverDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deliverMethod != null">
+                deliver_method = #{deliverMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverNumber != null">
+                deliver_number = #{deliverNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverAmount != null">
+                deliver_amount = #{deliverAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="deliverCoins != null">
+                deliver_coins = #{deliverCoins,jdbcType=INTEGER},
+            </if>
+            <if test="memberAddress != null">
+                address_id = #{memberAddress.id,jdbcType=INTEGER},
+            </if>
+            <if test="modifiedDate != null">
+                modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=INTEGER},
+            </if>
+            <if test="modifiedBy != null">
+                comment = #{comment,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zww.api.model.DollOrder">
+		update t_doll_order
+		set order_number = #{orderNumber,jdbcType=VARCHAR},
+		order_date = #{orderDate,jdbcType=TIMESTAMP},
+		order_by = #{orderBy,jdbcType=INTEGER},
+		status = #{status,jdbcType=VARCHAR},
+		stock_valid_date = #{stockValidDate,jdbcType=TIMESTAMP},
+		deliver_date = #{deliverDate,jdbcType=TIMESTAMP},
+		deliver_method = #{deliverMethod,jdbcType=VARCHAR},
+		deliver_number = #{deliverNumber,jdbcType=VARCHAR},
+		deliver_amount = #{deliverAmount,jdbcType=DECIMAL},
+		deliver_coins = #{deliverCoins,jdbcType=INTEGER},
+		address_id = #{addressId,jdbcType=INTEGER},
+		modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+		modified_by = #{modifiedBy,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+    <update id="sendDoll" parameterType="java.util.Map">
+        UPDATE t_doll_order
+        SET STATUS = '申请发货',
+        modified_date = NOW(),
+        address_id=#{addressId,jdbcType=INTEGER}
+        WHERE
+        id IN
+        <foreach item="item" index="index" collection="orderIds" open="("
+                 close=")" separator=",">
+            #{item}
+        </foreach>
+        AND STATUS = '寄存中'
+    </update>
+
+    <select id="selectOutTimeDolls" resultMap="BaseResultMap">
+        <![CDATA[
+        SELECT
+            *
+        FROM
+            t_doll_order
+        WHERE
+            order_date <= CURRENT_TIMESTAMP - INTERVAL 15 DAY
+        AND STATUS = '寄存中'
+        ORDER BY
+            order_date DESC;
+        ]]>
+    </select>
+
+</mapper>

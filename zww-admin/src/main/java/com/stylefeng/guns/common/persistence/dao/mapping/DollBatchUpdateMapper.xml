@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.DollBatchUpdateMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.DollBatchUpdate">
+		<id column="id" property="id" />
+		<result column="doll_id" property="dollId" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, doll_id AS dollId
+    </sql>
+
+	<insert id="inserts" parameterType="DollBatchUpdate">
+		insert into doll_batch_update
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dollId != null and dollId != ''">
+				doll_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dollId != null and dollId != ''">
+				#{dollId},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="selectLists" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		c.id id, c.doll_id dollId, a.name name, a.machine_type machineType, a.machine_status
+		machineStatus,
+		a.tbimg_real_path tbimgRealPath,a.machine_code machineCode,
+		a.doll_address_id dollAddressId,
+		b.province, b.city, b.county, b.street
+		from doll_batch_update c LEFT JOIN t_doll a on c.doll_id = a.id
+		LEFT JOIN doll_address b on a.doll_address_id = b.id
+		where machine_status!="" AND machine_status!="已下架" and delete_status = 1
+		<if test="name!=null and name != ''">
+			and a.name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="machineCode!=null and machineCode != ''">
+			and a.machine_code = #{machineCode}
+		</if>
+		order by id desc
+	</select>
+
+	<select id="selectByDollId" resultType="DollBatchUpdate" parameterType="java.lang.Integer">
+		select
+		*
+		from doll_batch_update
+		where doll_id = #{dollId}
+	</select>
+
+	<!--批量删除-->
+	<delete id="deleteAllById" parameterType="List">
+		delete from doll_batch_update
+		where id IN
+		<foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!--批量空闲-->
+	<update id="updateStatus" parameterType="List">
+	update t_doll
+		<set>
+			machine_status = '空闲中'
+		</set>
+		where id IN
+		<foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+
+	<!--批量未上线-->
+	<update id="updateStatusW" parameterType="List">
+		update t_doll
+		<set>
+			machine_status = '未上线'
+		</set>
+		where id IN
+		<foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

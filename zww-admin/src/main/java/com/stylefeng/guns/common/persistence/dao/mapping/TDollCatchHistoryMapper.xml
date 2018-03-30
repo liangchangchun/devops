@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.TDollCatchHistoryMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.TDollCatchHistory">
+		<id column="id" property="id" />
+		<result column="doll_id" property="dollId" />
+		<result column="member_id" property="userId" />
+		<result column="catch_date" property="catchDate" />
+		<result column="catch_status" property="catchStatus" />
+		<result column="video_url" property="videoUrl" />
+		<result column="game_num" property="gameNum" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, doll_id AS dollId, member_id AS userId, catch_date AS catchDate, catch_status AS catchStatus, video_url AS videoUrl, game_num AS gameNum
+    </sql>
+
+	<select id="selectDollCatchHistoryList" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		<include refid="Base_Column_List" />
+		from t_doll_catch_history
+		where 1=1
+		<if test="userId != null and userId != ''">
+			AND member_id = #{userId}
+		</if>
+		<if test="dollId != null and dollId != 0">
+			AND doll_id = #{dollId}
+		</if>
+		<if test="catchStatus != null and catchStatus != ''">
+			AND catch_status = #{catchStatus}
+		</if>
+		<if test="beginDate != null and beginDate != ''">
+			AND  DATEDIFF(catch_date,#{beginDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(catch_date,#{endtime})&lt;0
+		</if>
+			order by catch_date desc
+	</select>
+
+	<!--抓取总次数-->
+	<select id="selectCatchNum" resultType="java.lang.Integer" >
+		select
+		count(*)
+		from t_doll_catch_history
+		where 1=1
+		<if test="memberId != null and memberId != 0">
+			AND member_id = #{memberId}
+		</if>
+		<if test="beginDate != null and beginDate != ''">
+			AND  DATEDIFF(catch_date,#{beginDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(catch_date,#{endtime})&lt;0
+		</if>
+		order by catch_date desc
+	</select>
+
+
+	<!--抓取成功次数-->
+	<select id="selectCatchSuccessNum" resultType="java.lang.Integer" >
+		select
+		count(*)
+		from t_doll_catch_history
+		where 1=1 and catch_status = '抓取成功'
+		<if test="memberId != null and memberId != 0">
+			AND member_id = #{memberId}
+		</if>
+		<if test="beginDate != null and beginDate != ''">
+			AND  DATEDIFF(catch_date,#{beginDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(catch_date,#{endtime})&lt;0
+		</if>
+		order by catch_date desc
+	</select>
+</mapper>

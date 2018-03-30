@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zww.activity.dao.BannerDao">
+    <resultMap id="BaseResultMap" type="com.zww.api.model.Banner">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="hyperlink" property="hyperlink" jdbcType="VARCHAR"/>
+        <result column="sorts" property="sorts" jdbcType="INTEGER"/>
+        <result column="active_flg" property="activeFlg" jdbcType="BIT"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="created_date" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="created_by" property="createdBy" jdbcType="INTEGER"/>
+        <result column="link_type" property="linkType" jdbcType="INTEGER"/>
+        <result column="pay_index" property="payIndex" jdbcType="INTEGER"/>
+        <result column="package_name" property="packageName" jdbcType="INTEGER"/>
+        <result column="modified_date" property="modifiedDate"
+                jdbcType="TIMESTAMP"/>
+        <result column="modified_by" property="modifiedBy" jdbcType="INTEGER"/>
+        <result column="valid_start_date" property="validStartDate"
+                jdbcType="TIMESTAMP"/>
+        <result column="valid_end_date" property="validEndDate"
+                jdbcType="TIMESTAMP"/>
+        <result column="qq_group_num" property="qqGroupNum" jdbcType="VARCHAR"/>
+        <result column="qq_group_key" property="qqGroupKey" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		id, description, image_url, hyperlink,sorts, active_flg, type,
+		created_date,
+		created_by,
+		modified_date, modified_by, valid_start_date,
+		valid_end_date,link_type,pay_index,qq_group_num,qq_group_key
+	</sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_banner
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectBannerList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_banner
+        order by id desc
+        limit #{begin},#{pageSize}
+    </select>
+
+    <select id="totalCount" resultType="java.lang.Integer">
+		select
+		count(1)
+		from t_banner
+	</select>
+
+    <insert id="insertSelective" parameterType="com.zww.api.model.Banner">
+        insert into t_banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="imageUrl != null">
+                image_url,
+            </if>
+            <if test="hyperlink != null">
+                hyperlink,
+            </if>
+            <if test="sorts != null">
+                sorts,
+            </if>
+            <if test="linkType != null">
+                link_type,
+            </if>
+            <if test="payIndex != null">
+                pay_index,
+            </if>
+            <if test="activeFlg != null">
+                active_flg,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="createdDate != null">
+                created_date,
+            </if>
+            <if test="createdBy != null">
+                created_by,
+            </if>
+            <if test="modifiedDate != null">
+                modified_date,
+            </if>
+            <if test="modifiedBy != null">
+                modified_by,
+            </if>
+            <if test="validStartDate != null">
+                valid_start_date,
+            </if>
+            <if test="validEndDate != null">
+                valid_end_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="imageUrl != null">
+                #{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="hyperlink != null">
+                #{hyperlink,jdbcType=VARCHAR},
+            </if>
+            <if test="sorts != null">
+                #{sorts,jdbcType=INTEGER},
+            </if>
+            <if test="linkType != null">
+                #{linkType,jdbcType=INTEGER},
+            </if>
+            <if test="payIndex != null">
+                #{payIndex,jdbcType=INTEGER},
+            </if>
+            <if test="activeFlg != null">
+                #{activeFlg,jdbcType=BIT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=INTEGER},
+            </if>
+            <if test="modifiedDate != null">
+                #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                #{modifiedBy,jdbcType=INTEGER},
+            </if>
+            <if test="validStartDate != null">
+                #{validStartDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="validEndDate != null">
+                #{validEndDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="bannerDel" parameterType="java.lang.Integer">
+        delete from t_banner
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+
+    <select id="selectBannerById" resultType="Banner">
+        SELECT
+        id, description, hyperlink,sorts, type, valid_start_date, valid_end_date,link_type,pay_index
+        FROM
+        t_banner WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="Banner">
+        update t_banner
+        <set>
+
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="imageUrl != null">
+                image_url = #{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="hyperlink != null">
+                hyperlink = #{hyperlink,jdbcType=VARCHAR},
+            </if>
+            <if test="sorts != null">
+                sorts = #{sorts,jdbcType=VARCHAR},
+            </if>
+            <if test="linkType != null">
+                link_type = #{linkType,jdbcType=INTEGER},
+            </if>
+            <if test="payIndex != null">
+                pay_index = #{payIndex,jdbcType=INTEGER},
+            </if>
+            <if test="activeFlg != null">
+                active_flg=#{activeFlg,jdbcType=BIT},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                created_date = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy,jdbcType=INTEGER},
+            </if>
+            <if test="modifiedDate != null">
+                modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=INTEGER},
+            </if>
+            <if test="validStartDate != null">
+                valid_start_date = #{validStartDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="validEndDate != null">
+                valid_end_date = #{validEndDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据id查询banneer -->
+    <select id="selectById" parameterType="Banner" resultType="Banner">
+        select
+        id, description, image_url, hyperlink, active_flg, type,
+        valid_start_date, valid_end_date,link_type,pay_index
+        from t_banner
+        where id=#{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectscrollingBanner" resultType="com.zww.api.model.ScrollingBanner">
+        SELECT
+            IFNULL(
+                tm.`name`,
+                '不愿意透露姓名的某大神'
+            ) memberName,
+            tdch.doll_id,
+            tdch.catch_date time,
+            IFNULL(di.dollName, '练习娃娃') dollName
+        FROM
+            t_doll_catch_history tdch
+        LEFT JOIN t_member tm ON tdch.member_id = tm.id
+        LEFT JOIN t_doll td ON tdch.doll_id = td.id
+        LEFT JOIN doll_info di ON td.doll_ID = di.dollCode
+        WHERE
+            tdch.catch_status LIKE '%抓取成功'
+        AND tdch.catch_date > CURRENT_TIMESTAMP - INTERVAL 20 MINUTE
+        ORDER BY
+            catch_date DESC
+        LIMIT 0,
+         20;
+    </select>
+
+    <select id="selectActiveBannerByTypeAndPackageName" resultType="com.zww.api.model.Banner">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_banner
+        WHERE type IN <foreach collection="type" index="index" item="type"
+                               open="(" separator="," close=")">
+        #{type}
+    </foreach> AND active_flg = 1 AND <![CDATA[valid_start_date<now()<valid_end_date]]>
+        AND package_name = #{packageName}
+        ORDER BY sorts
+    </select>
+</mapper>
+
+

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.ChargeOrderMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.ChargeOrder">
+		<id column="id" property="id" />
+		<result column="order_no" property="orderNo" />
+		<result column="chargeruleid" property="chargeruleid" />
+		<result column="charge_name" property="chargeName" />
+		<result column="price" property="price" />
+		<result column="member_id" property="memberId" />
+		<result column="member_name" property="memberName" />
+		<result column="charge_type" property="chargeType" />
+		<result column="charge_state" property="chargeState" />
+		<result column="coins_before" property="coinsBefore" />
+		<result column="coins_after" property="coinsAfter" />
+		<result column="coins_charge" property="coinsCharge" />
+		<result column="coins_offer" property="coinsOffer" />
+		<result column="create_date" property="createDate" />
+		<result column="update_date" property="updateDate" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_no AS orderNo, chargeruleid, charge_name AS chargeName, price, member_id AS memberId, member_name AS memberName, charge_type AS chargeType, charge_state AS chargeState, coins_before AS coinsBefore, coins_after AS coinsAfter, coins_charge AS coinsCharge, coins_offer AS coinsOffer, create_date AS createDate, update_date AS updateDate
+    </sql>
+
+	<select id="selectList" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		a.id id, a.order_no orderNo, a.chargeruleid chargeruleid,a.charge_name chargeName,
+		a.price price, a.member_id memberId, a.member_name memberName, a.charge_type chargeType,
+		a.charge_state chargeState, a.coins_before coinsBefore, a.coins_after coinsAfter,
+		a.coins_charge coinsCharge, a.coins_offer coinsOffer,a.create_date createDate, a.update_date updateDate,
+		b.memberID memberNum
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		where 1=1
+		<if test="memberName != null and memberName != ''">
+			AND b.name like concat('%',#{memberName},'%')
+		</if>
+		<if test="memberId != null and memberId != ''">
+			AND a.member_id = #{memberId}
+		</if>
+		<if test="chargeruleid != null and chargeruleid != ''">
+			AND a.chargeruleid = #{chargeruleid}
+		</if>
+		<if test="chargeState != null and chargeState != ''">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+		ORDER by id DESC
+	</select>
+
+	<!--某个用户的充值记录-->
+	<select id="selectListOneMember" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		a.id id, a.order_no orderNo, a.chargeruleid chargeruleid,a.charge_name chargeName,
+		a.price price, a.member_id memberId, a.member_name memberName, a.charge_type chargeType,
+		a.charge_state chargeState, a.coins_before coinsBefore, a.coins_after coinsAfter,
+		a.coins_charge coinsCharge, a.coins_offer coinsOffer,a.create_date createDate, a.update_date updateDate,
+		b.memberID memberNum
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		where 1=1
+		<if test="memberId != null and memberId != ''">
+			AND a.member_id = #{memberId}
+		</if>
+		<if test="chargeruleid != null and chargeruleid != ''">
+			AND a.chargeruleid = #{chargeruleid}
+		</if>
+		<if test="chargeState != null and chargeState != '' ">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+		ORDER by id DESC
+	</select>
+
+	<!--某个用户总金额-->
+	<select id="selectAllMoneyOneMember" resultType="java.lang.Double" >
+		select
+		sum(price)
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		where 1=1
+		<if test="memberId != null and memberId != ''">
+			AND a.member_id = #{memberId}
+		</if>
+		<if test="chargeName != null and chargeName != ''">
+			AND a.chargeruleid = #{chargeName}
+		</if>
+		<if test="chargeState != null and chargeState != ''">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+
+	</select>
+
+
+	<!--渠道-->
+	<select id="selectListChannel" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		a.id id, a.order_no orderNo, a.chargeruleid chargeruleid,a.charge_name chargeName,
+		a.price price, a.member_id memberId, a.member_name memberName, a.charge_type chargeType,
+		a.charge_state chargeState, a.coins_before coinsBefore, a.coins_after coinsAfter,
+		a.coins_charge coinsCharge, a.coins_offer coinsOffer,a.create_date createDate, a.update_date updateDate,
+		b.register_channel registerChannel, b.login_channel loginChannel, b.memberID memberNum,b.last_login_from lastLoginFrom,
+		b.memberID memberNum
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		WHERE 1=1
+		<if test="channelNum != null and channelNum != ''">
+			AND b.register_channel = #{channelNum}
+		</if>
+		<if test="lastLoginFrom != null and lastLoginFrom != ''">
+			<if test="lastLoginFrom == 'android'">
+				AND b.last_login_from = 'android'
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (b.last_login_from is NULL
+				or b.last_login_from = 'iOS')
+			</if>
+		</if>
+		<if test="memberName != null and memberName != ''">
+			AND b.name like concat('%',#{memberName},'%')
+		</if>
+		<if test="memberId != null and memberId != ''">
+			AND a.member_id = #{memberId}
+		</if>
+		<if test="chargeruleid != null and chargeruleid != ''">
+			AND a.chargeruleid = #{chargeruleid}
+		</if>
+		<if test="chargeState != null and chargeState != '' ">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+		ORDER by id DESC
+	</select>
+
+
+	<!--小妖精渠道-->
+	<select id="xiaoyaojingSelectListChannel" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select
+		a.id id, a.order_no orderNo, a.chargeruleid chargeruleid,a.charge_name chargeName,
+		a.price price, a.member_id memberId, a.member_name memberName, a.charge_type chargeType,
+		a.charge_state chargeState, a.coins_before coinsBefore, a.coins_after coinsAfter,
+		a.coins_charge coinsCharge, a.coins_offer coinsOffer,a.create_date createDate, a.update_date updateDate,
+		b.register_channel registerChannel, b.login_channel loginChannel, b.memberID memberNum,b.last_login_from lastLoginFrom,
+		b.memberID memberNum
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		WHERE 1=1 and b.register_channel in ('an1','an2','an3','an4','an5','an6','an7')
+		and a.member_id not in (SELECT user_id from member_channel_deduct)
+		<if test="channelNum != null and channelNum != ''">
+			AND b.register_channel = #{channelNum}
+		</if>
+		<if test="lastLoginFrom != null and lastLoginFrom != ''">
+			<if test="lastLoginFrom == 'android'">
+				AND b.last_login_from = 'android'
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (b.last_login_from is NULL
+				or b.last_login_from = 'iOS')
+			</if>
+		</if>
+		<if test="memberName != null and memberName != ''">
+			AND b.name like concat('%',#{memberName},'%')
+		</if>
+		<if test="memberId != null and memberId != ''">
+			AND a.member_id = #{memberId}
+		</if>
+		<if test="chargeruleid != null and chargeruleid != ''">
+			AND a.chargeruleid = #{chargeruleid}
+		</if>
+		<if test="chargeState != null">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+		ORDER by id DESC
+	</select>
+
+	<!--用户总金额-->
+	<select id="selectAllMoney" resultType="java.lang.Double" >
+		select
+		sum(price)
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		where 1=1
+		<if test="memberName != null and memberName != ''">
+			AND b.name like concat
+			('%',#{memberName},'%')
+		</if>
+		<if test="memberId != null and memberId != ''">
+			AND a.member_id = #{memberId}
+		</if>
+		<if test="chargeName != null and chargeName != ''">
+			AND a.chargeruleid = #{chargeName}
+		</if>
+		<if test="chargeState != null and chargeState != ''">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+
+	</select>
+
+	<select id="selectAllPerson" resultType="java.lang.Integer" >
+		select
+		COUNT(DISTINCT member_id)
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		where 1=1
+		<if test="memberName != null and memberName != ''">
+			AND b.name like concat
+			('%',#{memberName},'%')
+		</if>
+		<if test="memberId != null and memberId != ''">
+			AND a.member_id = #{memberId}
+		</if>
+		<if test="chargeName != null and chargeName != ''">
+			AND a.chargeruleid = #{chargeName}
+		</if>
+		<if test="chargeState != null and chargeState != ''">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+	</select>
+
+
+	<!--渠道总金额-->
+	<select id="selectAllMoneyChannel" resultType="java.lang.Double" >
+		select
+		sum(a.price)
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		WHERE 1=1
+		<if test="channelNum != null and channelNum != ''">
+			AND b.register_channel = #{channelNum}
+		</if>
+		<if test="lastLoginFrom != null and lastLoginFrom != ''">
+			<if test="lastLoginFrom == 'android'">
+				AND b.last_login_from = #{lastLoginFrom}
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (b.last_login_from is NULL
+				or b.last_login_from = 'iOS')
+			</if>
+		</if>
+		<if test="memberName != null and memberName != ''">
+			AND b.name like concat('%',#{memberName},'%')
+		</if>
+		<if test="memberId != null and memberId != ''">
+			AND b.memberID = #{memberId}
+		</if>
+		<if test="chargeName != null and chargeName != ''">
+			AND a.chargeruleid = #{chargeName}
+		</if>
+		<if test="chargeState != null and chargeState != '' ">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+
+	</select>
+
+	<!--渠道总人数-->
+	<select id="selectAllPersonChannel" resultType="java.lang.Integer" >
+		select
+		COUNT(DISTINCT a.member_id)
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+ 		WHERE 1=1
+		<if test="channelNum != null and channelNum != ''">
+			AND b.register_channel = #{channelNum}
+		</if>
+		<if test="lastLoginFrom != null and lastLoginFrom != ''">
+			<if test="lastLoginFrom == 'android'">
+				AND b.last_login_from = #{lastLoginFrom}
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (b.last_login_from is NULL
+				or b.last_login_from = 'iOS')
+			</if>
+		</if>
+		<if test="memberName != null and memberName != ''">
+			AND b.name like concat('%',#{memberName},'%')
+		</if>
+		<if test="memberId != null and memberId != ''">
+			AND b.memberID = #{memberId}
+		</if>
+		<if test="chargeName != null and chargeName != ''">
+			AND a.chargeruleid = #{chargeName}
+		</if>
+		<if test="chargeState != null and chargeState != '' ">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+
+	</select>
+
+
+	<!--小妖精渠道总金额-->
+	<select id="xiaoyaojingSelectAllMoney" resultType="java.lang.Double" >
+		select
+		sum(a.price)
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		WHERE 1=1 and b.register_channel in ('an1','an2','an3','an4','an5','an6','an7')
+		and a.member_id not in (SELECT user_id from member_channel_deduct)
+		<if test="channelNum != null and channelNum != ''">
+			AND b.register_channel = #{channelNum}
+		</if>
+		<if test="lastLoginFrom != null and lastLoginFrom != ''">
+			<if test="lastLoginFrom == 'android'">
+				AND b.last_login_from = #{lastLoginFrom}
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (b.last_login_from is NULL
+				or b.last_login_from = 'iOS')
+			</if>
+		</if>
+		<if test="memberName != null and memberName != ''">
+			AND b.name like concat('%',#{memberName},'%')
+		</if>
+		<if test="memberId != null and memberId != ''">
+			AND b.memberID = #{memberId}
+		</if>
+		<if test="chargeName != null and chargeName != ''">
+			AND a.chargeruleid = #{chargeName}
+		</if>
+		<if test="chargeState != null and chargeState != '' ">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+
+	</select>
+
+	<!--小妖精渠道总人数-->
+	<select id="xiaoyaojingSelectAllPerson" resultType="java.lang.Integer" >
+		select
+		COUNT(DISTINCT a.member_id)
+		from charge_order a LEFT JOIN t_member b on a.member_id = b.id
+		WHERE 1=1 and b.register_channel in ('an1','an2','an3','an4','an5','an6','an7')
+		and a.member_id not in (SELECT user_id from member_channel_deduct)
+		<if test="channelNum != null and channelNum != ''">
+			AND b.register_channel = #{channelNum}
+		</if>
+		<if test="lastLoginFrom != null and lastLoginFrom != ''">
+			<if test="lastLoginFrom == 'android'">
+				AND b.last_login_from = #{lastLoginFrom}
+			</if>
+			<if test="lastLoginFrom == 'ios'">
+				AND (b.last_login_from is NULL
+				or b.last_login_from = 'iOS')
+			</if>
+		</if>
+		<if test="memberName != null and memberName != ''">
+			AND b.name like concat('%',#{memberName},'%')
+		</if>
+		<if test="memberId != null and memberId != ''">
+			AND b.memberID = #{memberId}
+		</if>
+		<if test="chargeName != null and chargeName != ''">
+			AND a.chargeruleid = #{chargeName}
+		</if>
+		<if test="chargeState != null and chargeState != '' ">
+			AND a.charge_state = #{chargeState}
+		</if>
+		<if test="registeDate != null and registeDate != ''">
+			AND  DATEDIFF(a.create_date,#{registeDate}) &gt;= 0
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND  DATEDIFF(a.create_date,#{endtime})&lt;0
+		</if>
+
+	</select>
+
+</mapper>

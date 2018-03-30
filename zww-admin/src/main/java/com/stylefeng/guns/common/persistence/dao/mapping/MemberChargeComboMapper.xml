@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.common.persistence.dao.MemberChargeComboMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.stylefeng.guns.common.persistence.model.MemberChargeCombo">
+		<id column="id" property="id" />
+		<result column="member_id" property="memberId" />
+		<result column="member_name" property="memberName" />
+		<result column="charge_type" property="chargeType" />
+		<result column="charge_name" property="chargeName" />
+		<result column="charge_date_limit" property="chargeDateLimit" />
+		<result column="charge_date_start" property="chargeDateStart" />
+		<result column="coins_give" property="coinsGive" />
+		<result column="member_state" property="memberState" />
+		<result column="give_times" property="giveTimes" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, member_id AS memberId, member_name AS memberName, charge_type AS chargeType, charge_name AS chargeName, charge_date_limit AS chargeDateLimit, charge_date_start AS chargeDateStart, coins_give AS coinsGive, member_state AS memberState, give_times AS giveTimes
+    </sql>
+
+</mapper>
