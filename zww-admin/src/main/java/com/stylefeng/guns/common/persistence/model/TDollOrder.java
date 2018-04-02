@@ -99,6 +99,51 @@ public class TDollOrder extends Model<TDollOrder> {
 	@TableField(exist=false)
 	private String memberIDs;
 
+	@TableField(exist=false)
+	private String dollCodes; //娃娃编号
+
+	@TableField(exist=false)
+	private Integer quantity; //娃娃数量
+
+	@TableField(exist=false)
+	private String dollName; //娃娃名称
+
+	@TableField(exist=false)
+	private String imgUrl; //娃娃url
+
+
+	public String getDollCodes() {
+		return dollCodes;
+	}
+
+	public void setDollCodes(String dollCodes) {
+		this.dollCodes = dollCodes;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getDollName() {
+		return dollName;
+	}
+
+	public void setDollName(String dollName) {
+		this.dollName = dollName;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
 	@TableField("doll_redeem_coins")
 	private Integer dollRedeemCoins;//返币数
 
@@ -318,6 +363,10 @@ public class TDollOrder extends Model<TDollOrder> {
 			", street=" + street +
 			", memberIDs=" + memberIDs +
 			", dollRedeemCoins=" + dollRedeemCoins +
+			", dollCode=" + dollCodes +
+			", dollName=" + dollName +
+			", imgUrl=" + imgUrl +
+			", quantity=" + quantity +
 			"}";
 	}
 }

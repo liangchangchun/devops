@@ -1,22 +1,22 @@
 package com.stylefeng.guns.common.constant.factory;
 
 import com.stylefeng.guns.common.persistence.dao.*;
-import com.stylefeng.guns.common.persistence.model.Account;
+import com.stylefeng.guns.common.persistence.model.*;
 
 import java.util.Date;
+import java.util.List;
 
-import com.stylefeng.guns.common.persistence.model.TDoll;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
-import com.stylefeng.guns.common.persistence.model.Member;
-import com.stylefeng.guns.common.persistence.model.TChargeRules;
 import com.stylefeng.guns.core.util.SpringContextHolder;
 
 @Component
 @DependsOn("springContextHolder")
 public class ZwwContentFactory {
-	
+
+	private MemberVipMapper memberVipMapper = SpringContextHolder.getBean(MemberVipMapper.class);
+
 	private MemberMapper memberMapper = SpringContextHolder.getBean(MemberMapper.class);
 	private TChargeRulesMapper tChargeRulesMapper = SpringContextHolder.getBean(TChargeRulesMapper.class);
 	private AccountMapper accountMapper = SpringContextHolder.getBean(AccountMapper.class);
@@ -86,5 +86,13 @@ public class ZwwContentFactory {
 //	public TDoll getTDoll(Integer dollId){
 //		return tDollMapper.selectById(dollId);
 //	}
+
+	/**
+	 * 获取某一用户vip等级
+	 *
+	 */
+	public MemberVip getVipByMemberId(Integer userId) {
+		return memberVipMapper.selectListByMemberId(userId);
+	}
 
 }

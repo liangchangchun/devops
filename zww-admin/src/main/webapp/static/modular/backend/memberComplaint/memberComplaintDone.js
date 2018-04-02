@@ -31,11 +31,19 @@ MemberComplaint.initColumn = function () {
             {title: '消耗金币', field: 'dollCions', visible: true, align: 'center', valign: 'middle'},
             // {title: '抓取记录id', field: 'memberCatchId', visible: true, align: 'center', valign: 'middle'},
             {title: '抓取时间', field: 'memberCatchDate', visible: true, align: 'center', valign: 'middle'},
-            {title: '抓取状态', field: 'memberCatchResult', visible: true, align: 'center', valign: 'middle'},
+            {title: '抓取状态', field: 'memberCatchResult', visible: true, align: 'center', valign: 'middle',
+                formatter:function (value,row,index) {
+                    if(value == '抓取成功'){
+                        return '<span class="label label-danger radius">'+value+'</span>';
+                    }else{
+                        return '<span class="label label-success radius">'+value+'</span>';
+                    }
+                }
+            },
             {title: '视频', field: 'videoURL', visible: true, align: 'center', valign: 'middle',
                 formatter:function (value,row,index) {
-                return '<a href="javascript:;" onclick="MemberComplaint.video(\'视频\',\'/memberComplaint\/video\',\''+value+'\',\'300\',\'450\')">播放</a>';
-            }
+                    return '<a href="javascript:;" onclick="MemberComplaint.video(\'视频\',\'/memberComplaint\/video\',\''+value+'\',\'300\',\'450\')">播放</a>';
+                }
             },
             {title: '申诉原因', field: 'complaintReason', visible: true, align: 'center', valign: 'middle'},
             {title: '审核状态', field: 'checkState', visible: true, align: 'center', valign: 'middle',
@@ -49,7 +57,9 @@ MemberComplaint.initColumn = function () {
             {title: '申诉日期', field: 'creatDate', visible: true, align: 'center', valign: 'middle'},
             // {title: '创建人', field: 'creatBy', visible: true, align: 'center', valign: 'middle'},
             {title: '处理时间', field: 'modifyDate', visible: true, align: 'center', valign: 'middle'},
-            // {title: '修改人', field: 'modifyBy', visible: true, align: 'center', valign: 'middle'}
+            // {title: '修改人', field: 'modifyBy', visible: true, align: 'center', valign: 'middle'},
+            {title: '操作人', field: 'person', visible: true, align: 'center', valign: 'middle'},
+            {title: 'vip等级', field: 'vipGroup', visible: true, align: 'center', valign: 'middle'},
     ];
 };
 
@@ -85,6 +95,8 @@ MemberComplaint.search = function () {
     var queryData = {};
     queryData['memberID'] = $("#memberID").val();
     queryData['channelNum'] = $("#channelNum").val();
+    queryData['catchStates'] = $("#catchStates").val();
+    queryData['checkState'] = $("#checkState").val();
     MemberComplaint.table.refresh({query: queryData});
 };
 
@@ -100,5 +112,8 @@ $(function () {
     var defaultColunms = MemberComplaint.initColumn();
     var table = new BSTable(MemberComplaint.id, "/memberComplaint/doneList", defaultColunms);
     table.setPaginationType("server");
+    var queryData = {};
+    queryData['catchStates'] = '未成功';
+    table.setQueryParams(queryData);
     MemberComplaint.table = table.init();
 });

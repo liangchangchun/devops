@@ -9,6 +9,7 @@ import com.corundumstudio.socketio.SocketIONamespace;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.stylefeng.game.rest.config.BMDataContext;
 import com.stylefeng.game.rest.server.handler.GameEventHandler;
+import com.stylefeng.guns.game.service.MachineService;
 
   
 @Component  
@@ -16,6 +17,8 @@ public class ServerRunner implements CommandLineRunner {
 	
     private final SocketIOServer server;
     private final SocketIONamespace gameSocketNameSpace ;
+    @Autowired
+    MachineService machineService;
     
     @Autowired  
     public ServerRunner(SocketIOServer server) {  
@@ -26,7 +29,7 @@ public class ServerRunner implements CommandLineRunner {
     
     @Bean(name="gameNamespace")
     public SocketIONamespace getGameSocketIONameSpace(SocketIOServer server ){
-    	gameSocketNameSpace.addListeners(new GameEventHandler(server));
+    	gameSocketNameSpace.addListeners( new GameEventHandler( server, machineService) );
     	return gameSocketNameSpace;
     }
     

@@ -3,6 +3,7 @@ package com.stylefeng.guns.modular.backend.service.impl;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.common.persistence.dao.*;
 import com.stylefeng.guns.common.persistence.model.*;
+import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.util.StringUtils;
 import com.stylefeng.guns.core.util.TimeUtil;
 import com.stylefeng.guns.modular.backend.service.IMemberComplaintService;
@@ -51,13 +52,13 @@ public class MemberComplaintServiceImpl extends ServiceImpl<MemberComplaintMappe
     private TSystemPrefMapper tSystemPrefMapper;
 
     @Override
-    public List<Map<String, Object>> selectMemberComplain(Page<MemberComplaint> page, String memberID, String complaintChannel) {
-        return memberComplaintMapper.selectMemberComplain(page, memberID,complaintChannel);
+    public List<Map<String, Object>> selectMemberComplain(Page<MemberComplaint> page, String memberID, String complaintChannel,String catchStates,Double vipGroup) {
+        return memberComplaintMapper.selectMemberComplain(page, memberID,complaintChannel,catchStates,vipGroup);
     }
 
     @Override
-    public List<Map<String, Object>> selectMemberComplainDone(Page<MemberComplaint> page, String memberID, String complaintChannel) {
-        return memberComplaintMapper.selectMemberComplainDone(page, memberID,complaintChannel);
+    public List<Map<String, Object>> selectMemberComplainDone(Page<MemberComplaint> page, String memberID, String complaintChannel,String catchStates,Integer checkState) {
+        return memberComplaintMapper.selectMemberComplainDone(page, memberID,complaintChannel,catchStates,checkState);
     }
 
     @Override
@@ -70,6 +71,7 @@ public class MemberComplaintServiceImpl extends ServiceImpl<MemberComplaintMappe
         if (backStatus == -1) {
             memberComplaint.setCheckState(backStatus);
             memberComplaint.setModifyDate(new Date());
+            memberComplaint.setModifyBy(ShiroKit.getUser().getId());
             return retBool(memberComplaintMapper.updateById(memberComplaint));
         } else if (backStatus == 1) {
 
@@ -108,6 +110,7 @@ public class MemberComplaintServiceImpl extends ServiceImpl<MemberComplaintMappe
             }
             memberComplaint.setCheckState(backStatus);
             memberComplaint.setModifyDate(new Date());
+            memberComplaint.setModifyBy(ShiroKit.getUser().getId());
             return retBool(memberComplaintMapper.updateById(memberComplaint));
 
         } else if (backStatus == 2) {
@@ -167,10 +170,12 @@ public class MemberComplaintServiceImpl extends ServiceImpl<MemberComplaintMappe
             }
             memberComplaint.setCheckState(backStatus);
             memberComplaint.setModifyDate(new Date());
+            memberComplaint.setModifyBy(ShiroKit.getUser().getId());
             return retBool(memberComplaintMapper.updateById(memberComplaint));
         } else {
             memberComplaint.setCheckState(backStatus);
             memberComplaint.setModifyDate(new Date());
+            memberComplaint.setModifyBy(ShiroKit.getUser().getId());
             return retBool(memberComplaintMapper.updateById(memberComplaint));
         }
     }

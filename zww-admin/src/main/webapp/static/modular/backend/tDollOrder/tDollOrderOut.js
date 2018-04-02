@@ -34,11 +34,11 @@ TDollOrderOut.initColumn = function () {
             },
             {title: '快递公司', field: 'deliverMethod', visible: true, align: 'center', valign: 'middle'},
             {title: '快递单号', field: 'deliverNumber', visible: true, align: 'center', valign: 'middle'},
-            // {title: '发货时间', field: 'deliverDate', visible: true, align: 'center', valign: 'middle'}
+            {title: '发货时间', field: 'deliverDate', visible: true, align: 'center', valign: 'middle'},
             // {title: '邮费金额，暂不用，预留字段', field: 'deliverAmount', visible: true, align: 'center', valign: 'middle'},
             // {title: '邮费等值的游戏币', field: 'deliverCoins', visible: true, align: 'center', valign: 'middle'},
             // {title: '发货地址id', field: 'addressId', visible: true, align: 'center', valign: 'middle'},
-            {title: '发货时间', field: 'modifiedDate', visible: true, align: 'center', valign: 'middle'},
+            {title: '申请发货时间', field: 'modifiedDate', visible: true, align: 'center', valign: 'middle'},
             // {title: '发货人', field: 'modifiedBy', visible: true, align: 'center', valign: 'middle'},
             // {title: '', field: 'comment', visible: true, align: 'center', valign: 'middle'}
     ];

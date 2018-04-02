@@ -29,4 +29,8 @@
 		ORDER by id
 	</select>
 
+	<select id="selectByOrderId" resultType="map">
+		select *
+		from t_doll_order_item where order_id = #{orderId}
+	</select>
 </mapper>

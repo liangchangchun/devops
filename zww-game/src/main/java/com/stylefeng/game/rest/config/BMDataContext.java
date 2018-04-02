@@ -194,7 +194,7 @@ public class BMDataContext {
 	
 	public enum MessageTypeEnum{
 		JOINROOM,
-		MESSAGE, 
+		MESSAGE,INSTRUCT, 
 		END,
 		TRANS, STATUS , AGENTSTATUS , SERVICE, WRITING;
 		

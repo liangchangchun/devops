@@ -19,7 +19,6 @@ public class AliyunConfig extends AliyunModel{
     public AliyunService aliyunService() {
 		AliyunServiceImpl aliyunService = new AliyunServiceImpl();
 		aliyunService.setAliyunProperties(aliyunProperties);
-		aliyunService.init();
 		return aliyunService;
     }
 }

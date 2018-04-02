@@ -19,10 +19,10 @@ import java.util.Map;
 public interface IMemberComplaintService extends IService<MemberComplaint> {
 
     //待处理
-    List<Map<String, Object>> selectMemberComplain(Page<MemberComplaint> page, String memberID, String complaintChannel);
+    List<Map<String, Object>> selectMemberComplain(Page<MemberComplaint> page, String memberID, String complaintChannel,String catchStates,Double vipGroup);
 
     //已处理
-    List<Map<String, Object>> selectMemberComplainDone(Page<MemberComplaint> page, String memberID, String complaintChannel);
+    List<Map<String, Object>> selectMemberComplainDone(Page<MemberComplaint> page, String memberID, String complaintChannel,String catchStates,Integer checkState);
 
     //申诉通过
     boolean complaintBack(MemberComplaint memberComplaint, Integer backStatus);

@@ -22,6 +22,7 @@ public interface RedisService {
      */
     public boolean set(final String key, Object value, Long expireTime) ;
     public boolean setString(final String key, Object value, Long expireTime) ;
+    public boolean setString(final String key, Object value, Integer expireTime) ;
     /**
      * @param key
      * @return

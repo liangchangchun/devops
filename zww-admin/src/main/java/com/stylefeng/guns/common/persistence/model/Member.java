@@ -119,8 +119,30 @@ public class Member extends Model<Member> implements Serializable {
 
 
 	@TableField(exist=false)
-	private String checkIn;
+	private String checkIn;  //寄存中个数
 
+	@TableField(exist=false)
+	private double growthValue; //vip等级成长值
+
+	@TableField(exist=false)
+	private String vipGroup; //vip等级显示
+
+
+	public String getVipGroup() {
+		return vipGroup;
+	}
+
+	public void setVipGroup(String vipGroup) {
+		this.vipGroup = vipGroup;
+	}
+
+	public double getGrowthValue() {
+		return growthValue;
+	}
+
+	public void setGrowthValue(double growthValue) {
+		this.growthValue = growthValue;
+	}
 
 	public String getCheckIn() {
 		return checkIn;
@@ -418,6 +440,8 @@ public class Member extends Model<Member> implements Serializable {
 			", loginChannel=" + loginChannel +
 			", phoneModel=" + phoneModel +
 			", checkIn=" + checkIn +
+			", growthValue=" + growthValue +
+			", vipGroup=" + vipGroup +
 			"}";
 	}
 }

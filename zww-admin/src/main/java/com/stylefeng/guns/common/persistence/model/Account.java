@@ -37,10 +37,20 @@ public class Account extends Model<Account> implements Serializable {
 	private Date monthCardState;//月卡状态
 	@TableField("bitState")
 	private Integer bitState;//用户状态码
+	@TableField("growth_value")
+	private double growthValue;//用户等级成长值
 
 	@TableField(exist=false)
 	private String addReason;//加币原因
 
+
+	public double getGrowthValue() {
+		return growthValue;
+	}
+
+	public void setGrowthValue(double growthValue) {
+		this.growthValue = growthValue;
+	}
 
 	public String getAddReason() {
 		return addReason;
@@ -112,6 +122,7 @@ public class Account extends Model<Account> implements Serializable {
 			", monthCardState=" + monthCardState +
 			", bitState=" + bitState +
 			", addReason=" + addReason +
+			", growthValue=" + growthValue +
 			"}";
 	}
 }

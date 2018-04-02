@@ -125,7 +125,6 @@ public class TAppVersionController extends BaseController {
     @RequestMapping(value = "/update")
     @ResponseBody
     public Object update(TAppVersion tAppVersion) {
-
         tAppVersionService.updateByAppKey(tAppVersion);
         return super.SUCCESS_TIP;
     }

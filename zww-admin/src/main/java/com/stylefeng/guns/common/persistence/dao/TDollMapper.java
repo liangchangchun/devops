@@ -28,4 +28,6 @@ public interface TDollMapper extends BaseMapper<TDoll> {
 	List<TDoll> getDollListProbability();
 	//占卜机器
 	List<TDoll> getDollListDivination();
+
+
 }

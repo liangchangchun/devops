@@ -7,6 +7,7 @@ import com.stylefeng.guns.common.persistence.dao.TDollOrderMapper;
 import com.stylefeng.guns.common.persistence.model.TDoll;
 import com.stylefeng.guns.common.persistence.model.TDollOrderItem;
 import com.stylefeng.guns.core.base.controller.BaseController;
+import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.modular.backend.warpper.TDollOrderItemWarpper;
 import com.stylefeng.guns.modular.backend.warpper.TDollOrderWarpper;
 import com.stylefeng.guns.modular.backend.warpper.TDollWarpper;
@@ -151,6 +152,54 @@ public class TDollOrderController extends BaseController {
 //        tDollOrderService.insert(tDollOrder);
 //        return super.SUCCESS_TIP;
 //    }
+
+
+    /**
+     * 扣留违规娃娃
+     */
+
+    @RequestMapping(value = "/callInDoll")
+    @ResponseBody
+    public Object callInDoll(@RequestParam Integer tDollOrderId) {
+        TDollOrder tDollOrder = new TDollOrder();
+        tDollOrder.setId(tDollOrderId);
+        tDollOrder.setModifiedBy(ShiroKit.getUser().getId());
+        tDollOrder.setModifiedDate(new Date());
+        tDollOrder.setStatus("违规收回");
+        tDollOrderService.updateById(tDollOrder);
+        return super.SUCCESS_TIP;
+    }
+
+    /**
+     * 寄存娃娃直接兑换币
+     */
+
+    @RequestMapping(value = "/dollBackCoins")
+    @ResponseBody
+    public Object dollBackCoins(@RequestParam Integer tDollOrderId,@RequestParam String memberId) {
+        tDollOrderService.dollBackCoins(tDollOrderId,memberId);
+        return super.SUCCESS_TIP;
+    }
+
+
+    /**
+     * 跳转到添加娃娃·详情
+     */
+    @RequestMapping("/toAddDoll/{memberId}")
+    public String toAddDoll(@PathVariable String memberId, Model model) {
+        model.addAttribute("memberId",memberId);
+        return PREFIX + "tDollOrder_add_doll.html";
+    }
+
+    /**
+     * 添加娃娃
+     */
+    @RequestMapping(value = "/backDoll")
+    @ResponseBody
+    public Object backDoll(TDollOrder tDollOrder) {
+        tDollOrderService.backDoll(tDollOrder);
+        return super.SUCCESS_TIP;
+    }
 
     /**
      * 删除待发货列表

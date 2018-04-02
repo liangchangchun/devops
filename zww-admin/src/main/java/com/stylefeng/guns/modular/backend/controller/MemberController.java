@@ -11,8 +11,10 @@ import com.stylefeng.guns.core.base.tips.ErrorTip;
 import com.stylefeng.guns.core.base.tips.TipType;
 import com.stylefeng.guns.core.util.RedisKeyGenerator;
 import com.stylefeng.guns.modular.backend.service.IMemberChargeHistoryService;
+import com.stylefeng.guns.modular.backend.service.ITDollOrderService;
 import com.stylefeng.guns.modular.backend.service.impl.ChargeOrderServiceImpl;
 import com.stylefeng.guns.modular.backend.warpper.ChargeOrderWarpper;
+import com.stylefeng.guns.modular.backend.warpper.TDollOrderWarpper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -66,6 +68,10 @@ public class MemberController extends BaseController {
 
     @Autowired
     IMemberChargeHistoryService memberChargeHistoryService;
+
+    @Autowired
+    private TDollOrderMapper tDollOrderMapper;
+
 
     /**
      * 跳转到member首页
@@ -127,6 +133,7 @@ public class MemberController extends BaseController {
         LogObjectHolder.me().set(accounts);
         return PREFIX + "member_edit.html";
     }
+
 
     /**
      * 获取member列表
@@ -268,7 +275,35 @@ public class MemberController extends BaseController {
     public Object detail(@PathVariable("memberId") Integer memberId) {
         return memberService.selectById(memberId);
     }
-    
+
+
+
+    /**
+     * 跳转寄存娃娃页
+     * @param memberId
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/goodsDetail/{memberId}")
+    public String goodsDetail(@PathVariable("memberId") Integer memberId,Model model) {
+        Member member = memberService.selectById(memberId);
+        model.addAttribute("item",member);
+        return PREFIX + "member_tDollOrder.html";
+    }
+
+    /**
+     * 寄存中娃娃列表
+     */
+    @RequestMapping(value = "/goodsDetail/list")
+    @ResponseBody
+    public Object goodsDetail( String memberId,String phone) {
+        Page<TDollOrder> page = new PageFactory<TDollOrder>().defaultPage();
+        List<Map<String, Object>> result = tDollOrderMapper.selectTDollOrderMember(page,memberId,phone);
+        page.setRecords((List<TDollOrder>)new TDollOrderWarpper(result).warp());
+        return super.packForBT(page);
+}
+
+
     /**
      * 抓取记录详情
      */
@@ -280,7 +315,6 @@ public class MemberController extends BaseController {
     	Date lastLoginDate =   member.getLastLoginDate();
     	model.addAttribute("lastLoginDate",DateUtil.getTime(lastLoginDate));
         model.addAttribute("item",member);
-       
     	 return PREFIX + "member_catch_detail.html";
     }
     

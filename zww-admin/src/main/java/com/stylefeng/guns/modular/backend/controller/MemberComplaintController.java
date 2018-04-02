@@ -89,9 +89,9 @@ public class MemberComplaintController extends BaseController {
      
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(String memberID, String channelNum) {
+    public Object list(String memberID, String channelNum,String catchStates,Double vipGroups) {
         Page<MemberComplaint> page = new PageFactory<MemberComplaint>().defaultPage();
-        List<Map<String, Object>> result = memberComplaintService.selectMemberComplain(page,memberID,channelNum);
+        List<Map<String, Object>> result = memberComplaintService.selectMemberComplain(page,memberID,channelNum,catchStates,vipGroups);
         page.setRecords((List<MemberComplaint>)new MemberComplainWarpper(result).warp());
         return super.packForBT(page);
     }
@@ -103,9 +103,9 @@ public class MemberComplaintController extends BaseController {
 
     @RequestMapping(value = "/doneList")
     @ResponseBody
-    public Object doneList(String memberID, String channelNum) {
+    public Object doneList(String memberID, String channelNum,String catchStates,Integer checkState) {
         Page<MemberComplaint> page = new PageFactory<MemberComplaint>().defaultPage();
-        List<Map<String, Object>> result = memberComplaintService.selectMemberComplainDone(page,memberID,channelNum);
+        List<Map<String, Object>> result = memberComplaintService.selectMemberComplainDone(page,memberID,channelNum,catchStates,checkState);
         page.setRecords((List<MemberComplaint>)new MemberComplainWarpper(result).warp());
         return super.packForBT(page);
     }

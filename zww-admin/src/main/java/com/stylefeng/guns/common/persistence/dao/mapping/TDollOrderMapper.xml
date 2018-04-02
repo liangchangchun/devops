@@ -34,6 +34,32 @@
 		WHERE order_number = #{orderNumber}
 	</select>
 
+	<!-- 查询寄存的订单 -->
+	<select id="selectTDollOrderMember" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+		select a.id id, a.order_number orderNumber, a.order_date orderDate,
+		a.order_by orderBy,a.status status,a.deliver_date deliverDate,
+		a.deliver_method deliverMethod, a.deliver_number deliverNumber,
+		b.receiver_phone addrPhone,b.receiver_name addrName, b.province province, b.city city,
+		b.county county, b.street street,
+		c.memberID memberIDs,
+		d.doll_code dollCodes, d.quantity quantity,
+		e.dollName dollName, e.img_url imgUrl
+		from t_doll_order a LEFT JOIN t_member_addr b ON  a.address_id=b.id
+		LEFT JOIN t_member c on a.order_by = c.id
+		LEFT JOIN t_doll_order_item d on d.order_id = a.id
+		LEFT JOIN doll_info e on d.doll_code = e.dollCode
+		where a.status='寄存中'
+		<if test="phone!=null and phone != '' ">
+			and b.receiver_phone like concat
+			('%',#{phone},'%')
+		</if>
+		<if test="memberId!=null and memberId != '' ">
+			and c.memberID = #{memberId}
+		</if>
+		order by a.modified_date DESC
+	</select>
+
+
 	<!-- 查询申请发货的订单 -->
 	<select id="selectTDollOrder" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
 		select a.id id, a.order_number orderNumber, a.order_date orderDate,

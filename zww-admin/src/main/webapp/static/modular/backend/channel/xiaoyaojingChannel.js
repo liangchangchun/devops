@@ -60,8 +60,8 @@ Member.initColumn = function () {
             // {title: '账号是否激活', field: 'activeFlg', visible: true, align: 'center', valign: 'middle'},
             // {title: '是否已输入邀请码', field: 'inviteFlg', visible: true, align: 'center', valign: 'middle'},
             // {title: '', field: 'inviteFlgWeb', visible: true, align: 'center', valign: 'middle'},
-            // {title: '注册设备', field: 'registerFrom', visible: true, align: 'center', valign: 'middle'},
-            {title: '登录设备', field: 'lastLoginFrom', visible: true, align: 'center', valign: 'middle'},
+            {title: '注册设备', field: 'registerFrom', visible: true, align: 'center', valign: 'middle'},
+            // {title: '登录设备', field: 'lastLoginFrom', visible: true, align: 'center', valign: 'middle'},
             // {title: '0尚未充值，1已充值', field: 'firstLogin', visible: true, align: 'center', valign: 'middle'},
             // {title: '0尚未充值过，1已完成过充值', field: 'firstCharge', visible: true, align: 'center', valign: 'middle'},
             {title: '手机机型', field: 'phoneModel', visible: true, align: 'center', valign: 'middle'}

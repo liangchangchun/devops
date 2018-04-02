@@ -57,6 +57,7 @@ Member.initColumn = function () {
             // {title: '注册渠道号', field: 'registerChannel', visible: true, align: 'center', valign: 'middle'},
             // {title: '登陆渠道号', field: 'loginChannel', visible: true, align: 'center', valign: 'middle'},
             // {title: '手机机型', field: 'phoneModel', visible: true, align: 'center', valign: 'middle'}
+            {title: 'vip等级', field: 'vipGroup', visible: true, align: 'center', valign: 'middle'},
     ];
 };
 
@@ -143,6 +144,26 @@ Member.openMemberCatchDetail = function () {
         this.layerIndex = index;
     }
 };
+
+
+/**
+ * 打开查看寄存详情
+ */
+Member.openMemberGoodsDetail = function () {
+    if (this.check()) {
+        var index = layer.open({
+            type: 2,
+            title: '查看寄存详情',
+            area: ['900px', '520px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/member/goodsDetail/' + Member.seItem.id
+        });
+        this.layerIndex = index;
+    }
+};
+
+
 
 //用户封号
 Member.closeMember = function () {

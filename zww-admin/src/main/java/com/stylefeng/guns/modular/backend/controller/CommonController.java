@@ -36,6 +36,9 @@ public class CommonController extends BaseController{
 	@Autowired
 	DivinationTopicMapper divinationTopicMapper;
 
+	@Autowired
+	MemberVipMapper memberVipMapper;
+
 	/**
 	 * 获取充值 规则	
 	 * @return
@@ -143,6 +146,16 @@ public class CommonController extends BaseController{
 	@RequestMapping(value = "getdivinationTopicList",method = RequestMethod.POST)
 	public Object getdivinationTopicList(){
 		List<DivinationTopic> result = divinationTopicMapper.selectList(null);
+		return result;
+	}
+
+	/**
+	 * 获取vip等级
+	 * @return
+	 */
+	@RequestMapping(value = "getVipList",method = RequestMethod.POST)
+	public Object getVipList(){
+		List<MemberVip> result = memberVipMapper.selectList(null);
 		return result;
 	}
 }

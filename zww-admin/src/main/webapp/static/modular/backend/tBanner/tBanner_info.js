@@ -168,6 +168,12 @@ TBannerInfoDlg.editInit = function() {
 	 //初始化banner类型
 	TBannerInfoDlg.init("type");
     TBannerInfoDlg.init("packageName");
+    if($("#packageNameValue").val() == undefined){
+        $("#packageName").val(1);//初始化默认值
+    }else{
+        var flg =$("#packageNameValue").val()=="1"?1:2;
+        $("#packageName").val(flg);
+    }
    if($("#activeFlgValue").val() == undefined){
        $("#activeFlg").val(1);//初始化默认值
    }else{

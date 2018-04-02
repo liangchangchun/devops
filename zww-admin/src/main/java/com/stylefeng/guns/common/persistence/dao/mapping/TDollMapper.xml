@@ -115,4 +115,6 @@
 		from t_doll
 		where machine_type = 3 and delete_status = 1
 	</select>
+
+
 </mapper>

@@ -17,6 +17,17 @@
                                 </#Combobox>
                             </div>
                             <div class="col-sm-3">
+                                <#SelectCon id="catchStates" name="抓取状态" >
+                                    <option value="未成功" >未成功</option>
+                                    <option value="成功" >成功</option>
+                                    <option value="" >全部</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#Combobox id="vipGroups" name="VIP等级" dataOptions="valueField:'leastAllowed',textField:'name',url:'${ctxPath}/common/getVipList'" >
+                                </#Combobox>
+                            </div>
+                            <div class="col-sm-3">
                                 <#button name="搜索" icon="fa-search" clickFun="MemberComplaint.search()"/>
                             </div>
                         </div>

@@ -77,6 +77,10 @@ public class RedisServiceImpl implements RedisService {
     public boolean setString(final String key, Object value, Long expireTime) {
     	return set(key ,value ,expireTime);
     }
+    
+    public boolean setString(final String key, Object value, Integer expireTime) {
+    	return set(key ,value ,expireTime * 1L);
+    }
 
     /**
      * @param key

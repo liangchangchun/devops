@@ -48,7 +48,8 @@
 		a.online_flg AS onlineFlg, a.icon_context_path AS iconContextPath, a.icon_file_name AS iconFileName, a.icon_real_path AS iconRealPath, a.easemob_uuid AS easemobUuid,
 		a.active_flg AS activeFlg, a.invite_flg AS inviteFlg, a.invite_flg_web AS inviteFlgWeb, a.register_from AS registerFrom, a.last_login_from AS lastLoginFrom, a.first_login AS firstLogin,
 		a.first_charge AS firstCharge, a.register_channel AS registerChannel, a.login_channel AS loginChannel, a.phone_model AS phoneModel,
-		b.jicun AS checkIn
+		b.jicun AS checkIn,
+		c.growth_value AS growthValue
 	</sql>
 
 	<select id="selectMember" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
@@ -56,6 +57,7 @@
 		<include refid="Base_Column_Lists" />
 		from t_member
 		a LEFT JOIN (SELECT  NULLIF(COUNT(id),0) jicun,order_by FROM t_doll_order WHERE STATUS = '寄存中' GROUP BY order_by) b ON a.id = b.order_by
+		LEFT JOIN account c on a.id = c.id
 		where 1=1
 		<if test="id != null and id != ''">
 			and a.id = #{id}
@@ -117,11 +119,15 @@
 
 	<!--小妖精渠道-->
 	<select id="xiaoyaojingSelectChannel" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+
 		select
 		<include refid="Base_Column_List" />
+		FROM
+		(select *
 		from t_member
 		where 1=1 and register_channel in ('an1','an2','an3','an4','an5','an6','an7')
-		and id not in (SELECT user_id from member_channel_deduct)
+		and id not in (SELECT user_id from member_channel_deduct) or register_from = 'iOSxyj') a
+		WHERE 1=1
 		<if test="channelNum != null and channelNum != ''">
 			and register_channel = #{channelNum}
 		</if>
@@ -139,11 +145,10 @@
 		</if>
 		<if test="lastLoginFrom != null and lastLoginFrom != '' ">
 			<if test="lastLoginFrom == 'android'">
-				AND last_login_from = #{lastLoginFrom}
+				AND register_from = 'android'
 			</if>
 			<if test="lastLoginFrom == 'ios'">
-				AND (last_login_from is NULL
-				or last_login_from = 'iOS')
+				AND register_from = 'iOSxyj'
 			</if>
 		</if>
 		order by register_date desc
@@ -157,7 +162,6 @@
 		<if test="memberId != null and memberId !='' ">
 		   and memberID = #{memberId}
 		</if>
-
 	</select>
 
 

@@ -1,0 +1,40 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+            <input type="hidden" id="operation" value="add">
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <!--<#input id="id" name="" underline="true"/>-->
+                            <#input id="level" name="等级" underline="false"/>
+                            <#input id="name" name="VIP名称" underline="false"/>
+                            <#input id="leastAllowed" name="最低额度" underline="false"/>
+                            <#input id="exemptionPostageNumber" name="包邮个数"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="deliveryTime" name="发货时效(天)" underline="false"/>
+                            <#input id="checkTime" name="寄存时效(天)" underline="false"/>
+                            <!--<#input id="flashAppeal" name="闪电申诉" underline="false"/>-->
+                            <#SelectCon id="flashAppeal" name="闪电申诉" >
+                                <option value="0" >否</option>
+                                <option value="1" >是</option>
+                            </#SelectCon>
+                            <#input id="discount" name="充值折扣" underline="false"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MemberVipInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MemberVipInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/memberVip/memberVip_info.js"></script>
+@}

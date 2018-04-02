@@ -19,9 +19,9 @@ import java.util.Map;
 public interface MemberComplaintMapper extends BaseMapper<MemberComplaint> {
 
     //待处理
-    List<Map<String, Object>> selectMemberComplain(@Param("page") Page<MemberComplaint> page, @Param("memberNum") String memberNum, @Param("complaintChannel") String complaintChannel);
+    List<Map<String, Object>> selectMemberComplain(@Param("page") Page<MemberComplaint> page, @Param("memberNum") String memberNum, @Param("complaintChannel") String complaintChannel,@Param("catchStates") String catchStates,@Param("vipGroup") Double vipGroup);
 
     //已处理
-    List<Map<String, Object>> selectMemberComplainDone(@Param("page") Page<MemberComplaint> page, @Param("memberNum") String memberNum, @Param("complaintChannel") String complaintChannel);
+    List<Map<String, Object>> selectMemberComplainDone(@Param("page") Page<MemberComplaint> page, @Param("memberNum") String memberNum, @Param("complaintChannel") String complaintChannel,@Param("catchStates") String catchStates,@Param("checkState") Integer checkState);
 
 }

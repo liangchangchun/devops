@@ -116,6 +116,28 @@ public class MemberComplaint extends Model<MemberComplaint> {
 	@TableField(exist=false)
 	private String complaintChannel;//申诉渠道
 
+	@TableField(exist=false)
+	private String person; //操作人
+
+	@TableField(exist=false)
+	private String vipGroup; //vip等级
+
+
+	public String getVipGroup() {
+		return vipGroup;
+	}
+
+	public void setVipGroup(String vipGroup) {
+		this.vipGroup = vipGroup;
+	}
+
+	public String getPerson() {
+		return person;
+	}
+
+	public void setPerson(String person) {
+		this.person = person;
+	}
 
 	public String getComplaintChannel() {
 		return complaintChannel;
@@ -323,6 +345,8 @@ public class MemberComplaint extends Model<MemberComplaint> {
 			", memberCatchResult=" + memberCatchResult +
 			", videoURL=" + videoURL +
 			", complaintChannel=" + complaintChannel +
+			", person=" + person +
+			", vipGroup=" + vipGroup +
 			"}";
 	}
 }

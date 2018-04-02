@@ -123,3 +123,12 @@ MemberComplaintInfoDlg.editSubmit = function() {
 $(function() {
 
 });
+
+//jquery实现回车键触发事件
+$(document).keyup(function(event){
+    if(event.keyCode ==13){
+        if($("#operation").val()=='nopass'){
+            MemberComplaintInfoDlg.editSubmit();
+        }
+    }
+});

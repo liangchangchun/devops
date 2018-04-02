@@ -24,5 +24,12 @@ public interface ITDollOrderService extends IService<TDollOrder> {
     //已发货
     List<Map<String, Object>> selectTDollOrderOut(Page<TDollOrder> page, String memberId, String phone);
 
+    //按订单编号查询
     TDollOrder selectByorderNum(String orderNum);
+
+    //违规返币
+    boolean dollBackCoins(Integer tDollOrderId, String memberId);
+
+    //反娃娃
+    boolean backDoll(TDollOrder tDollOrder);
 }

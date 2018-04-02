@@ -21,4 +21,6 @@ public interface TDollOrderItemMapper extends BaseMapper<TDollOrderItem> {
 
     List<Map<String, Object>> selectLists(@Param("page") Page<TDollOrderItem> page, @Param("orderId") Integer orderId);
 
+    //按房间订单id查询
+    TDollOrderItem selectByOrderId(Integer orderId);
 }

@@ -40,8 +40,18 @@ TBanner.initColumn = function () {
                     }
                 } 
             },
-            //超链接状态(0链接，1支付页，2.原生，3，支付, 4.身份验证， 5.qq群)
-            {title: '超链接类型', field: 'linkTypeName', visible: true, align: 'center', valign: 'middle'},
+            //超链接状态(0链接，1支付页，2.原生，3，支付, 4.身份验证， 5.qq群，6.小说登录)
+            {title: '超链接类型', field: 'linkType', visible: true, align: 'center', valign: 'middle',
+                formatter:function (value,row,index) {
+                    if (value == 0)  return "跳转链接";
+                    if (value == 1)  return "跳转支付页";
+                    if (value == 2)  return "跳转原生";
+                    if (value == 3)  return "跳转调起支付";
+                    if (value == 4)  return "身份验证";
+                    if (value == 5)  return "qq群";
+                    if (value == 6)  return "小说登录";
+                }
+            },
             {title: '支付第几个套餐', field: 'payIndexName', visible: true, align: 'center', valign: 'middle'},
             {title: '排序', field: 'sorts', visible: true, align: 'center', valign: 'middle'},
             {title: 'qq群号', field: 'qqGroupNum', visible: true, align: 'center', valign: 'middle'},

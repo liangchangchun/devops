@@ -59,6 +59,9 @@ TDollOrderInfoDlg.collectData = function() {
     .set('addressId')
     .set('modifiedDate')
     .set('modifiedBy')
+    .set('dollCodes')
+    .set('quantity')
+    .set('memberIDs')
     ;
 }
 
@@ -82,6 +85,7 @@ TDollOrderInfoDlg.addSubmit = function() {
     ajax.start();
 }
 
+
 /**
  * 提交修改
  */
@@ -101,6 +105,27 @@ TDollOrderInfoDlg.editSubmit = function() {
     ajax.set(this.tDollOrderInfoData);
     ajax.start();
 }
+
+/**
+ * 提交添加娃娃
+ */
+TDollOrderInfoDlg.backDollSubmit = function() {
+
+    this.clearData();
+    this.collectData();
+
+    //提交信息
+    var ajax = new $ax(Feng.ctxPath + "/tDollOrder/backDoll", function(data){
+        Feng.success("添加成功!");
+        window.parent.TDollOrder.table.refresh();
+        TDollOrderInfoDlg.close();
+    },function(data){
+        Feng.error("添加失败!" + data.responseJSON.message + "!");
+    });
+    ajax.set(this.tDollOrderInfoData);
+    ajax.start();
+}
+
 
 $(function() {
 

@@ -10,8 +10,10 @@ public enum LinkType {
 	LINK_1_PAY_PAGE("1","跳转支付页"),
 	LINK_2_SHARE("2","跳转分享"),
 	LINK_3_PAY_MEAL("3","跳转支付套餐"),
-	LINK_4_ID("4","身份验证");
-	
+	LINK_4_ID("4","身份验证"),
+	LINK_5_QQ_GROUP("5","QQ群"),
+	LINK_6_BOOK_LOGIN("6","小说登录");
+
 	String val;
     String message;
 

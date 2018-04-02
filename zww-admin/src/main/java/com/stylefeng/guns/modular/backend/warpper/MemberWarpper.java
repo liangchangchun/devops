@@ -1,15 +1,21 @@
 package com.stylefeng.guns.modular.backend.warpper;
 
-import java.util.Map;
+import java.util.*;
 
 import com.stylefeng.guns.common.constant.factory.ZwwContentFactory;
+import com.stylefeng.guns.common.persistence.dao.MemberVipMapper;
 import com.stylefeng.guns.common.persistence.model.Account;
+import com.stylefeng.guns.common.persistence.model.MemberVip;
 import com.stylefeng.guns.core.base.enums.GenderType;
 import com.stylefeng.guns.core.base.warpper.BaseControllerWarpper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class MemberWarpper extends BaseControllerWarpper {
 
-	 public MemberWarpper(Object list) {
+
+
+
+	public MemberWarpper(Object list) {
 	        super(list);
 	 }
 	 
@@ -29,6 +35,15 @@ public class MemberWarpper extends BaseControllerWarpper {
 			superTicket = superTicket==null?0:superTicket;
 		map.put("Acoins", acoins);
 		map.put("superTicket", superTicket);
+		}
+
+
+		//vip等级划分
+		MemberVip memberVip = ZwwContentFactory.me().getVipByMemberId(userId);
+		if(memberVip == null){
+			map.put("vipGroup","非vip");
+		} else {
+			map.put("vipGroup",memberVip.getName());
 		}
 	}
 

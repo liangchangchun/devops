@@ -1,0 +1,42 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="operation" value="update">
+            <input type="hidden" id="flashAppealValue" value="${item.flashAppeal}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <!--<#input id="id" name="" value="${item.id}" underline="true"/>-->
+                            <#input id="level" name="等级" value="${item.level}" underline="false"/>
+                            <#input id="name" name="VIP名称" value="${item.name}" underline="false"/>
+                            <#input id="leastAllowed" name="最低额度" value="${item.leastAllowed}" underline="false"/>
+                            <#input id="exemptionPostageNumber" name="包邮个数" value="${item.exemptionPostageNumber}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="deliveryTime" name="发货时效" value="${item.deliveryTime}" underline="false"/>
+                            <#input id="checkTime" name="寄存时效" value="${item.checkTime}" underline="false"/>
+                            <!--<#input id="flashAppeal" name="闪电申诉" value="${item.flashAppeal}" underline="false"/>-->
+                            <#SelectCon id="flashAppeal" name="闪电申诉" >
+                                <option value="0" >否</option>
+                                <option value="1" >是</option>
+                            </#SelectCon>
+                            <#input id="discount" name="充值折扣" value="${item.discount}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MemberVipInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MemberVipInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/backend/memberVip/memberVip_info.js"></script>
+@}

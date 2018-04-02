@@ -49,10 +49,10 @@
 			<if test="hideFlg!=null and hideFlg !=''">
 				 hide_flg = #{hideFlg},
 			</if>
-			<if test="forceUpdate!=null and forceUpdate !=''">
+			<if test="forceUpdate!=null ">
 				force_update = #{forceUpdate},
 			</if>
-			<if test="openUpdate!=null and openUpdate !=''">
+			<if test="openUpdate!=null ">
 				open_update = #{openUpdate},
 			</if>
 		</set>

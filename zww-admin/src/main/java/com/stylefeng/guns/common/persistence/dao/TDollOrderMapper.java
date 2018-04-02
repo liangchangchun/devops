@@ -21,6 +21,9 @@ public interface TDollOrderMapper extends BaseMapper<TDollOrder> {
     //根据订单编号查询
     TDollOrder selectByOrderNum(String orderNum);
 
+    //查询寄存中订单
+    List<Map<String, Object>> selectTDollOrderMember(@Param("page") Page<TDollOrder> page, @Param("memberId") String memberId, @Param("phone") String phone);
+
     //查询待发货订单
     List<Map<String, Object>> selectTDollOrder(@Param("page") Page<TDollOrder> page, @Param("memberId") String memberId, @Param("phone") String phone);
 
