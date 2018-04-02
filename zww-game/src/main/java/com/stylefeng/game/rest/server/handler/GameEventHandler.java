@@ -1,6 +1,7 @@
 
 package com.stylefeng.game.rest.server.handler;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.corundumstudio.socketio.AckRequest;
@@ -9,6 +10,9 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.annotation.OnConnect;
 import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
+import com.stylefeng.game.rest.client.NettyClients;
+import com.stylefeng.game.rest.client.RoomPlayer;
+import com.stylefeng.game.rest.client.RoomPlayerClient;
 import com.stylefeng.game.rest.config.BMDataContext;
 import com.stylefeng.game.rest.server.message.ChatObject;
 
@@ -26,7 +30,11 @@ public class GameEventHandler
     @OnConnect  
     public void onConnect(SocketIOClient client)  
     {  
-    	System.out.println("连接");
+    	System.out.println("发起连接");
+    	RoomPlayer player = NettyClients.getInstance().getClient(client.getSessionId().toString());
+    	if (player!=null  && !StringUtils.isBlank(player.getToken())) {
+    		
+    	}
     	String pathParam = "/{memberId}/{dollId}/{key}/{device}/{queue}/{token}";
     	String path = client.getHandshakeData().getSingleUrlParam("path") ;
     	System.out.println(path);

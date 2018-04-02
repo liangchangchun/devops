@@ -15,7 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 
+
 public class ApiRequestMatchingFilter implements Filter {
+
     private RequestMatcher[] ignoredRequests;
     private RequestMatcher[] exRequests;
 
@@ -39,13 +41,13 @@ public class ApiRequestMatchingFilter implements Filter {
 	        	 }
 	         }
          }
-         String authorization = request.getHeader("authorization") ;
-         if (authorization==null) {
-        	 authorization = request.getParameter("token");
+         String authorization = request.getHeader("token") ;
+         if(StringUtils.isBlank(authorization)) {
+        	 authorization = request.getParameter("token") ;
          }
          if(matchAnyRoles){
         	 //if(!StringUtils.isBlank(authorization) && CacheHelper.getApiUserCacheBean().getCacheObject(authorization, BMDataContext.SYSTEM_ORGI) != null){
-        	 if(!StringUtils.isBlank(authorization) ){	
+        	 if(StringUtils.isBlank(authorization)) {
         		 chain.doFilter(req,resp);
         	 }else{
         		 HttpServletResponse response = (HttpServletResponse) resp ;

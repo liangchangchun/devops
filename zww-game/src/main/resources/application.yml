@@ -11,15 +11,33 @@ web:
  
 
 spring:
-  datasource:
-      url: jdbc:mysql://127.0.0.1:3306/rest?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
-      username: root
-      password: admins
-      filters: log4j,wall,mergeStat
-
-
-logging:
-  level.root: info
-  level.com.stylefeng: debug
-  path: logs/
-  file: guns-rest.log
+  redis:
+    database: 0
+    host: ${redis-host}
+    port: ${redis-port}
+    password: ${redis-password}
+    timeout: 0
+    pool:
+     max-active: 8
+     max-wait: -1
+     max-idle: 8
+     min-idle: 0
+  profiles:
+    active: dev  # dev  test  produce  majia
+    http:
+    converters:
+      preferred-json-mapper: fastjson
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
+    multipart:
+      max-request-size: 100MB #最大请求大小
+      max-file-size: 100MB #最大文件大小
+  devtools:
+    restart:
+      enabled: ${devtools-enabled} #是否开启开发者工具（true/false）  线上为 false
+      additional-paths: src/main/java
+      exclude: static/**,WEB-INF/view/**
+  aop:
+    proxy-target-class: true #false为启用jdk默认动态代理,true为cglib动态代理
+    

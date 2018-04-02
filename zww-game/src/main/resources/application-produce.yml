@@ -1,0 +1,48 @@
+##########################################################
+###################  正式环境的profile  ###################
+##########################################################
+spring:
+  profiles: produce
+  datasource:
+     url: jdbc:mysql://rm-uf6528juob1nalin3.mysql.rds.aliyuncs.com:3306/zww?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+     username: zww_app_user
+     password: nxCpVYcnqkrsA6dbqtZV8NUIr3gvtVEk
+     db-name: zww
+     filters: log4j,wall,mergeStat
+     connectionInitSqls: "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+logging:
+  level.root: warn
+  path: logs/
+  file: zww.log
+
+###################  aliyun配置  ###################
+aliyun:
+  accessKey: LTAIR9bpEjEQwnHO
+  accessSecret: hAPaZlI9NXlH5ErNoFnVbkyuRQz0gy
+  mnsAccountEndPoint: http://1792180091275324.mns.cn-shanghai.aliyuncs.com/
+  ossBucketName: zww-image-prod
+  sts: http://47.100.113.59:7080/app/oss/gettoken
+  smsModelCode: 
+   reg: SMS_121910820
+   find: SMS_121910820
+   bind: SMS_121910820
+
+###################  游戏业务配置  ###################
+webapi:
+  validateToken: http://365zhuawawa.com:8080/icrane/api/validateToken
+  consumeGame: http://365zhuawawa.com:8080/icrane/api/game/claw
+  endRound: http://365zhuawawa.com:8080/icrane/api/game/endRound
+  endGame: http://365zhuawawa.com:8080/icrane/api/game/end
+  exitDollRoom: http://365zhuawawa.com:8080/icrane/api/dollRoom/exitDoll
+  machineIp: 172.19.172.240
+  machinePort: 2345
+
+################### dev prop配置 ########################
+redis-host: r-uf6f930e26bf2944.redis.rds.aliyuncs.com
+redis-port: 6379
+redis-password: Zww123456
+kaptcha-open: true
+session-open: true
+resource-auto-check: false
+devtools-enabled: false

@@ -1,0 +1,51 @@
+##########################################################
+###################  开发环境的profile  ###################
+##########################################################
+spring: 
+ profiles: dev
+ datasource:
+   url: jdbc:mysql://192.168.2.66:3306/rest?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+   username: root
+   password: admins
+   db-name: zww
+   filters: log4j,wall,mergeStat
+   connectionInitSqls: "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+
+logging:
+  level.root: info
+  level.com.stylefeng: debug
+  path: logs/
+  file: game.log
+
+###################  aliyun配置  ###################
+aliyun:
+  accessKey: LTAIR9bpEjEQwnHO
+  accessSecret: hAPaZlI9NXlH5ErNoFnVbkyuRQz0gy
+  mnsAccountEndPoint: http://1792180091275324.mns.cn-shanghai.aliyuncs.com/
+  ossBucketName: zww-image-dev
+  sts: http://47.100.113.59:7080/app/oss/gettoken
+  smsModelCode: 
+   reg: SMS_121910820
+   find: SMS_121910820
+   bind: SMS_121910820
+
+###################  游戏业务配置  ###################
+webapi:
+  validateToken: http://192.168.2.166:8080/icrane/api/validateToken
+  consumeGame: http://192.168.2.166:8080/icrane/api/game/claw
+  endRound: http://192.168.2.166:8080/icrane/api/game/endRound
+  endGame: http://192.168.2.166:8080/icrane/api/game/end
+  exitDollRoom: http://192.168.2.166:8080/icrane/api/dollRoom/exitDoll
+  machineIp: 47.100.113.59
+  machinePort: 2345
+################### dev prop配置 ########################
+
+redis-host: 192.168.99.100
+redis-port: 6379
+redis-password: Zww123456
+kaptcha-open: false
+session-open: false
+resource-auto-check: true
+devtools-enabled: true
+  
