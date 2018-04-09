@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>玩转spring boot——结合AOP</title>
+<script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var app = angular.module('app', []);
+    app.controller('MainController', function($rootScope, $scope, $http) {
+        //保存
+        $scope.save = function() {
+            $http({
+                url : '/aopsave',
+                method : 'POST'
+            }).success(function(r) {
+                $scope.result = JSON.stringify(r)
+            });
+        }
+
+    });
+
+    /*]]>*/
+</script>
+</head>
+<body ng-app="app" ng-controller="MainController">
+    <h1>玩转spring boot——结合AOP</h1>
+    <h4>
+        <a href="http://www.cnblogs.com/GoodHelper/">from 刘冬的博客</a>
+    </h4>
+    <input type="button" value="调用" ng-click="save()" />
+    <br />
+    <h3>调用结果：</h3>
+    <p>{{result}}</p>
+
+
+    <br />
+    <a href="http://www.cnblogs.com/GoodHelper/">点击访问原版博客</a>
+</body>
+</html>

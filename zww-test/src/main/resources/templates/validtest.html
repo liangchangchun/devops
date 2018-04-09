@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>玩转spring boot——结合AOP与表单验证</title>
+<script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var app = angular.module('app', []);
+    app.controller('MainController', function($rootScope, $scope, $http) {
+
+        $scope.data = {
+            no : 'no.1234567890',
+            date : '2017-01-01',
+            quantity : 100
+        };
+
+        $scope.errors = {
+            no : '',
+            date : '',
+            quantity : ''
+        };
+
+        //保存
+        $scope.save = function() {
+            $http({
+                url : '/aopsave',
+                method : 'POST'
+            }).success(function(r) {
+                $scope.result = JSON.stringify(r)
+            });
+        }
+        $scope.saveOrder = function() {
+            $http({
+                url : '/saveOrder',
+                method : 'POST',
+                data : $scope.data
+            }).success(function(r) {
+                $scope.result = JSON.stringify(r)
+            }).error(function(e) {
+                $scope.result = JSON.stringify(e)
+                $scope.errors.no = '';
+                $scope.errors.date = '';
+                $scope.errors.quantity = '';
+                for ( var i in e.errors) {
+                    var error = e.errors[i];
+                    var field = $scope.errors[error.field];
+                    if (field == undefined)
+                        continue;
+                    $scope.errors[error.field] = error.defaultMessage;
+                }
+            })
+        }
+    });
+
+    /*]]>*/
+</script>
+</head>
+<body ng-app="app" ng-controller="MainController">
+    <h1>玩转spring boot——结合AOP与表单验证</h1>
+    <h4>
+        <a href="http://www.cnblogs.com/GoodHelper/">from 刘冬的博客</a>
+    </h4>
+    <input type="button" value="调用" ng-click="save()" />
+    <br />
+    <br />
+    <input type="button" value="保存订单" ng-click="saveOrder()" />
+    <br /> 订单信息：
+    <br />
+    <table cellspacing="1" style="background-color: #a0c6e5">
+        <tr>
+            <td>编号：</td>
+            <td><input ng-model="data.no" /></td>
+            <td><font color="red" ng-show="errors.no">{{errors.no}}</font></td>
+        </tr>
+        <tr>
+            <td>日期：</td>
+            <td><input ng-model="data.date" /></td>
+            <td><font color="red" ng-show="errors.date">{{errors.date}}</font></td>
+        </tr>
+        <tr>
+            <td>数量：</td>
+            <td><input ng-model="data.quantity" /></td>
+            <td><font color="red" ng-show="errors.quantity">{{errors.quantity}}</font></td>
+        </tr>
+    </table>
+    <br />
+    <h3>调用结果：</h3>
+    <p>{{result}}</p>
+
+
+    <br />
+    <a href="http://www.cnblogs.com/GoodHelper/">点击访问原版博客</a>
+</body>
+</html>
