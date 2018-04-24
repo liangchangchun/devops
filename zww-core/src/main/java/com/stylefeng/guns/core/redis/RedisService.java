@@ -1,6 +1,7 @@
 package com.stylefeng.guns.core.redis;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface RedisService {
@@ -73,7 +74,7 @@ public interface RedisService {
      */
     public Object hashGet(String key, Object hashKey);
     public String getHashSet(String key, Object hashKey);
-
+    public Map hashGet(String key);
     /**
      *  list push
      * @param k
