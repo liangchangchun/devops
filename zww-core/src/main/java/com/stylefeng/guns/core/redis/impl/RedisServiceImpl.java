@@ -14,6 +14,7 @@ import com.stylefeng.guns.core.redis.RedisService;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -166,6 +167,11 @@ public class RedisServiceImpl implements RedisService {
     public Object hashGet(String key, Object hashKey){
         HashOperations<String, Object, Object>  hash = redisTemplate.opsForHash();
         return hash.get(key,hashKey);
+    }
+    
+    public Map<Object,Object> hashGet(String key){
+        HashOperations<String, Object, Object>  hash = redisTemplate.opsForHash();
+        return hash.entries(key);
     }
     
     public String getHashSet(String key, Object hashKey){
