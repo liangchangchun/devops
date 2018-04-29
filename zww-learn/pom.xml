@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.stylefeng.zww</groupId>
-	<artifactId>zww-test1</artifactId>
+	<artifactId>zww-learn</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>zww-test1</name>
-	<description>zww-test1项目分布式test</description>
+	<name>zww-learn</name>
+	<description>zww-learn练习</description>
 
 	<parent>
 		<groupId>com.stylefeng</groupId>
@@ -24,10 +24,7 @@
 	</properties>
 	
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-config-server</artifactId>
-		</dependency>
+      
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -46,11 +43,15 @@
     		<groupId>commons-lang</groupId>
     		<artifactId>commons-lang</artifactId>
 		</dependency>
-		<dependency>
-    		<groupId>io.netty</groupId>
-    		<artifactId>netty-all</artifactId>
-    		<version>5.0.0.Alpha2</version>
+        <dependency>
+    		<groupId>com.google.guava</groupId>
+    		<artifactId>guava</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
 	</dependencies>
 	
 	<build>
@@ -58,12 +59,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<groupId>io.netty</groupId>
-    					<artifactId>netty-all</artifactId>
-					</execution>
-				</executions>
 				<configuration>
 					<finalName>${project.name}</finalName>
 				</configuration>
