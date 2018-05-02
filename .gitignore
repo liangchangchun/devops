@@ -41,7 +41,13 @@ test-classes
 /zww-test/*.classpath
 /zww-test/*.gitignore
 /zww-test/*.project
-TestNG 项目报告
-html
-test-output
-/zww-admin/logs/daily/*.gz
+default-compile
+default-testCompile
+surefire-reports
+surefire
+maven-archiver
+target
+*.classpath
+*.project
+/zww-learn/*.springBeans
+*.springBeans

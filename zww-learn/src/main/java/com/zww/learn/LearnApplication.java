@@ -1,15 +1,14 @@
-package com.zww.test1;
+package com.zww.learn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.config.server.EnableConfigServer;
 
 
 @SpringBootApplication
-public class TestApplication {
+public class LearnApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TestApplication.class, args);
+		SpringApplication.run(LearnApplication.class, args);
 	}
 
 }

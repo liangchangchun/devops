@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style type="text/css">
+/*<![CDATA[*/
+tr {
+    text-align: center;
+    COLOR: #0076C8;
+    BACKGROUND-COLOR: #F4FAFF;
+    font-weight: bold;
+}
+/*]]>*/
+</style>
+<title>玩转spring boot——properties配置</title>
+</head>
+<body>
+    <h1>玩转spring boot——properties配置</h1>
+    <h4>
+        <a href="http://www.cnblogs.com/GoodHelper/">from 刘冬的博客
+            http://www.cnblogs.com/GoodHelper/</a>
+    </h4>
+    配置注入：
+    <br />
+    <table cellspacing="1" style="background-color: #a0c6e5">
+        <tr>
+            <td>模式：</td>
+            <td th:text="${debug}"></td>
+        </tr>
+        <tr>
+            <td>URL：</td>
+            <td th:text="${url}"></td>
+        </tr>
+        <tr>
+            <td>园龄：</td>
+            <td th:text="${year}"></td>
+        </tr>
+    </table>
+    <br />
+    <br /> 自定义配置
+    <br /> Map注入：
+    <br />
+    <table cellspacing="1" style="background-color: #a0c6e5">
+
+        <tr th:each="item : ${info}">
+            <td th:text="${item.key}"></td>
+            <td th:text="${item.value}"></td>
+        </tr>
+
+    </table>
+    <br /> List注入：
+    <br />
+    <ul th:each="item : ${blogs}">
+        <li th:text="${item}"></li>
+    </ul>
+
+    <br />
+
+</body>
+</html>
