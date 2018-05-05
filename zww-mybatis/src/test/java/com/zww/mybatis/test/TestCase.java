@@ -27,8 +27,8 @@ public class TestCase {
 			
 			sqlSession = sqlSessionFactory.openSession();
 	        User user = (User)sqlSession.selectOne("com.zww.mybatis.dao.UserMapper.selectByPrimaryKey", 1000);
-	        System.out.println(user);
-	        user.setPhone("111");
+	       // System.out.println(user);
+	        //user.setPhone("111");
 	       // sqlSession.update("com.zww.mybatis.dao.UserMapper.updateByPrimaryKeySelective", user);
 	        sqlSession.commit();
 	        sqlSession2 = sqlSessionFactory.openSession();

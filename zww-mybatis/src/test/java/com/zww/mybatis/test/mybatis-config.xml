@@ -28,6 +28,12 @@
         <setting name="cacheEnabled" value="true"/>
         
     </settings>
+    
+   <plugins>
+        <plugin interceptor="com.zww.mybatis.test.ExamplePlugin">
+            <property name="dialect" value="mysql" />
+        </plugin>
+    </plugins>
 
     <!-- autoMappingBehavior should be set in each test case -->
 
@@ -48,5 +54,7 @@
     <mappers>
         <mapper resource="mapping/UserMapper.xml"/>
     </mappers>
+    
+
 
 </configuration>

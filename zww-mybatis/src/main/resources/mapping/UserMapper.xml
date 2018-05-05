@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zww.mybatis.dao.UserMapper">
-	<cache type="com.zww.mybatis.utils.MybatisRedisCache" />
+	<!-- <cache type="com.zww.mybatis.utils.MybatisRedisCache" /> -->
 
   <resultMap id="BaseResultMap" type="com.zww.mybatis.model.User">
     <id column="user_id" jdbcType="INTEGER" property="userId" />
