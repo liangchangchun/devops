@@ -14,8 +14,7 @@ public class RedisController {
 
 	 @RequestMapping("/set")  
 	 public String set(String key, String value) throws Exception{  
-		 for (long i=0;i<5000000;i++) {
-			 redisClinet.ge
+		 for (long i=0;i<50000;i++) {
 			 redisClinet.set(key+i, value+i);  
 		 }
 	        return "success";  
