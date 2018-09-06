@@ -24,7 +24,6 @@ import com.zww.test.entity.Order;
 @Controller
 public class HomeController {
 
-
     @Autowired
     private OrderRepository orderRepository;
     

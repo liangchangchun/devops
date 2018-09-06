@@ -41,3 +41,14 @@ test-classes
 /zww-test/*.classpath
 /zww-test/*.gitignore
 /zww-test/*.project
+default-compile
+default-testCompile
+surefire-reports
+surefire
+maven-archiver
+target
+*.classpath
+*.project
+/zww-learn/*.springBeans
+*.springBeans
+*.log
